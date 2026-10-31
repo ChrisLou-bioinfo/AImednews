@@ -1,0 +1,2129 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>肺癌（NSCLC）诊疗情报</title>
+<link rel="icon" type="image/png" href="/assets/FigureLogo.png">
+<style>
+:root{
+  --bg:#f2f5f9;--panel:#ffffff;--panel2:#f7f9fc;--panel3:#ecf1f7;
+  --line:#e2e8f1;--line2:#cfd9e5;
+  --txt:#1c2733;--sub:#5a6675;--faint:#8d97a6;
+  --blue:#2478d8;--blue2:#1a5fb0;--blued:#3b8ae8;--steel:#5c7fa3;
+  --grad:linear-gradient(135deg,#2f86e0 0%,#5aa9f0 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB",
+  "Microsoft YaHei","Segoe UI",Roboto,sans-serif;line-height:1.6;
+  background-image:radial-gradient(900px 380px at 12% -5%,rgba(47,134,224,.06),transparent),
+                   radial-gradient(900px 380px at 88% -5%,rgba(92,127,163,.07),transparent)}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline;color:var(--blue2)}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#c7d2e0;border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ── 顶部标题栏 ── */
+header.app{position:sticky;top:0;z-index:50;padding:13px 26px;
+  display:flex;align-items:center;gap:15px;flex-wrap:wrap;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line)}
+.logo{width:42px;height:42px;flex:none;border-radius:10px}
+.title-wrap{min-width:0}
+h1.app-title{margin:0;font-size:23px;font-weight:800;letter-spacing:.5px;color:#16202c}
+h1.app-title .hl{background:var(--grad);-webkit-background-clip:text;
+  background-clip:text;-webkit-text-fill-color:transparent}
+.app-sub{font-size:12px;color:var(--sub);margin-top:1px}
+.head-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--blued);
+  box-shadow:0 0 6px rgba(59,138,232,.6);display:inline-block;margin-right:5px;
+  animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.live-dot.err{background:#9aa4b1;box-shadow:none}
+#updated{font-size:12px;color:var(--sub)}
+#updated b{color:var(--txt);font-weight:600}
+.btn{background:#fff;border:1px solid var(--line2);color:var(--txt);
+  border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--grad);border:none;color:#fff;font-weight:700}
+.btn.primary:hover{filter:brightness(1.06);color:#fff}
+.btn.spin svg{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.switch{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);
+  cursor:pointer;user-select:none}
+.switch input{accent-color:var(--blue)}
+
+/* ── 布局 ── */
+.layout{display:grid;grid-template-columns:262px minmax(0,1fr);gap:20px;
+  max-width:1480px;margin:0 auto;padding:18px 24px 80px}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* ── 左侧筛选栏 ── */
+aside.filters{position:sticky;top:84px;align-self:start;
+  display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 104px);
+  overflow-y:auto;padding-right:2px}
+@media(max-width:980px){aside.filters{position:static;max-height:none}}
+.fgroup{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:13px 15px;box-shadow:0 1px 3px rgba(28,39,51,.04)}
+.fgroup h3{margin:0 0 10px;font-size:12px;font-weight:700;color:var(--blue2);
+  letter-spacing:1px}
+select.sel{width:100%;background:#fff;border:1px solid var(--line2);
+  color:var(--txt);border-radius:8px;padding:7px 10px;font-size:13px;outline:none}
+select.sel:focus{border-color:var(--blue)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{background:#fff;border:1px solid var(--line2);color:var(--sub);
+  border-radius:14px;padding:2px 11px;font-size:12px;cursor:pointer;transition:.12s}
+.chip:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff;font-weight:700}
+.chip:disabled{opacity:.35;cursor:not-allowed}
+.ck{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0;
+  cursor:pointer;color:var(--txt)}
+.ck input{accent-color:var(--blue)}
+#kw{width:100%;background:#fff;border:1px solid var(--line2);color:var(--txt);
+  border-radius:8px;padding:7px 11px;font-size:13px;outline:none}
+#kw:focus{border-color:var(--blue)}
+.hint{font-size:11px;color:var(--faint);margin-top:7px}
+#resetAll{width:100%}
+
+/* ── 主区 ── */
+main{min-width:0}
+.warnbar{background:#fdf6e3;border:1px solid #eadfb0;color:#8a6d2f;border-radius:12px;
+  padding:10px 16px;font-size:13px;margin-bottom:14px;display:none}
+
+/* Hero 横幅 */
+.hero{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+  margin-bottom:16px;box-shadow:0 8px 30px rgba(28,39,51,.10)}
+.hero img{display:block;width:100%;height:225px;object-fit:cover;object-position:center}
+.hero .hero-ol{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:18px 24px;
+  background:linear-gradient(180deg,rgba(10,12,16,0) 32%,rgba(10,12,16,.82) 100%)}
+.hero .hero-t{font-size:19px;font-weight:800;color:#fff;letter-spacing:.5px}
+.hero .hero-s{font-size:12px;color:#b9c6d8;margin-top:2px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}
+@media(max-width:1180px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:14px 16px;position:relative;overflow:hidden;
+  box-shadow:0 1px 3px rgba(28,39,51,.04)}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--kc,var(--grad))}
+.kpi b{display:block;font-size:22px;font-weight:800;color:#16202c;line-height:1.3}
+.kpi b small{font-size:12px;color:var(--sub);font-weight:400}
+.kpi span{font-size:12px;color:var(--sub)}
+.kpi .kico{position:absolute;right:10px;top:10px;font-size:16px;opacity:.45}
+
+/* 图表（置顶区） */
+.chart-bar{display:flex;align-items:center;gap:10px;margin:2px 0 10px;font-size:13px;
+  color:var(--txt);font-weight:700}
+.chart-bar .chint{font-weight:400;font-size:10.5px;color:var(--faint)}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:12px;margin-bottom:20px}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:15px 17px;box-shadow:0 1px 3px rgba(28,39,51,.04)}
+.ctitle{font-size:13px;color:var(--txt);font-weight:700;margin-bottom:11px;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ctitle .cdot{width:8px;height:8px;border-radius:3px;background:var(--grad)}
+.ctitle .chint{margin-left:auto;font-size:10.5px;color:var(--faint);font-weight:400}
+.donut-wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dg{cursor:pointer}
+.dg circle{transition:stroke-width .12s}
+.dg:hover circle{stroke-width:31px}
+.dnum{font-size:27px;fill:#16202c;font-weight:800}
+.dlab{font-size:10px;fill:var(--sub)}
+.lgs{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--sub);flex:1;min-width:110px}
+.lg{display:flex;align-items:center;gap:7px}
+.lg i{width:9px;height:9px;border-radius:2.5px;flex:none}
+.lg b{color:var(--txt);margin-left:auto}
+.bars{display:flex;flex-direction:column;gap:7px}
+.brow{display:grid;grid-template-columns:118px 1fr 42px;gap:9px;align-items:center;
+  font-size:12px;border-radius:6px;padding:1px 3px}
+.brow[data-act]{cursor:pointer}
+.brow[data-act]:hover{background:var(--panel3)}
+.blabel{color:var(--sub);text-align:right;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.btrack{background:#e8edf4;border:1px solid #dfe6f0;border-radius:6px;height:16px;overflow:hidden}
+.bfill{height:100%;border-radius:5px 3px 3px 5px;
+  background:linear-gradient(90deg,var(--blued),#7cc0f5);transition:width .45s ease,filter .12s}
+.brow:hover .bfill{filter:brightness(1.08)}
+.bval{font-weight:700;text-align:right;color:var(--blue2)}
+.cnote{font-size:11px;color:var(--faint);margin-top:8px}
+
+/* 问答面板 */
+.ask{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:16px 20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(28,39,51,.04)}
+.ask h3{margin:0 0 4px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.ask .ad{font-size:12px;color:var(--sub);margin-bottom:11px}
+.ask .qchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:11px}
+.qchip{background:#fff;border:1px solid var(--line2);color:var(--sub);
+  border-radius:16px;padding:4px 13px;font-size:12.5px;cursor:pointer;transition:.12s}
+.qchip:hover{border-color:var(--blue);color:var(--blue)}
+.ask .qrow{display:flex;gap:9px}
+.ask .qrow input{flex:1;background:#fff;border:1px solid var(--line2);
+  color:var(--txt);border-radius:10px;padding:9px 14px;font-size:13px;outline:none}
+.ask .qrow input:focus{border-color:var(--blue)}
+.ask-note{font-size:11px;color:var(--faint);margin-top:9px}
+
+/* 自定义专题卡 */
+.csec{background:var(--panel);border:1px solid var(--line2);border-radius:16px;
+  margin-bottom:20px;overflow:hidden;box-shadow:0 4px 18px rgba(28,39,51,.07)}
+.csec-h{padding:15px 22px;background:linear-gradient(180deg,var(--panel3),var(--panel2));
+  border-bottom:1px solid var(--line);display:flex;justify-content:space-between;
+  align-items:center;gap:12px;flex-wrap:wrap}
+.csec-h .qt{font-size:15.5px;font-weight:700;color:#16202c}
+.csec-h .qt::before{content:"❓ ";opacity:.85}
+.csec-h .ops{display:flex;gap:8px;align-items:center}
+.mini-btn{background:#fff;border:1px solid var(--line2);color:var(--sub);
+  border-radius:8px;padding:3px 11px;font-size:12px;cursor:pointer}
+.mini-btn:hover{border-color:var(--blue);color:var(--blue)}
+.mini-btn.del:hover{border-color:#d05252;color:#d05252}
+.csec .tagline{font-size:11px;color:var(--faint);padding:8px 22px 0}
+
+/* 筛选命中面板（点击图表后，命中内容在总览区展现） */
+#drillCard{background:var(--panel);border:1px solid rgba(47,134,224,.45);border-radius:16px;
+  margin-bottom:20px;overflow:hidden;box-shadow:0 4px 18px rgba(28,39,51,.08)}
+#drillCard .dh{padding:12px 20px;background:linear-gradient(180deg,var(--panel3),var(--panel2));
+  border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;
+  gap:12px;flex-wrap:wrap}
+#drillCard .dh .dt{font-size:15px;font-weight:700;color:#16202c;display:flex;align-items:center;
+  gap:6px;flex-wrap:wrap}
+#drillCard .dnote{font-size:11px;color:var(--faint);padding:7px 20px 0}
+#drillCard .dbody{padding:6px 0 10px}
+.drow{display:flex;align-items:center;gap:8px;padding:8px 20px;border-top:1px solid var(--line);
+  font-size:13px;flex-wrap:wrap}
+.drow:first-child{border-top:none}
+.drow:hover{background:var(--panel2)}
+.drow .dttl{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drow .dttl a{color:var(--txt)}
+.drow .dttl a:hover{color:var(--blue)}
+
+/* 主题卡 */
+.topic{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  margin-bottom:20px;overflow:hidden;box-shadow:0 1px 3px rgba(28,39,51,.04)}
+.topic-img{display:block;width:100%;height:108px;object-fit:cover;cursor:pointer;
+  border-bottom:1px solid var(--line)}
+.topic-h{padding:14px 22px;background:var(--panel2);border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  cursor:pointer;user-select:none}
+.topic-h:hover{background:var(--panel3)}
+.topic-h h2{margin:0;font-size:16px;font-weight:700;color:#16202c}
+.topic-h .en{display:block;color:var(--sub);font-size:11.5px;font-weight:400;margin-top:2px}
+.tmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{background:rgba(47,134,224,.1);color:var(--blue2);border:1px solid rgba(47,134,224,.25);
+  border-radius:20px;padding:2px 12px;font-size:12px;font-weight:600}
+.badge.gray{background:var(--panel3);color:var(--sub);border-color:var(--line2)}
+.caret{color:var(--faint);transition:.2s;font-size:13px}
+.topic.collapsed .caret{transform:rotate(-90deg)}
+.topic.collapsed .tbody{display:none}
+.topic.collapsed .topic-img{height:56px}
+.topic-img{transition:height .25s}
+.tbody{padding:16px 22px}
+
+/* AI 解读 */
+.synth{margin:0 0 16px;padding:13px 18px;border-radius:0 12px 12px 0;
+  background:linear-gradient(90deg,#eaf3fd,#f6faff);
+  border-left:3px solid var(--blue);font-size:13.5px;color:#2d4a63}
+.synth b.hd{color:var(--blue2);margin-right:8px}
+.ai-tag{float:right;color:var(--faint);font-size:11px}
+.cref{color:var(--blue);font-size:11px;margin-left:4px;font-weight:700;
+  text-decoration:none}
+.cref:hover{text-decoration:underline}
+
+/* 分区块 */
+.sec{margin-bottom:18px}
+.sec>b.sTitle{display:flex;align-items:center;gap:8px;font-size:13px;
+  color:var(--blue2);margin-bottom:10px;font-weight:700}
+.sTitle .n{background:rgba(47,134,224,.1);border:1px solid rgba(47,134,224,.25);
+  color:var(--blue2);border-radius:12px;padding:0 9px;font-size:11px;font-weight:600}
+.sTitle .more{margin-left:auto;font-size:11px;color:var(--faint);font-weight:400}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:1100px){.grid2{grid-template-columns:1fr}}
+
+/* 试验卡片 */
+.trial{background:var(--panel2);border:1px solid var(--line);border-radius:12px;
+  padding:12px 15px;margin-bottom:10px;font-size:13px;transition:border-color .15s}
+.trial:hover{border-color:var(--line2);background:#fff}
+.trial .row1{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.trial .ttle{font-weight:600;flex:1;min-width:200px}
+.nct{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--blue2)}
+.st-b{display:inline-block;border-radius:6px;padding:1px 9px;font-size:11px;
+  font-weight:700;white-space:nowrap}
+.st-RECRUITING{background:#dceefd;color:#1470c8}
+.st-ACTIVE{background:#e3edf7;color:#3a6ea5}
+.st-SOON{background:#edf1f6;color:#5a6b80}
+.st-DONE{background:#e9ecef;color:#6b7686}
+.st-OTHER{background:#f0e9e9;color:#8a5f5f}
+.ph-b{display:inline-block;background:#e0effc;color:#1d6fc0;
+  border-radius:6px;padding:1px 8px;font-size:11px;font-weight:600;margin-left:4px}
+.meta-line{color:var(--sub);font-size:12px;margin-top:5px;display:flex;
+  gap:5px 14px;flex-wrap:wrap;align-items:center}
+.meta-line b{color:#33404f;font-weight:600}
+.tag{display:inline-block;background:#eef5fc;color:#2a6bb0;
+  border:1px solid #dce9f6;border-radius:6px;padding:0 8px;
+  font-size:11px;margin:3px 4px 0 0}
+.tag.iv{background:#e7f1fb;color:#2560a8;border-color:#d3e5f7}
+.tag i{font-style:normal;color:var(--faint);margin-left:4px}
+.src{display:inline-block;background:#e4edf7;color:#3a6ea5;
+  border-radius:6px;padding:0 7px;font-size:10px;margin-left:7px;
+  vertical-align:1px;font-weight:600}
+.src.tv{background:#eef0f3;color:#5a6b80}
+.live-b{display:inline-block;border-radius:6px;padding:0 7px;font-size:10px;
+  font-weight:700;background:#dceefd;color:#1470c8;margin-left:6px}
+.trial details{margin-top:8px}
+.trial details summary{cursor:pointer;color:var(--faint);font-size:12px;
+  list-style:none;user-select:none}
+.trial details summary::before{content:"▸ "}
+.trial details[open] summary::before{content:"▾ "}
+.trial details .sumtxt{color:var(--sub);font-size:12.5px;margin-top:6px;
+  max-height:180px;overflow-y:auto;white-space:pre-line}
+.whystop{margin-top:6px;color:#a05252;font-size:12px}
+
+/* 文献/新闻/靶点卡 */
+.item{background:var(--panel2);border:1px solid var(--line);border-radius:12px;
+  padding:11px 14px;margin-bottom:9px;font-size:13px}
+.item:hover{background:#fff}
+.item .t{font-weight:600;margin-bottom:2px}
+.item .s{color:var(--sub);font-size:12px;margin-top:3px}
+.empty{color:var(--faint);font-size:12px;padding:6px 2px}
+
+/* 来源索引 */
+details.refs{margin-top:6px;border-top:1px dashed var(--line2);padding-top:10px}
+details.refs summary{cursor:pointer;color:var(--sub);font-size:12px}
+details.refs ol{margin:8px 0 0 18px;padding:0;font-size:12px;color:var(--sub)}
+details.refs li{margin-bottom:5px}
+details.refs li .src{margin:0 6px 0 0}
+
+footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40px}
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);
+  background:#fff;border:1px solid var(--line2);color:var(--txt);
+  border-radius:12px;padding:10px 20px;font-size:13px;opacity:0;transition:.3s;
+  z-index:99;box-shadow:0 8px 30px rgba(28,39,51,.16);max-width:80vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#loader{position:fixed;inset:0;background:rgba(242,245,249,.72);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:100;flex-direction:column;
+  gap:14px}
+#loader.show{display:flex}
+.spin-ring{width:46px;height:46px;border-radius:50%;border:4px solid #d5dfeb;
+  border-top-color:var(--blue);animation:rot .9s linear infinite}
+#loader span{color:var(--sub);font-size:13px}
+
+/* 悬停信息浮层 */
+#tip{position:fixed;z-index:200;background:#fff;border:1px solid var(--line2);
+  border-radius:9px;padding:7px 11px;font-size:12px;color:var(--txt);max-width:280px;
+  box-shadow:0 8px 26px rgba(28,39,51,.16);pointer-events:none;display:none;line-height:1.5}
+#tip .t1{font-weight:700}
+#tip .t2{color:var(--sub)}
+#tip .t3{color:var(--blue);font-size:11px}
+
+/* ── LLM 设置弹窗 ── */
+#llmModal{position:fixed;inset:0;background:rgba(18,24,36,.45);backdrop-filter:blur(3px);
+  z-index:150;display:none;align-items:center;justify-content:center}
+#llmModal.show{display:flex}
+.llm-panel{background:#fff;border-radius:16px;padding:22px 26px;width:min(460px,92vw);
+  box-shadow:0 24px 60px rgba(28,39,51,.25)}
+.llm-panel h3{margin:0 0 3px;font-size:16px;color:#16202c}
+.llm-panel .sub{font-size:12px;color:var(--sub);margin-bottom:6px}
+.llm-panel .fld{margin:13px 0}
+.llm-panel .fld label{display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600}
+.llm-panel .fld input{width:100%;border:1px solid var(--line2);border-radius:8px;
+  padding:8px 11px;font-size:13px;outline:none;font-family:inherit;box-sizing:border-box}
+.llm-panel .fld input:focus{border-color:var(--blue)}
+#llmStat{font-size:12px;margin-top:10px;min-height:18px;color:var(--sub);line-height:1.5;word-break:break-all}
+.llm-panel .btns{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+</style>
+</head>
+<body>
+
+<header class="app">
+  <img class="logo" src="/assets/FigureLogo.png" alt="肺癌（NSCLC）诊疗情报 logo">
+  <div class="title-wrap">
+    <h1 class="app-title">肺癌（NSCLC）<span class="hl">诊疗情报</span></h1>
+    <div class="app-sub">EGFR / MET · NSCLC ｜ ClinicalTrials.gov 实时 · PubTator 3 文献 · OpenTargets 靶点 · Tavily 新闻</div>
+  </div>
+  <div class="head-right">
+    <span id="updated"><span class="live-dot"></span>加载中…</span>
+    <button class="btn" id="llmBtn" title="配置 AI 解读所用的 LLM 接口">⚙️ LLM 设置</button>
+    <button class="btn primary" id="refreshBtn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+      刷新数据</button>
+    <label class="switch"><input type="checkbox" id="autoRef"> 每 5 分钟自动刷新</label>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="filters">
+    <div class="fgroup">
+      <h3>⏱ 时间筛选</h3>
+      <select class="sel" id="yearSel"></select>
+      <div class="chips" id="monthChips" style="margin-top:9px"></div>
+      <div class="hint" id="timeHint"></div>
+    </div>
+    <div class="fgroup">
+      <h3>📋 主题</h3>
+      <div id="topicCks"></div>
+    </div>
+    <div class="fgroup">
+      <h3>🧪 试验状态</h3>
+      <div class="chips" id="stChips"></div>
+    </div>
+    <div class="fgroup">
+      <h3>⚗️ 试验分期</h3>
+      <div class="chips" id="phChips"></div>
+    </div>
+    <div class="fgroup">
+      <h3>💊 治疗模式</h3>
+      <div class="chips" id="txChips"></div>
+    </div>
+    <div class="fgroup">
+      <h3>🗄 数据来源</h3>
+      <div id="srcCks"></div>
+    </div>
+    <div class="fgroup">
+      <h3>🔍 关键词</h3>
+      <input id="kw" placeholder="标题 / NCT / PMID / 申办方…">
+    </div>
+    <button class="btn" id="resetAll">重置全部筛选</button>
+  </aside>
+
+  <main>
+    <div class="warnbar" id="warnbar"></div>
+
+    <div class="hero">
+      <img src="/assets/FigureHero.jpg" alt="Lung Cancer Treatment Intelligence">
+      <div class="hero-ol">
+        <div class="hero-t">肺癌（NSCLC）诊疗情报</div>
+        <div class="hero-s">Lung Cancer (NSCLC) · 分子诊断 → 靶向治疗 → 临床证据 ｜ 实时数据驱动</div>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+    <div class="chart-bar"><b>📈 情报图表</b>
+      <span class="chint">悬停看信息 · 点击筛选（再点取消）</span>
+      <label class="mini-btn" title="勾选后 PPT 会包含 ESMO/WCLC/ASCO 等会议的关键试验表" style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;cursor:pointer"><input type="checkbox" id="exportConf" style="margin:0"> 含会议内容</label>
+      <button class="mini-btn" id="exportPPTXBtn" style="background:#2FBF8F;color:#04231a;font-weight:700">📊 导出 PPTX（可编辑）</button>
+      <button class="mini-btn" id="exportPPTBtn">📤 导出网页版</button>
+      <button class="mini-btn" id="chartReset">↺ 重置图表</button>
+    </div>
+    <div class="charts" id="charts"></div>
+    <div id="drill"></div>
+    <div id="overview"></div>
+
+    <div class="ask" id="askPanel">
+      <h3>💬 情报问答 · 按问题生成专题</h3>
+      <div class="ad">输入或选择医疗问题，AI 将检索临床试验与文献证据，生成带编号引用的专题板块（可重新生成/删除）</div>
+      <div class="qchips" id="qchips"></div>
+      <div class="qrow">
+        <input id="qInput" placeholder="输入医疗问题，如：奥希替尼耐药后四代 TKI 有哪些在研试验？">
+        <button class="btn primary" id="askBtn">生成专题</button>
+      </div>
+      <div class="ask-note">依据：实时 ClinicalTrials.gov 检索 + 已有文献/新闻证据 · AI 生成内容仅供参考，事实以编号来源为准</div>
+    </div>
+
+    <div id="csecs"></div>
+    <div id="topics"></div>
+    <footer id="foot"></footer>
+  </main>
+</div>
+
+<div id="tip"></div>
+<div id="toast"></div>
+<div id="loader"><div class="spin-ring"></div><span id="loadTxt">正在从 ClinicalTrials.gov 拉取最新试验数据…</span></div>
+
+<div id="llmModal">
+  <div class="llm-panel">
+    <h3>⚙️ LLM 设置</h3>
+    <div class="sub">用于 AI 解读 / 情报问答 / 总结报告（DeepSeek 兼容 chat/completions 接口）</div>
+    <div class="fld"><label>API 地址（Base URL）</label>
+      <input id="llmBase" placeholder="https://api.deepseek.com"></div>
+    <div class="fld"><label>API Key（留空 = 保持不变）</label>
+      <input id="llmKey" type="password" placeholder="sk-…" autocomplete="off"></div>
+    <div class="fld"><label>模型名</label>
+      <input id="llmModel" placeholder="deepseek-chat"></div>
+    <div id="llmStat"></div>
+    <div class="btns">
+      <button class="btn" id="llmClose">关闭</button>
+      <button class="btn" id="llmTest">测试连接</button>
+      <button class="btn primary" id="llmSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ═══════════ 全局状态 ═══════════ */
+var DATA=null;
+var F={year:'all',month:'all',topics:new Set(),st:'all',ph:'all',tx:'all',drug:-1,sp:'',
+       srcs:new Set(['trial','paper','news','target']),q:''};
+var AUTO_TIMER=null;
+
+var STMAP={recruiting:['RECRUITING'],active:['ACTIVE_NOT_RECRUITING','ENROLLING_BY_INVITATION'],
+  soon:['NOT_YET_RECRUITING','APPROVED_FOR_MARKETING','AVAILABLE'],
+  done:['COMPLETED'],other:['TERMINATED','WITHDRAWN','SUSPENDED','NO_LONGER_AVAILABLE','UNKNOWN']};
+var ST_NAME={recruiting:'招募中',active:'进行中',soon:'尚未开始',done:'已完成',other:'终止/暂停'};
+var ST_CLS=function(st){if(st==='RECRUITING')return'st-RECRUITING';
+  if(st==='ACTIVE_NOT_RECRUITING'||st==='ENROLLING_BY_INVITATION')return'st-ACTIVE';
+  if(st==='NOT_YET_RECRUITING'||st==='APPROVED_FOR_MARKETING'||st==='AVAILABLE')return'st-SOON';
+  if(st==='COMPLETED')return'st-DONE';return'st-OTHER';};
+var PALETTE=['#2f86e0','#5c7fa3','#7cc0f5','#3a6ea5','#a9c4e0','#2464b8','#8d9db5','#4a86c8'];
+/* 治疗模式归类：[药物名正则, 模式, 靶点, 展示名] —— 顺序即优先级 */
+var TX_SKIP=/placebo|standard of care|supportive care|best supportive|background|^study (drug|treatment|therapy)|any approved/i;
+var TX_RULES=[
+  [/amivantamab|rybrevant/i,'双抗','EGFR×c-MET','Amivantamab'],
+  [/ivonescimab|ak112/i,'双抗','PD-1×VEGF','Ivonescimab'],
+  [/zenocutuzumab/i,'双抗','HER2×HER3','Zenocutuzumab'],
+  [/volrustomig|cadonilimab|kn046|pm8002|mds1109|sh2046/i,'双抗','双靶点','其他双抗'],
+  [/patritumab|datopotamab|deruxtecan|enhertu|rezetecan/i,'ADC','HER2/HER3','DXd 类 ADC'],
+  [/telisotuzumab|vedotin/i,'ADC','MET','Vedotin 类 ADC'],
+  [/sacituzumab|govitecan|trodelvy/i,'ADC','TROP2','Sacituzumab'],
+  [/sunvozertinib|dzd9008/i,'四代TKI','EGFR C797S','Sunvozertinib'],
+  [/blu-?\s*(945|701)|bbt-?\s*176/i,'四代TKI','EGFR C797S','BLU/BBT 四代'],
+  [/osimertinib|tagrisso/i,'EGFR TKI','EGFR','Osimertinib'],
+  [/aumolertinib|almonertinib/i,'EGFR TKI','EGFR','Aumolertinib'],
+  [/lazertinib/i,'EGFR TKI','EGFR','Lazertinib'],
+  [/fulmonertinib|firmonertinib/i,'EGFR TKI','EGFR','Fulmonertinib'],
+  [/gefitinib/i,'EGFR TKI','EGFR','Gefitinib'],
+  [/erlotinib/i,'EGFR TKI','EGFR','Erlotinib'],
+  [/afatinib/i,'EGFR TKI','EGFR','Afatinib'],
+  [/dacomitinib/i,'EGFR TKI','EGFR','Dacomitinib'],
+  [/zipalertinib|cln-?\s*081|andamertinib|abivertinib/i,'EGFR TKI','EGFR ex20','Zipalertinib 等'],
+  [/capmatinib/i,'MET TKI','MET','Capmatinib'],
+  [/tepotinib/i,'MET TKI','MET','Tepotinib'],
+  [/savolitinib/i,'MET TKI','MET','Savolitinib'],
+  [/gumarontinib|glumatinib/i,'MET TKI','MET','Gumarontinib'],
+  [/cabozantinib/i,'MET TKI','MET','Cabozantinib'],
+  [/crizotinib/i,'多靶点TKI','MET/ALK','Crizotinib'],
+  [/alectinib|lorlatinib|brigatinib|ensartinib|ceritinib/i,'ALK TKI','ALK','ALK 抑制剂类'],
+  [/selpercatinib|pralsetinib/i,'TKI','RET','RET 抑制剂类'],
+  [/pembrolizumab|keytruda|nivolumab|opdivo|atezolizumab|tecentriq|durvalumab|imfinzi|sintilimab|camrelizumab|toripalimab|tislelizumab|serplulimab|cemiplimab|penpulimab|retifanlimab|budigalimab/i,'免疫检查点','PD-1/PD-L1','PD-1/PD-L1 类'],
+  [/ipilimumab|tremelimumab/i,'免疫检查点','CTLA-4','CTLA-4 类'],
+  [/carboplatin|cisplatin|pemetrexed|paclitaxel|docetaxel|gemcitabine|nedaplatin|lobaplatin|thiotepa|chemotherapy/i,'化疗','细胞毒','含铂/化疗类'],
+  [/radiotherapy|irradiation|radiation|sabr\b/i,'放疗','局部治疗','放疗/照射'],
+  [/bevacizumab|avastin|ramucirumab|anlotinib/i,'抗血管','VEGF','抗血管生成类'],
+  [/necitumumab|cetuximab|panitumumab/i,'单抗','EGFR','EGFR 单抗类']
+];
+var TX_ORDER=['EGFR TKI','四代TKI','MET TKI','ALK TKI','多靶点TKI','TKI','双抗','ADC','免疫检查点','抗血管','单抗','化疗','放疗','未分类'];
+function txClass(name){
+  var s=String(name||'');
+  if(!s||TX_SKIP.test(s))return null;
+  for(var i=0;i<TX_RULES.length;i++)
+    if(TX_RULES[i][0].test(s))return{mode:TX_RULES[i][1],target:TX_RULES[i][2],name:TX_RULES[i][3],ri:i};
+  return null;
+}
+function txModes(t){
+  var ms=[],classified=false,ivs=t.interventions||[];
+  ivs.forEach(function(iv){
+    var c=txClass(iv.name);
+    if(c){if(ms.indexOf(c.mode)<0)ms.push(c.mode);classified=true;}
+  });
+  if(ivs.length&&!classified)ms.push('未分类');
+  return ms;
+}
+var MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+var TOPIC_IMG={'egfr_l1_later':'/assets/FigureTopic1.jpg','egfr_tp53':'/assets/FigureTopic2.jpg',
+  'egfr_resistance':'/assets/FigureTopic3.jpg','met_primary':'/assets/FigureTopic4.jpg'};
+var PRESET_Q=[
+  'EGFR 突变晚期 NSCLC 目前一线标准治疗是什么？有哪些新试验？',
+  '奥希替尼耐药后有哪些在研新药和治疗策略？',
+  '四代 EGFR TKI 最新研发进展如何？',
+  'EGFR 合并 TP53 共突变对预后和治疗选择有何影响？',
+  'MET 外显子 14 跳跃突变有哪些已获批靶向药和关键试验？',
+  'MET 扩增（非 14 跳突）NSCLC 如何治疗？',
+  'ADC / 双特异性抗体在 EGFR 突变 NSCLC 中有哪些进展？',
+  'EGFR 突变 NSCLC 的辅助/新辅助靶向治疗证据如何？'];
+
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);
+  return d.innerHTML.replace(/"/g,'&quot;');}
+function $(id){return document.getElementById(id);}
+
+/* ═══════════ 悬停信息浮层 + 图表点击联动 ═══════════ */
+var TIP=$('tip');
+document.addEventListener('mousemove',function(e){
+  var el=e.target.closest?e.target.closest('[data-tip]'):null;
+  if(!el){TIP.style.display='none';return;}
+  TIP.innerHTML=el.getAttribute('data-tip');
+  TIP.style.display='block';
+  var x=e.clientX+14,y=e.clientY+14;
+  var r=TIP.getBoundingClientRect();
+  if(x+r.width>innerWidth-8)x=e.clientX-r.width-10;
+  if(y+r.height>innerHeight-8)y=e.clientY-r.height-10;
+  TIP.style.left=x+'px';TIP.style.top=y+'px';
+});
+document.addEventListener('scroll',function(){TIP.style.display='none';},{passive:true});
+function tipHTML(t1,t2,t3){
+  return'<span class="t1">'+esc(t1)+'</span>'+
+    (t2?'<br><span class="t2">'+esc(t2)+'</span>':'')+
+    (t3?'<br><span class="t3">'+esc(t3)+'</span>':'');
+}
+document.addEventListener('click',function(e){
+  var el=e.target.closest?e.target.closest('[data-act]'):null;
+  if(!el)return;
+  var parts=el.getAttribute('data-act').split(':'),k=parts[0],v=parts.slice(1).join(':');
+  var msg='',drill=false;
+  if(k==='st'){F.st=(F.st===v?'all':v);drill=F.st!=='all';
+    msg=drill?'已按状态「'+ST_NAME[v]+'」筛选，下方为匹配详情':'已取消状态筛选';}
+  else if(k==='ph'){F.ph=(F.ph===v?'all':v);drill=F.ph!=='all';
+    msg=drill?'已按分期「'+v+'」筛选，下方为匹配详情':'已取消分期筛选';}
+  else if(k==='tx'){F.tx=(F.tx===v?'all':v);drill=F.tx!=='all';
+    msg=drill?'已按治疗模式「'+v+'」筛选，下方为匹配详情':'已取消治疗模式筛选';}
+  else if(k==='drug'){var ri=+v;
+    if(F.drug===ri){F.drug=-1;msg='已取消药物筛选';}
+    else{F.drug=ri;drill=true;msg='已按药物「'+TX_RULES[ri][3]+'」筛选，下方为匹配详情';}}
+  else if(k==='sp'){
+    if(F.sp===v){F.sp='';msg='已取消申办方筛选';}
+    else{F.sp=v;drill=true;msg='已按申办方「'+v+'」筛选，下方为匹配详情';}}
+  else if(k==='year'){
+    if(String(F.year)===v){F.year='all';F.month='all';msg='已取消年份筛选';}
+    else{F.year=v;F.month='all';drill=true;msg='已按 '+v+' 年筛选，下方为匹配详情';}}
+  else if(k==='ym'){var ym=v.split('-');F.year=ym[0];F.month=ym[1];drill=true;
+    msg='已按 '+ym[0]+' 年 '+ym[1]+' 月筛选，下方为匹配详情';}
+  else if(k==='src'){
+    var nm={trial:'ClinicalTrials 试验',paper:'PubTator 文献',
+      target:'OpenTargets 靶点',news:'Tavily 新闻'}[v]||v;
+    if(F.srcs.has(v)){F.srcs.delete(v);msg='已隐藏 '+nm+'（再点一次恢复）';}
+    else{F.srcs.add(v);msg='已显示 '+nm;}}
+  else if(k==='goto'){
+    var card=document.getElementById(v);
+    if(card){card.classList.remove('collapsed');
+      card.scrollIntoView({behavior:'smooth',block:'start'});}
+    return;}
+  else return;
+  buildStaticFilters();renderAll();toast(msg);
+  if(drill){var dc=$('drillCard');
+    if(dc)setTimeout(function(){dc.scrollIntoView({behavior:'smooth',block:'start'});},120);}
+});
+
+/* ═══════════ 日期解析 ═══════════ */
+function parseYM(s){
+  s=String(s||'');
+  var m=s.match(/(\d{4})[-\/](\d{1,2})/);
+  if(m)return{y:+m[1],mo:+m[2]};
+  m=s.toLowerCase().match(/(\d{4})\s+([a-z]{3})[a-z]*/);
+  if(m&&MN[m[2]])return{y:+m[1],mo:MN[m[2]]};
+  m=s.toLowerCase().match(/([a-z]{3})[a-z]*\s+(\d{1,2}),?\s+(\d{4})/);
+  if(m&&MN[m[1]])return{y:+m[3],mo:MN[m[1]]};
+  m=s.toLowerCase().match(/(\d{1,2})\s+([a-z]{3})[a-z]*\s+(\d{4})/);
+  if(m&&MN[m[2]])return{y:+m[3],mo:MN[m[2]]};
+  m=s.match(/((?:19|20)\d{2})/);
+  if(m)return{y:+m[1],mo:null};
+  return{y:null,mo:null};
+}
+
+/* ═══════════ 数据装载 ═══════════ */
+function loadData(force,quiet){
+  if(!quiet)$('loader').classList.add('show');
+  fetch('/api/data'+(force?'?refresh=1':'')).then(function(r){return r.json();})
+   .then(function(d){
+     DATA=d;prepare();buildStaticFilters();renderAll();
+     fetch('/api/sections').then(function(r){return r.json();})
+       .then(function(ss){DATA.sections=ss||[];renderSections();});
+     var ld=$('updated');
+     ld.innerHTML='<span class="live-dot'+(d.live?'':' err')+'"></span>'+
+       (d.live?'实时':'缓存')+' · 试验更新 <b>'+d.trials_fetched_at.replace('T',' ')+'</b>'+
+       ' · 归档 '+d.archive_days.length+' 天';
+     var wb=$('warnbar');
+     if(!d.live){
+       wb.style.display='block';
+       wb.innerHTML='⚠ ClinicalTrials.gov 实时拉取失败（'+esc((d.errors&&d.errors[0])||'网络异常')+
+         '），当前展示归档数据。点「刷新数据」或稍后重试即可恢复实时。';
+     }else{wb.style.display='none';}
+     if(d.errors&&d.errors.length&&!quiet)toast('⚠ 部分实时数据拉取失败，已回退归档数据');
+     else if(!quiet)toast('已更新 · 试验 '+liveTrialCount()+' 条');
+   })
+   .catch(function(e){toast('加载失败：'+e);})
+   .finally(function(){$('loader').classList.remove('show');});
+}
+function liveTrialCount(){
+  var n=0;(DATA.topics||[]).forEach(function(t){t.trials.forEach(function(x){if(x.source==='live')n++;});});
+  return n;
+}
+
+var PREP={topics:[],years:new Set(),ym:new Set()};
+function prepare(){
+  PREP.topics=[];PREP.years=new Set();PREP.ym=new Set();
+  (DATA.topics||[]).forEach(function(tp){
+    var P={id:tp.id,title:tp.title,subtitle:tp.subtitle,refs:tp.refs||[],
+      synth:tp.synth||'',used:tp.used||[],invalid:tp.invalid||0,
+      targets:tp.targets||[],trials:[],papers:[],news:[],
+      key_trials:tp.key_trials||[],anchor_ym:tp.anchor_ym||''};
+    (tp.trials||[]).forEach(function(t){
+      var y=t.year!=null?t.year:null,mo=t.month!=null?t.month:null;
+      if(y==null){var p=parseYM(t.start_date||t.submit_date||t.first_post||t.date);y=p.y;mo=mo||p.mo;}
+      t._y=y;t._m=mo;
+      if(y){PREP.years.add(y);if(mo)PREP.ym.add(y+'-'+mo);}
+      P.trials.push(t);
+    });
+    (tp.papers||[]).forEach(function(p){
+      var py=parseYM(p.pubdate||'');
+      p._y=p.year?+p.year:(py.y||null);
+      p._m=(p.month!=null&&p.month!=='')?+p.month:(py.mo||null);
+      if(p._y)PREP.years.add(p._y);
+      if(p._y&&p._m)PREP.ym.add(p._y+'-'+p._m);
+      P.papers.push(p);
+    });
+    (tp.news||[]).forEach(function(n){
+      var p=parseYM(n.published_date);n._y=p.y;n._m=p.mo;
+      if(p.y){PREP.years.add(p.y);if(p.mo)PREP.ym.add(p.y+'-'+p.mo);}
+      P.news.push(n);
+    });
+    PREP.topics.push(P);
+  });
+  if(F.topics.size===0)PREP.topics.forEach(function(t){F.topics.add(t.id);});
+}
+
+/* ═══════════ 筛选 ═══════════ */
+function timeOK(it){
+  if(F.year!=='all'&&it._y!==+F.year)return false;
+  if(F.month!=='all'&&(it._m==null||it._m!==+F.month))return false;
+  return true;
+}
+function stGroup(st){
+  for(var k in STMAP)if(STMAP[k].indexOf(st)>=0)return k;
+  return'other';
+}
+function kwOK(text){
+  if(!F.q)return true;
+  return String(text||'').toLowerCase().indexOf(F.q)>=0;
+}
+function trialOK(t){
+  if(!timeOK(t))return false;
+  if(F.st!=='all'&&stGroup(t.status)!==F.st)return false;
+  if(F.ph!=='all'){
+    var hit=(t.phase||[]).some(function(p){return String(p).indexOf(F.ph)===0;});
+    if(!hit)return false;
+  }
+  if(F.tx!=='all'&&txModes(t).indexOf(F.tx)<0)return false;
+  if(F.drug>=0&&!(t.interventions||[]).some(function(iv){
+      return TX_RULES[F.drug][0].test(String(iv.name||''));}))return false;
+  if(F.sp&&t.sponsor!==F.sp)return false;
+  return kwOK([t.title,t.official_title,t.nct,t.sponsor,t.summary,
+    (t.conditions||[]).join(' '),(t.interventions||[]).map(function(i){return i.name;}).join(' '),
+    (t.collaborators||[]).join(' ')].join(' '));
+}
+function paperOK(p){
+  return timeOK(p)&&F.srcs.has('paper')&&
+    kwOK([p.title,p.pmid,Object.keys(p.entities||{}).map(function(k){return(p.entities[k]||[]).join(' ');}).join(' ')].join(' '));
+}
+function newsOK(n){
+  return timeOK(n)&&F.srcs.has('news')&&kwOK([n.title,n.snippet,n.url].join(' '));
+}
+function anchorOK(P){
+  if(!P.anchor_ym)return true;
+  var ay=P.anchor_ym.slice(0,4),am=String(parseInt(P.anchor_ym.slice(5,7),10));
+  if(F.year!=='all'&&String(F.year)!==ay)return false;
+  if(F.month!=='all'&&String(F.month)!==am)return false;
+  return true;
+}
+function view(){
+  var out=[];
+  PREP.topics.forEach(function(P){
+    if(!F.topics.has(P.id))return;
+    if(!anchorOK(P))return;
+    out.push({P:P,
+      trials:F.srcs.has('trial')?P.trials.filter(trialOK):[],
+      papers:P.papers.filter(paperOK),
+      news:P.news.filter(newsOK),
+      showTargets:F.srcs.has('target')&&kwOK(P.targets.map(function(g){
+        return g.symbol+(g.drugs||[]).map(function(d){return d.name;}).join('');}).join(' '))});
+  });
+  return out;
+}
+
+/* ═══════════ 渲染 ═══════════ */
+function renderAll(){renderKpis();renderCharts();renderDrill();renderOverview();renderTopics();renderFoot();refreshCounts();}
+
+/* ═══════════ 总览：AI 跨主题总结 + 筛选命中 ═══════════ */
+function renderOverview(){
+  var g=(DATA&&DATA.global)||{},h='';
+  if(g.synth){
+    h+='<section class="topic" id="overviewCard">'+
+      '<div class="topic-h" onclick="this.parentNode.classList.toggle(\'collapsed\')">'+
+      '<h2>📊 总览 · AI 跨主题总结<span class="en">DeepSeek 综合 4 主题证据 · 内联 [n] 引用可溯源 · 仅供参考</span></h2>'+
+      '<div class="tmeta"><span class="badge">引用 '+(g.refs||[]).length+'</span>'+
+      '<span class="caret">▾</span></div></div>'+
+      '<div class="tbody"><div class="synth"><b class="hd">AI 综合解读</b>'+
+      '<span class="ai-tag">AI 生成 · 事实以编号来源为准</span>'+
+      '<div>'+fmtRich(g.synth,'global')+'</div></div>';
+    if((g.refs||[]).length){
+      h+='<details class="refs"><summary>📚 来源索引（'+g.refs.length+' 条）—— 综述引用可溯源</summary><ol>'+
+        g.refs.map(function(s){return'<li id="r-global-'+s.n+'"><span class="src">'+esc(s.kind)+'</span> '+
+          esc(s.label)+(s.url?' <a href="'+esc(s.url)+'" target="_blank">链接</a>':'')+'</li>';}).join('')+
+        '</ol></details>';
+    }
+    h+='</div></section>';
+  }
+  $('overview').innerHTML=h;
+}
+function activeFilterDesc(){
+  var a=[];
+  if(F.year!=='all')a.push(F.year+' 年'+(F.month!=='all'?' · '+F.month+' 月':''));
+  if(F.st!=='all')a.push('状态「'+ST_NAME[F.st]+'」');
+  if(F.ph!=='all')a.push('分期「'+F.ph+'」');
+  if(F.tx!=='all')a.push('治疗「'+F.tx+'」');
+  if(F.drug>=0)a.push('药物「'+TX_RULES[F.drug][3]+'」');
+  if(F.sp)a.push('申办方「'+esc(F.sp)+'」');
+  if(F.q)a.push('关键词「'+esc(F.q)+'」');
+  return a;
+}
+var DRILL_MAX=15,DRILL_REPORT=null;
+function drillSig(){return activeFilterDesc().join('|');}
+function renderDrill(){
+  var d=$('drill'),a=activeFilterDesc();
+  if(!a.length){d.innerHTML='';DRILL_REPORT=null;return;}
+  var v=view(),trials=[],papers=[],newsArr=[];
+  v.forEach(function(x){
+    x.trials.forEach(function(t){trials.push({t:t,tp:x.P});});
+    x.papers.forEach(function(p){papers.push({p:p,tp:x.P});});
+    x.news.forEach(function(n){newsArr.push(n);});
+  });
+  var more=trials.length>DRILL_MAX?trials.length-DRILL_MAX:0;
+  var h='<div id="drillCard"><div class="dh"><div class="dt">🔍 筛选命中：'+
+    a.map(function(x){return'<span class="badge">'+x+'</span>';}).join('')+
+    '</div><div class="ops"><button class="mini-btn" onclick="askReport()">📋 生成总结报告</button>'+
+    '<button class="mini-btn" onclick="exportPPTX()" style="background:#2FBF8F;color:#04231a;font-weight:700">📊 导出PPTX</button>'+
+    '<button class="mini-btn" onclick="exportPPT()">📤 导出网页版</button>'+
+    '<button class="mini-btn" onclick="clearDrill()">✕ 清除筛选</button></div></div>'+
+    '<div class="dnote">试验 '+trials.length+' · 文献 '+papers.length+' · 新闻 '+newsArr.length+
+    ' —— 点击图表筛选后，命中内容在此展现；行尾标签可跳到对应主题卡</div>'+
+    '<div class="dbody">'+
+    (trials.length?trials.slice(0,DRILL_MAX).map(function(r){return renderDrillRow(r.t,r.tp);}).join('')+
+      (more?'<div class="empty" style="padding:6px 20px">… 其余 '+more+' 条试验见下方各主题卡</div>':'')
+      :'<div class="empty" style="padding:6px 20px">无命中试验</div>');
+  if(papers.length){
+    h+='<div style="padding:10px 20px 2px"><b class="sTitle" style="margin:0">📄 命中文献 '+papers.length+
+      '<span class="more">PubTator</span></b></div>'+
+      papers.slice(0,5).map(function(r){
+        return'<div class="drow"><span class="dttl"><a href="https://pubmed.ncbi.nlm.nih.gov/'+esc(r.p.pmid)+
+          '/" target="_blank">'+esc(r.p.title)+'</a></span><span class="nct">PMID '+esc(r.p.pmid)+
+          '</span><span class="badge gray" data-act="goto:'+esc(r.tp.id)+'">↦ '+esc(r.tp.title.slice(0,14))+'</span></div>';
+      }).join('');
+  }
+  if(DRILL_REPORT&&DRILL_REPORT.sig===drillSig()&&DRILL_REPORT.data.answer){
+    var R=DRILL_REPORT.data;
+    h+='<div class="synth" style="margin:14px 20px 0"><b class="hd">📋 AI 筛选总结报告</b>'+
+      '<span class="ai-tag">DeepSeek 生成 · '+esc(R.created||'')+' · 事实以编号来源为准</span>'+
+      '<div>'+fmtRich(R.answer,'drill')+'</div></div>';
+    if((R.refs||[]).length){
+      h+='<details class="refs" style="margin:8px 20px 12px" open><summary>📚 报告来源索引（'+R.refs.length+' 条）</summary><ol>'+
+        R.refs.map(function(r,i){return'<li id="r-drill-'+(i+1)+'"><span class="src">'+esc(r.kind)+'</span> '+
+          esc(r.label)+(r.url?' <a href="'+esc(r.url)+'" target="_blank">链接</a>':'')+'</li>';}).join('')+'</ol></details>';
+    }
+  }
+  h+='</div></div>';
+  d.innerHTML=h;
+}
+function collectReportPayload(){
+  var v=view(),trials=[],papers=[],news=[];
+  v.forEach(function(x){
+    x.trials.forEach(function(t){trials.push(t);});
+    x.papers.forEach(function(p){papers.push(p);});
+    x.news.forEach(function(n){news.push(n);});
+  });
+  return{filters:activeFilterDesc(),
+    trials:trials.slice(0,30).map(function(t){
+      return{nct:t.nct,title:t.title,status_cn:t.status_cn,phase:t.phase,
+        sponsor:t.sponsor,start_date:t.start_date,enrollment:t.enrollment,
+        summary:(t.summary||'').slice(0,380),
+        ivs:(t.interventions||[]).map(function(i){return i.name;}).slice(0,6)};}),
+    papers:papers.slice(0,10).map(function(p){
+      return{pmid:p.pmid,title:p.title,year:p.year,
+        abstract:(p.abstract||'').slice(0,380)};}),
+    news:news.slice(0,6).map(function(n){
+      return{title:n.title,url:n.url,published_date:n.published_date,
+        snippet:(n.snippet||'').slice(0,300)};})};
+}
+function askReport(){
+  var pl=collectReportPayload();
+  if(!pl.trials.length&&!pl.papers.length&&!pl.news.length){toast('当前筛选无命中内容');return;}
+  $('loader').classList.add('show');
+  $('loadTxt').textContent='AI 正在基于筛选命中生成总结报告…（约 20-60 秒）';
+  fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(pl)})
+   .then(function(r){return r.json();})
+   .then(function(d){
+     if(d.error){toast('报告生成失败：'+d.error);return;}
+     DRILL_REPORT={sig:drillSig(),data:d};
+     renderDrill();
+     toast('报告已生成 · 引用 '+(d.refs||[]).length+' 条');
+     var dc=$('drillCard');
+     if(dc)setTimeout(function(){dc.scrollIntoView({behavior:'smooth',block:'start'});},120);
+   })
+   .catch(function(e){toast('报告生成失败：'+e);})
+   .finally(function(){$('loadTxt').textContent='正在从 ClinicalTrials.gov 拉取最新试验数据…';
+     $('loader').classList.remove('show');});
+}
+function renderDrillRow(t,tp){
+  return'<div class="drow">'+
+    '<span class="st-b '+ST_CLS(t.status)+'">'+esc(t.status_cn||t.status||'')+'</span>'+
+    (t.phase||[]).slice(0,2).map(function(p){return'<span class="ph-b">'+esc(p)+'</span>';}).join('')+
+    '<span class="dttl"><a href="https://clinicaltrials.gov/study/'+esc(t.nct)+'" target="_blank">'+
+      esc(t.title||t.nct)+'</a></span>'+
+    '<span class="nct">'+esc(t.nct)+'</span>'+
+    '<span class="badge gray" data-act="goto:'+esc(tp.id)+'">↦ '+esc(tp.title.slice(0,14))+'</span></div>';
+}
+function clearDrill(){
+  F.year='all';F.month='all';F.st='all';F.ph='all';F.tx='all';F.drug=-1;F.sp='';
+  buildStaticFilters();renderAll();toast('已清除筛选');
+}
+
+function renderKpis(){
+  var v=view(),nT=0,nR=0,nP=0,nN=0,nSrc=0,nMatch=0;
+  v.forEach(function(x){nT+=x.trials.length;nR+=x.trials.filter(function(t){return t.status==='RECRUITING';}).length;
+    nP+=x.papers.length;nN+=x.news.length;nSrc+=(x.P.refs||[]).length;});
+  v.forEach(function(x){if(DATA.ct_total_counts&&DATA.ct_total_counts[x.P.id]!=null)nMatch+=DATA.ct_total_counts[x.P.id];});
+  var cards=[
+    ['🧪','临床试验（展示）',nT+'<small> / 匹配 '+(nMatch||'—')+'</small>','var(--grad)','当前筛选下实际展示的试验条数；「匹配」为 ClinicalTrials.gov 检索命中总数（每主题取最新 50 条展示）'],
+    ['✅','招募中',nR+'<small> / 展示 '+nT+'</small>','#2f86e0','状态为 RECRUITING（招募中）的试验数量'],
+    ['📄','文献',nP+'<small> 篇</small>','#5c7fa3','PubTator 3 检索、跨归档去重后的文献数（随筛选变化）'],
+    ['📰','新闻补充',nN+'<small> 条</small>','#8d9db5','Tavily 新闻补充条数（非证据源）'],
+    ['📚','来源索引',nSrc+'<small> 条</small>','#3b8ae8','各主题底部「来源索引」可溯源引用的条数'],
+    ['🗂','主题',v.length+'<small> / '+PREP.topics.length+'</small>','#2464b8','左侧面板勾选启用的主题数'],
+  ];
+  $('kpis').innerHTML=cards.map(function(c){
+    return'<div class="kpi" style="--kc:'+c[3]+'" data-tip="'+esc(tipHTML(c[1],c[4]))+
+      '"><span class="kico">'+c[0]+'</span><b>'+c[2]+'</b><span>'+c[1]+'</span></div>';
+  }).join('');
+}
+
+/* donut：meta=[{act,tip1,tip2,tip3}] 与 data 平行，可 null */
+function donutSVG(data,meta){
+  var total=0;data.forEach(function(d){total+=d.value;});
+  if(!total)return'<div class="empty">暂无数据</div>';
+  var size=150,stroke=26,R=(size-stroke)/2-3,C=2*Math.PI*R,cx=size/2,cy=size/2,acc=0,segs='';
+  data.forEach(function(d,i){
+    if(d.value<=0)return;
+    var ln=d.value/total*C,m=meta&&meta[i]||{};
+    var pct=Math.round(d.value/total*100);
+    var tip=tipHTML(m.tip1||d.label,(m.tip2||d.value+' 条 · 占 '+pct+'%'),m.act?'点击：'+(m.tip3||'按此筛选'):'');
+    var act=m.act?' data-act="'+esc(m.act)+'"':'';
+    segs+='<g class="dg"'+act+' data-tip="'+esc(tip)+'">'+
+      '<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="'+PALETTE[i%PALETTE.length]+
+      '" stroke-width="'+stroke+'" stroke-dasharray="'+Math.max(ln-2,1).toFixed(2)+' '+(C-ln+2).toFixed(2)+
+      '" stroke-dashoffset="'+(-acc-1).toFixed(2)+'" transform="rotate(-90 '+cx+' '+cy+')"></circle></g>';
+    acc+=ln;
+  });
+  var lg=data.map(function(d,i){
+    var m=meta&&meta[i]||{};
+    var tip=tipHTML(m.tip1||d.label,(m.tip2||d.value+' 条'),m.act?'点击：'+(m.tip3||'按此筛选'):'');
+    var act=m.act?' data-act="'+esc(m.act)+'"':'';
+    return'<span class="lg"'+(act||'')+' data-tip="'+esc(tip)+'"'+(m.act?' style="cursor:pointer"':'')+
+      '><i style="background:'+PALETTE[i%PALETTE.length]+'"></i>'+esc(d.label)+'<b>'+d.value+'</b></span>';
+  }).join('');
+  return'<div class="donut-wrap"><svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+
+    '">'+segs+'<text x="'+cx+'" y="'+(cy-1)+'" text-anchor="middle" class="dnum">'+total+
+    '</text><text x="'+cx+'" y="'+(cy+15)+'" text-anchor="middle" class="dlab">合计</text></svg><div class="lgs">'+lg+'</div></div>';
+}
+/* bars：meta=[{act,tip1,tip2,tip3}] 与 data 平行，可 null */
+function barsHTML(data,meta){
+  if(!data.length)return'<div class="empty">暂无数据</div>';
+  var mx=Math.max.apply(null,data.map(function(d){return d.value;}).concat([1]));
+  return'<div class="bars">'+data.map(function(d,i){
+    var w=Math.round(d.value/mx*1000)/10,m=meta&&meta[i]||{};
+    var tip=tipHTML(m.tip1||d.label,(m.tip2||d.value+' 条'),m.act?'点击：'+(m.tip3||'按此筛选'):'');
+    var act=m.act?' data-act="'+esc(m.act)+'"':'';
+    return'<div class="brow"'+act+' data-tip="'+esc(tip)+'">'+
+      '<span class="blabel">'+esc(d.label)+'</span>'+
+      '<div class="btrack"><div class="bfill" style="width:'+w+'%"></div></div>'+
+      '<span class="bval">'+d.value+'</span></div>';}).join('')+'</div>';
+}
+function chartCard(title,body,hint,note){
+  return'<div class="chart"><div class="ctitle"><span class="cdot"></span>'+esc(title)+
+    (hint?'<span class="chint">'+esc(hint)+'</span>':'')+'</div>'+
+    body+(note?'<div class="cnote">'+esc(note)+'</div>':'')+'</div>';
+}
+function renderCharts(){
+  var v=view(),trials=[],papers=[],news=[];
+  v.forEach(function(x){trials=trials.concat(x.trials);papers=papers.concat(x.papers);news=news.concat(x.news);});
+  var stCnt={},phCnt={},srcCnt={},trend={},trendY={};
+  trials.forEach(function(t){
+    var g=ST_NAME[stGroup(t.status)];stCnt[g]=(stCnt[g]||0)+1;
+    (t.phase||[]).forEach(function(p){phCnt[p]=(phCnt[p]||0)+1;});
+    if(t._y){trendY[t._y]=(trendY[t._y]||0)+1;
+      if(F.year!=='all'&&t._m)trend[t._m]=(trend[t._m]||0)+1;}
+  });
+  papers.concat(news).forEach(function(p){
+    if(p._y){trendY[p._y]=(trendY[p._y]||0)+1;
+      if(F.year!=='all'&&p._m)trend[p._m]=(trend[p._m]||0)+1;}
+  });
+  srcCnt['trial']=trials.length;srcCnt['paper']=papers.length;
+  srcCnt['news']=news.length;
+  v.forEach(function(x){if(x.showTargets)srcCnt['target']=(srcCnt['target']||0)+x.P.targets.length;});
+  var SRC_NAME={trial:'ClinicalTrials 试验',paper:'PubTator 文献',
+    target:'OpenTargets 靶点',news:'Tavily 新闻'};
+
+  var stOrder=['招募中','进行中','尚未开始','已完成','终止/暂停'];
+  var stKey={};Object.keys(ST_NAME).forEach(function(k){stKey[ST_NAME[k]]=k;});
+  var phOrder=['I期','II期','III期','IV期','不适用'];
+
+  var stData=stOrder.filter(function(k){return stCnt[k];})
+    .map(function(k){return{label:k,value:stCnt[k]};});
+  var stMeta=stData.map(function(d){return{act:'st:'+stKey[d.label],
+    tip1:'试验状态 · '+d.label,tip3:(F.st===stKey[d.label]?'取消该筛选':'仅看「'+d.label+'」试验')};});
+  var phData=phOrder.filter(function(k){return phCnt[k];})
+    .map(function(k){return{label:k,value:phCnt[k]};});
+  var phMeta=phData.map(function(d){return{act:'ph:'+d.label,
+    tip1:'试验分期 · '+d.label,tip3:(F.ph===d.label?'取消该筛选':'仅看 '+d.label+' 试验')};});
+
+  var trendData,trendTitle,trendMeta;
+  if(F.year!=='all'){
+    trendData=[];for(var m=1;m<=12;m++)trendData.push({label:m+'月',value:trend[m]||0});
+    trendMeta=trendData.map(function(d){
+      var mm=d.label.replace('月','');
+      return{act:'ym:'+F.year+'-'+mm,tip1:F.year+' 年 '+d.label+' 情报量',
+        tip3:(String(F.month)===mm?'取消月份筛选':'筛选 '+F.year+' 年 '+d.label)};});
+    trendTitle=F.year+' 年情报月度分布';
+    var ynote='试验(开始月) + 文献/新闻(发表月)';
+  }else{
+    trendData=Object.keys(trendY).sort().reverse().slice(0,10)
+      .map(function(k){return{label:k+'年',value:trendY[k]};});
+    trendMeta=trendData.map(function(d){
+      var yy=d.label.replace('年','');
+      return{act:'year:'+yy,tip1:yy+' 年情报量',
+        tip3:(String(F.year)===yy?'取消年份筛选':'按 '+yy+' 年筛选')};});
+    trendTitle='情报年度分布';
+    var ynote='试验(开始年) + 文献/新闻(发表年)';
+  }
+  /* 药厂 / 申办方 Top 10 */
+  var SPCLS_CN={INDUSTRY:'药企',ACADEMIC:'学术/医院',NIH:'NIH',OTHER:'其他',FED:'政府'};
+  var spCnt={},spCls={};
+  trials.forEach(function(t){
+    var s=(t.sponsor||'').trim();
+    if(!s)return;
+    spCnt[s]=(spCnt[s]||0)+1;
+    if(!spCls[s]&&t.sponsor_class)spCls[s]=t.sponsor_class;
+  });
+  var spRows=Object.keys(spCnt).map(function(k){return{k:k,n:spCnt[k]};})
+    .sort(function(a,b){return b.n-a.n;}).slice(0,10);
+  var spData=spRows.map(function(d){
+    var lb=d.k.length>20?d.k.slice(0,19)+'…':d.k;
+    return{label:lb,value:d.n};});
+  var spMeta=spRows.map(function(d){
+    var cn=SPCLS_CN[spCls[d.k]]||spCls[d.k]||'未注明';
+    return{act:'sp:'+d.k,tip1:'申办方 · '+d.k,
+      tip2:cn+' · 牵头 '+d.n+' 项试验',
+      tip3:(F.sp===d.k?'取消该申办方筛选':'仅看该申办方试验')};});
+
+  /* 治疗模式 / 药物-靶点（按干预措施自动归类） */
+  var txCnt={},drugAgg={};
+  trials.forEach(function(t){
+    txModes(t).forEach(function(m){txCnt[m]=(txCnt[m]||0)+1;});
+    var seen={};
+    (t.interventions||[]).forEach(function(iv){
+      var c=txClass(iv.name);
+      if(!c||seen[c.name])return;
+      seen[c.name]=1;
+      if(!drugAgg[c.name])drugAgg[c.name]={n:0,ri:c.ri};
+      drugAgg[c.name].n++;
+    });
+  });
+  var txData=TX_ORDER.filter(function(m){return txCnt[m];})
+    .map(function(m){return{label:m,value:txCnt[m]};});
+  var txMeta=txData.map(function(d){return{act:'tx:'+d.label,tip1:'治疗模式 · '+d.label,
+    tip2:d.value+' 项试验'+(d.label==='未分类'?'（自动归类未命中）':''),
+    tip3:(F.tx===d.label?'取消该筛选':'仅看「'+d.label+'」相关试验')};});
+  var drugRows=Object.keys(drugAgg).map(function(k){return{k:k,n:drugAgg[k].n,ri:drugAgg[k].ri};})
+    .sort(function(a,b){return b.n-a.n;}).slice(0,10);
+  var drugData=drugRows.map(function(d){return{label:d.k+'·'+TX_RULES[d.ri][2],value:d.n};});
+  var drugMeta=drugRows.map(function(d){
+    return{act:'drug:'+d.ri,tip1:TX_RULES[d.ri][3]+'（'+TX_RULES[d.ri][1]+'）',
+      tip2:'靶点 '+TX_RULES[d.ri][2]+' · 涉及 '+d.n+' 项试验',
+      tip3:(F.drug===d.ri?'取消该药物筛选':'仅看含该药物的试验')};});
+
+  $('charts').innerHTML=
+    chartCard('试验状态分布',donutSVG(stData,stMeta),'悬停看占比 · 点击筛选')+
+    chartCard('治疗模式分布',donutSVG(txData,txMeta),'悬停看分类 · 点击筛选','按干预措施自动归类：TKI / 四代 / 双抗 / ADC / IO / 化疗')+
+    chartCard('高频在研药物 · 靶点',barsHTML(drugData,drugMeta),'悬停看靶点 · 点击筛选该药','含该药物干预的试验数 · 分组行代表一类药物')+
+    chartCard('试验分期分布',barsHTML(phData,phMeta),'点击筛选','一项试验可属多期')+
+    chartCard(trendTitle,barsHTML(trendData,trendMeta),'点击按时间筛选',ynote)+
+    chartCard('药厂 / 申办方 Top 10',barsHTML(spData,spMeta),'悬停看详情 · 点击筛选','按牵头申办方统计 · 药企 / 学术机构 / 医院');
+}
+
+function fmtRich(text,prefix){
+  var s=esc(text).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/\[(\d{1,3})\]/g,function(m,n){
+      return'<a class="cref" href="#r-'+prefix+'-'+n+'">['+n+']</a>';});
+  return s.replace(/\n/g,'<br>');
+}
+function ivChips(t){
+  return(t.interventions||[]).map(function(i){
+    return'<span class="tag iv" title="'+esc(i.type||'')+'">'+esc(i.name)+'</span>';}).join('')||'';
+}
+function renderTrial(t,pid){
+  var loc='';
+  if(t.source==='archive'||!t.n_locations){
+    loc=t.date?'提交 '+esc(t.date):'';
+  }else{
+    loc='<b>'+t.n_locations+'</b> 家中心 · <b>'+(t.countries||[]).length+'</b> 国'+
+      ((t.countries||[]).length?'（'+esc((t.countries||[]).slice(0,4).join('、'))+
+        ((t.countries||[]).length>4?' 等':'')+'）':'');
+  }
+  var sum=(t.summary||'').trim();
+  return'<div class="trial">'+
+    '<div class="row1"><span class="st-b '+ST_CLS(t.status)+'">'+esc(t.status_cn||t.status||'')+'</span>'+
+    (t.phase||[]).map(function(p){return'<span class="ph-b">'+esc(p)+'</span>';}).join('')+
+    '<span class="ttle"><a href="https://clinicaltrials.gov/study/'+esc(t.nct)+'" target="_blank">'+esc(t.title||'')+'</a>'+
+    (t.source==='live'?'<span class="live-b">实时</span>':'')+
+    (t.ref&&pid?'<a class="cref" href="#r-'+pid+'-'+t.ref+'">['+t.ref+']</a>':'')+'</span>'+
+    '<span class="nct">'+esc(t.nct)+'</span></div>'+
+    '<div class="meta-line">'+
+      (t.sponsor?'<span>申办 <b>'+esc(t.sponsor)+'</b>'+(t.sponsor_class?' · '+esc(t.sponsor_class):'')+'</span>':'')+
+      (t.study_type?'<span>'+esc(t.study_type==='INTERVENTIONAL'?'干预性':t.study_type==='OBSERVATIONAL'?'观察性':t.study_type)+'</span>':'')+
+      (t.allocation==='RANDOMIZED'?'<span>随机化</span>':'')+
+      (t.enrollment!=null?'<span>入组 <b>'+esc(t.enrollment)+'</b></span>':'')+
+      (t.start_date?'<span>开始 <b>'+esc(t.start_date)+'</b></span>':'')+
+      (t.completion||t.primary_completion?'<span>完成 '+esc(t.completion||t.primary_completion)+'</span>':'')+
+    '</div>'+
+    (loc?'<div class="meta-line"><span>地点 '+loc+'</span>'+
+      (t.sex||t.ages?'<span>'+[t.sex==='ALL'?'男女均可':t.sex==='F'?'仅女性':t.sex==='M'?'仅男性':'',
+        t.ages?'龄 '+esc(t.ages):''].filter(Boolean).join(' · ')+'</span>':'')+'</div>':'')+
+    (ivChips(t)?'<div style="margin-top:5px">'+ivChips(t)+'</div>':'')+
+    ((t.conditions||[]).length?'<div style="margin-top:2px">'+t.conditions.slice(0,3).map(function(c){
+      return'<span class="tag">'+esc(c.length>44?c.slice(0,44)+'…':c)+'</span>';}).join('')+'</div>':'')+
+    (t.why_stopped?'<div class="whystop">⚠ 终止原因：'+esc(t.why_stopped)+'</div>':'')+
+    (sum?'<details><summary>试验摘要</summary><div class="sumtxt">'+esc(sum)+'</div></details>':'')+
+    ((t.collaborators||[]).length?'<details><summary>合作机构（'+t.collaborators.length+'）</summary><div class="sumtxt">'+
+      esc(t.collaborators.join('、'))+'</div></details>':'')+
+    '</div>';
+}
+function renderTopic(x){
+  var P=x.P,pid=P.id,ev=x.trials.length+x.papers.length+x.P.targets.length;
+  var img=TOPIC_IMG[pid];
+  var h='<section class="topic" id="'+pid+'">'+
+    (img?'<img class="topic-img" src="'+img+'" alt="'+esc(P.title)+'" onclick="var s=this.parentNode;s.classList.toggle(\'collapsed\')">':'')+
+    '<div class="topic-h" onclick="this.parentNode.classList.toggle(\'collapsed\')">'+
+    '<h2>'+esc(P.title)+'<span class="en">'+esc(P.subtitle)+'</span></h2>'+
+    '<div class="tmeta"><span class="badge">证据 '+ev+'</span>'+
+    (DATA.ct_total_counts&&DATA.ct_total_counts[pid]!=null?'<span class="badge gray">CT.gov 匹配 '+DATA.ct_total_counts[pid]+' · 本版展示 '+x.trials.length+'</span>':'')+
+    '<span class="caret">▾</span></div></div><div class="tbody">';
+  if(P.synth){
+    h+='<div class="synth"><b class="hd">AI 关键解读</b><span class="ai-tag">AI 生成 · 引用见来源索引 · 仅供参考</span>'+
+      '<div>'+fmtRich(P.synth,pid)+'</div></div>';
+  }
+  if(P.key_trials&&P.key_trials.length){
+    var th='style="border:1px solid var(--line);padding:5px 8px;font-size:11px;color:var(--sub);text-align:left;white-space:nowrap"';
+    var tdc='style="border:1px solid var(--line);padding:5px 8px;font-size:12px"';
+    h+='<div class="sec" style="margin-bottom:10px"><b class="sTitle">📊 ESMO 2026 关键注册试验（全瘤种）'+
+      '<span class="n">'+P.key_trials.length+'</span>'+
+      '<span class="more">AI 从会议报道抽取 · 数字请以原文为准 · 每行附来源编号</span></b>'+
+      '<div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%">'+
+      '<thead><tr>'+['终点','方案','试验','瘤种/场景','HR','95%CI','N','判定','来源'].map(function(x){
+        return'<th '+th+'>'+x+'</th>';}).join('')+'</tr></thead><tbody>'+
+      P.key_trials.map(function(r){
+        var ci=(r.ci_low!=null&&r.ci_high!=null)?(r.ci_low+'-'+r.ci_high):'—';
+        var hr=(r.hr!=null)?String(r.hr):'—';
+        var nv=(r.n!=null)?String(r.n):'—';
+        var src=r.src?('<a class="cref" href="#r-'+pid+'-'+r.src+'">['+r.src+']</a>'):'—';
+        return'<tr>'+
+          '<td '+tdc+'>'+esc(r.endpoint||'')+'</td>'+
+          '<td '+tdc+'>'+esc(r.regimen||'')+'</td>'+
+          '<td '+tdc+'>'+esc(r.trial||'')+'</td>'+
+          '<td '+tdc+'>'+esc(r.tumor||'')+'</td>'+
+          '<td '+tdc+'>'+hr+'</td><td '+tdc+'>'+ci+'</td><td '+tdc+'>'+nv+'</td>'+
+          '<td '+tdc+'>'+esc(r.verdict||'')+'</td><td '+tdc+'>'+src+'</td></tr>';}).join('')+
+      '</tbody></table></div></div>';
+  }
+  h+='<div class="grid2">';
+  h+='<div class="sec"><b class="sTitle">🧪 临床试验<span class="n">'+x.trials.length+'</span>'+
+    '<span class="more">ClinicalTrials.gov v2 · 实时 · 按提交日期取最新</span></b>'+
+    (x.trials.length?x.trials.map(function(t){return renderTrial(t,pid);}).join('')
+      :(P.key_trials&&P.key_trials.length
+        ?'<div class="empty">本主题以会议报道与关键试验表为主，不单独采集临床试验列表</div>'
+        :'<div class="empty">当前筛选无匹配</div>'))+'</div>';
+  h+='<div class="sec"><b class="sTitle">📄 文献<span class="n">'+x.papers.length+'</span>'+
+    '<span class="more">PubTator 3</span></b>'+
+    (x.papers.length?x.papers.map(function(p){
+      var ents=[];['Gene','Disease','Variant','Chemical'].forEach(function(k){
+        (p.entities&&p.entities[k]||[]).slice(0,2).forEach(function(v){ents.push(v);});});
+      return'<div class="item"><div class="t"><a href="https://pubmed.ncbi.nlm.nih.gov/'+esc(p.pmid)+'/" target="_blank">'+
+        esc(p.title)+'</a><span class="src">PubTator</span>'+
+        (p.ref?'<a class="cref" href="#r-'+pid+'-'+p.ref+'">['+p.ref+']</a>':'')+'</div>'+
+        '<div class="s">PMID '+esc(p.pmid)+' · '+esc(p.year||'年份未注明')+'</div>'+
+        (ents.length?'<div class="s">'+ents.map(function(e){return'<span class="tag">'+esc(e)+'</span>';}).join('')+'</div>':'')+
+        '</div>';}).join(''):'<div class="empty">当前筛选无匹配</div>')+'</div>';
+  if(x.showTargets&&P.targets.length){
+    h+='<div class="sec"><b class="sTitle">🧬 靶点 · 药物<span class="n">'+P.targets.length+'</span>'+
+      '<span class="more">OpenTargets</span></b>'+P.targets.map(function(g){
+      var dc=(g.diseases||[]).slice(0,5).map(function(d){
+        return'<span class="tag" title="关联分 '+((d.score!=null?(Math.round(d.score*100)/100):'?'))+'">'+esc(d.name)+'</span>';}).join('');
+      var uc=(g.drugs||[]).slice(0,8).map(function(d){
+        return'<span class="tag iv" title="'+esc(d.stage||'')+'">'+esc(d.name)+'<i>'+esc(stageCn(d.stage))+'</i></span>';}).join('');
+      return'<div class="item"><div class="t"><a href="https://platform.opentargets.org/target/'+esc(g.ensembl)+'" target="_blank">'+
+        esc(g.symbol)+'</a><span class="src">OpenTargets</span>'+
+        (g.ref?'<a class="cref" href="#r-'+pid+'-'+g.ref+'">['+g.ref+']</a>':'')+'</div>'+
+        '<div class="s">疾病：'+(dc||'—')+'</div><div class="s">候选药物：'+(uc||'—')+'</div></div>';}).join('')+'</div>';
+  }
+  h+='<div class="sec"><b class="sTitle">📰 新闻补充<span class="n">'+x.news.length+'</span>'+
+    '<span class="more">Tavily · 非证据源</span></b>'+
+    (x.news.length?x.news.map(function(n){
+      var sc=n.score!=null&&isFinite(n.score)?' · 相关度 '+(Math.round(n.score*100)/100):'';
+      return'<div class="item"><div class="t"><a href="'+esc(n.url)+'" target="_blank">'+esc(n.title)+'</a>'+
+        '<span class="src tv">Tavily·补充</span>'+
+        (n.ref?'<a class="cref" href="#r-'+pid+'-'+n.ref+'">['+n.ref+']</a>':'')+'</div>'+
+        '<div class="s">'+esc(n.published_date||'日期不详')+sc+'</div>'+
+        (n.snippet?'<div class="s">'+esc(n.snippet.slice(0,180))+'</div>':'')+'</div>';}).join('')
+      :'<div class="empty">当前筛选无匹配</div>')+'</div>';
+  h+='</div>';
+  if((P.refs||[]).length){
+    h+='<details class="refs"><summary>📚 来源索引（'+P.refs.length+' 条）—— 所有证据可溯源</summary><ol>'+
+      P.refs.map(function(s){return'<li id="r-'+pid+'-'+s.n+'"><span class="src">'+esc(s.kind)+'</span> '+
+        esc(s.label)+(s.url?' <a href="'+esc(s.url)+'" target="_blank">链接</a>':'')+'</li>';}).join('')+'</ol></details>';
+  }
+  h+='</div></section>';
+  return h;
+}
+function renderTopics(){
+  var v=view();
+  /* 有内容筛选（状态/分期/治疗/药物/申办方/时间/关键词）时，隐藏零命中的主题卡 */
+  if(activeFilterDesc().length)
+    v=v.filter(function(x){return x.trials.length||x.papers.length||x.news.length||
+      (x.showTargets&&(x.P.targets||[]).length);});
+  $('topics').innerHTML=v.length?v.map(renderTopic).join(''):
+    '<div class="empty" style="font-size:13px;padding:10px 4px">当前筛选无命中主题 —— 试试放宽条件或点「重置全部筛选」</div>';
+}
+function renderFoot(){
+  var d=DATA||{};
+  $('foot').innerHTML='数据来源：ClinicalTrials.gov v2 实时 · PubTator 3 · OpenTargets · Tavily（新闻补充）'+
+    ' ｜ 归档 '+(d.archive_days||[]).length+' 天 · 最近归档构建 '+esc(d.latest_generated_at||'—')+
+    ' ｜ AI 解读由 DeepSeek 生成 · 仅供参考 · 事实以编号来源为准';
+}
+var STAGE_CN={6:'已获批',5:'IV期',4:'III期',3:'II期',2:'I期',1:'临床前',0:'—'};
+function stageCn(s){
+  s=String(s||'').toUpperCase();
+  if(s.indexOf('APPROVAL')>=0||s.indexOf('APPROVED')>=0)return STAGE_CN[6];
+  var m=s.match(/PHASE[\s_]*(IV|4|III|3|II|2|I|1)\b/);
+  if(m){var r={'IV':5,'4':5,'III':4,'3':4,'II':3,'2':3,'I':2,'1':2}[m[1]];return STAGE_CN[r];}
+  if(/PRECLINICAL|DISCOVERY/i.test(s))return STAGE_CN[1];
+  return STAGE_CN[0];
+}
+
+/* ═══════════ 问答专题 ═══════════ */
+function renderSections(){
+  var ss=DATA.sections||[];
+  $('csecs').innerHTML=ss.length?ss.map(function(s){
+    var h='<section class="csec" id="'+s.id+'"><div class="csec-h"><div class="qt">'+esc(s.question)+'</div>'+
+      '<div class="ops"><button class="mini-btn" onclick="exportSectionPPT(\''+s.id+'\')">📤 导出PPT</button>'+
+      '<button class="mini-btn" onclick="regenSection(\''+s.id+'\')">↻ 重新生成</button>'+
+      '<button class="mini-btn del" onclick="delSection(\''+s.id+'\')">✕ 删除</button></div></div>'+
+      '<div class="tagline">生成于 '+esc(s.created)+' · CT.gov 检索词「'+esc(s.ct_term||'—')+'」 · 证据 '+
+      (s.refs||[]).length+' 条'+(s.trials&&s.trials.length?' · 关联试验 '+s.trials.length+' 项':'')+'</div>'+
+      '<div class="tbody">';
+    if(s.answer)h+='<div class="synth"><b class="hd">AI 解读</b><span class="ai-tag">AI 生成 · 仅供参考 · 事实以编号来源为准</span>'+
+      '<div>'+fmtRich(s.answer,s.id)+'</div></div>';
+    if((s.trials||[]).length)h+='<div class="sec"><b class="sTitle">🧪 关联临床试验<span class="n">'+s.trials.length+'</span>'+
+      '<span class="more">按问题实时检索</span></b>'+s.trials.map(function(t){return renderTrial(t,s.id);}).join('')+'</div>';
+    if((s.refs||[]).length)h+='<details class="refs" open><summary>📚 来源索引（'+s.refs.length+' 条）</summary><ol>'+
+      s.refs.map(function(r,i){return'<li id="r-'+s.id+'-'+(i+1)+'"><span class="src">'+esc(r.kind)+'</span> '+
+        esc(r.label)+(r.url?' <a href="'+esc(r.url)+'" target="_blank">链接</a>':'')+'</li>';}).join('')+'</ol></details>';
+    h+='</div></section>';
+    return h;
+  }).join(''):'';
+}
+function askQuestion(q){
+  if(!q)return;
+  $('loader').classList.add('show');
+  $('loadTxt').textContent='AI 正在检索证据并生成专题解读…（约 20-60 秒）';
+  fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question:q})})
+   .then(function(r){return r.json();})
+   .then(function(d){
+     if(d.error){toast('生成失败：'+d.error);}
+     else{DATA.sections=d;renderSections();
+       var last=d[d.length-1];
+       toast('专题已生成 · 证据 '+((last&&last.refs)||[]).length+' 条');
+       if(last)setTimeout(function(){last&&$(last.id)&&$(last.id).scrollIntoView({behavior:'smooth',block:'start'});},150);}
+   })
+   .catch(function(e){toast('生成失败：'+e);})
+   .finally(function(){$('loadTxt').textContent='正在从 ClinicalTrials.gov 拉取最新试验数据…';
+     $('loader').classList.remove('show');});
+}
+function regenSection(id){
+  var s=(DATA.sections||[]).filter(function(x){return x.id===id;})[0];
+  if(!s)return;
+  $('loader').classList.add('show');
+  $('loadTxt').textContent='AI 正在重新生成专题…（约 20-60 秒）';
+  fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question:s.question,id:id})})
+   .then(function(r){return r.json();})
+   .then(function(d){if(d.error){toast('重新生成失败：'+d.error);}
+     else{DATA.sections=d;renderSections();toast('已重新生成');}})
+   .catch(function(e){toast('重新生成失败：'+e);})
+   .finally(function(){$('loadTxt').textContent='正在从 ClinicalTrials.gov 拉取最新试验数据…';
+     $('loader').classList.remove('show');});
+}
+function delSection(id){
+  fetch('/api/sections/delete',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id:id})})
+   .then(function(r){return r.json();})
+   .then(function(d){DATA.sections=d;renderSections();toast('已删除');});
+}
+
+/* ═══════════ 筛选栏构建 ═══════════ */
+function buildStaticFilters(){
+  var ys=Array.from(PREP.years).sort(function(a,b){return b-a;});
+  $('yearSel').innerHTML='<option value="all">全部年份</option>'+
+    ys.map(function(y){return'<option value="'+y+'"'+(String(F.year)===String(y)?' selected':'')+'>'+y+' 年</option>';}).join('');
+  var mh='<span class="chip'+(F.month==='all'?' on':'')+'" data-m="all">全部</span>';
+  for(var m=1;m<=12;m++){
+    var dis=!Array.from(PREP.ym).some(function(k){return k.split('-')[1]===String(m);});
+    mh+='<span class="chip'+(String(F.month)===String(m)?' on':'')+'" data-m="'+m+'"'+(dis?' disabled':'')+'>'+m+'月</span>';
+  }
+  $('monthChips').innerHTML=mh;
+  $('timeHint').textContent='可按年份/月份筛选（月份可跨年）；时间基于试验提交日期、文献出版日期或新闻发表日期';
+  $('topicCks').innerHTML=PREP.topics.map(function(P){
+    var short={'egfr_l1_later':'EGFR 一线/后线','egfr_tp53':'EGFR+TP53',
+      'egfr_resistance':'EGFR 耐药','met_primary':'MET 异常',
+      'esmo_congress':'ESMO 会议'}[P.id]||P.title.slice(0,10);
+    return'<label class="ck"><input type="checkbox" data-tp="'+P.id+'"'+
+      (F.topics.has(P.id)?' checked':'')+'>'+esc(short)+'</label>';}).join('');
+  $('stChips').innerHTML=stChipsHTML();
+  $('txChips').innerHTML=txChipsHTML();
+  var phs=['I期','II期','III期','IV期','不适用'];
+  $('phChips').innerHTML='<span class="chip'+(F.ph==='all'?' on':'')+'" data-ph="all">全部</span>'+
+    phs.map(function(p){return'<span class="chip'+(F.ph===p?' on':'')+'" data-ph="'+p+'">'+p+'</span>';}).join('');
+  var srcs=[['trial','ClinicalTrials 试验'],['paper','PubTator 文献'],['target','OpenTargets 靶点'],['news','Tavily 新闻']];
+  $('srcCks').innerHTML=srcs.map(function(s){
+    return'<label class="ck"><input type="checkbox" data-src="'+s[0]+'"'+
+      (F.srcs.has(s[0])?' checked':'')+'>'+esc(s[1])+'</label>';}).join('');
+  bindFilterEvents();
+}
+function stChipsHTML(){
+  var h='<span class="chip'+(F.st==='all'?' on':'')+'" data-st="all">全部</span>';
+  Object.keys(ST_NAME).forEach(function(k){
+    var n=0;PREP.topics.forEach(function(P){P.trials.forEach(function(t){
+      if(stGroup(t.status)===k)n++;});});
+    h+='<span class="chip'+(F.st===k?' on':'')+'" data-st="'+k+'">'+ST_NAME[k]+' '+n+'</span>';
+  });
+  return h;
+}
+function txChipsHTML(){
+  var cnt={};
+  PREP.topics.forEach(function(P){P.trials.forEach(function(t){
+    txModes(t).forEach(function(m){cnt[m]=(cnt[m]||0)+1;});});});
+  var h='<span class="chip'+(F.tx==='all'?' on':'')+'" data-tx="all">全部</span>';
+  TX_ORDER.forEach(function(m){
+    if(!cnt[m])return;
+    h+='<span class="chip'+(F.tx===m?' on':'')+'" data-tx="'+esc(m)+'">'+m+' '+cnt[m]+'</span>';});
+  return h;
+}
+function refreshCounts(){
+  $('stChips').innerHTML=stChipsHTML();bindStChips();
+  $('txChips').innerHTML=txChipsHTML();bindTxChips();
+}
+
+function bindFilterEvents(){
+  $('yearSel').onchange=function(){F.year=this.value;F.month='all';buildStaticFilters();renderAll();};
+  $('monthChips').onclick=function(e){
+    var c=e.target.closest('.chip');if(!c||c.hasAttribute('disabled'))return;
+    F.month=c.getAttribute('data-m');buildStaticFilters();renderAll();};
+  $('topicCks').onchange=function(e){
+    var tp=e.target.getAttribute('data-tp');if(!tp)return;
+    if(e.target.checked)F.topics.add(tp);else F.topics.delete(tp);
+    renderAll();};
+  $('phChips').onclick=function(e){
+    var c=e.target.closest('.chip');if(!c)return;
+    F.ph=c.getAttribute('data-ph');
+    this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===c);});
+    renderAll();};
+  $('srcCks').onchange=function(e){
+    var s=e.target.getAttribute('data-src');if(!s)return;
+    if(e.target.checked)F.srcs.add(s);else F.srcs.delete(s);
+    renderAll();};
+  bindStChips();
+  var kt;$('kw').oninput=function(){clearTimeout(kt);var v=this.value;
+    kt=setTimeout(function(){F.q=v.trim().toLowerCase();renderAll();},200);};
+  $('resetAll').onclick=resetAllFilters;
+  $('askBtn').onclick=function(){var q=$('qInput').value.trim();
+    if(!q){toast('请输入医疗问题');return;}askQuestion(q);};
+  $('qInput').onkeydown=function(e){if(e.key==='Enter')$('askBtn').click();};
+  $('qchips').innerHTML=PRESET_Q.map(function(q,i){
+    return'<span class="qchip" data-i="'+i+'">'+esc(q)+'</span>';}).join('');
+  $('qchips').onclick=function(e){
+    var c=e.target.closest('.qchip');if(!c)return;
+    $('qInput').value=PRESET_Q[+c.getAttribute('data-i')];askQuestion(PRESET_Q[+c.getAttribute('data-i')]);};
+}
+function bindStChips(){
+  $('stChips').onclick=function(e){
+    var c=e.target.closest('.chip');if(!c)return;
+    F.st=c.getAttribute('data-st');
+    this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===c);});
+    renderAll();};
+}
+function bindTxChips(){
+  $('txChips').onclick=function(e){
+    var c=e.target.closest('.chip');if(!c)return;
+    F.tx=c.getAttribute('data-tx');
+    this.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===c);});
+    renderAll();};
+}
+function resetAllFilters(){
+  F={year:'all',month:'all',topics:new Set(PREP.topics.map(function(P){return P.id;})),
+     st:'all',ph:'all',tx:'all',drug:-1,sp:'',
+     srcs:new Set(['trial','paper','news','target']),q:''};
+  $('kw').value='';
+  buildStaticFilters();renderAll();toast('筛选已重置');
+}
+
+/* ═══════════ 其它 UI ═══════════ */
+var toastT=null;
+function toast(msg){
+  var t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},2600);
+}
+$('refreshBtn').onclick=function(){loadData(true,false);};
+$('chartReset').onclick=resetAllFilters;
+
+/* ═══════════ 导出 html-ppt（1920×1080 固定画布 · 实测分页 · 单文件） ═══════════ */
+function deckRich(text){
+  return esc(text).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+}
+function toDataURL(u){
+  return fetch(u).then(function(r){return r.blob();}).then(function(b){
+    return new Promise(function(res,rej){var f=new FileReader();
+      f.onload=function(){res(f.result);};f.onerror=rej;f.readAsDataURL(b);});});
+}
+
+/* ═══ Gemini 留白配图（figure-gen 同款 cometapi 通道，服务端磁盘缓存）═══ */
+var FILL_PROMPTS=[
+ 'IMPORTANT: Create a wide cinematic landscape banner illustration. The canvas MUST be 16:9 widescreen aspect ratio, MUCH WIDER THAN TALL (at least 1.7 times wider than its height). Do NOT produce portrait or square. Style: minimal medical illustration for a professional clinical report, deep navy blue gradient background, steel blue and ice blue accents, soft white glowing highlights, clean geometric shapes. CONTENT: a stylized human lung silhouette on the right side formed by fine luminous particle dots, the particles gradually flow leftward and transform into small hexagonal molecular icons, thin line-chart curves and a subtle grid of tiny data dots, gentle glow, generous empty space in the middle, calm and professional. Absolutely NO text, NO words, NO letters, NO numbers, NO logos, NO watermarks. REMINDER: The final canvas MUST be 16:9 widescreen horizontal panoramic, width at least 1.7 times height.',
+ 'IMPORTANT: Create a wide cinematic landscape banner illustration. The canvas MUST be 16:9 widescreen aspect ratio, MUCH WIDER THAN TALL (at least 1.7 times wider than its height). Do NOT produce portrait or square. Style: minimal medical illustration for a professional clinical report, deep navy blue gradient background, steel blue and ice blue palette with soft white highlights, clean geometric shapes. CONTENT: a subtle glowing double helix made of small particles sweeping horizontally across the lower third, scattered hexagonal molecule icons connected by thin lines, small dot clusters suggesting a clinical data network, large clean negative space above, calm and professional. Absolutely NO text, NO words, NO letters, NO numbers, NO logos, NO watermarks. REMINDER: The final canvas MUST be 16:9 widescreen horizontal panoramic, width at least 1.7 times height.'
+];
+var FILLERS=[],FILL_FI=0;
+function fetchFillers(){
+  return Promise.all(FILL_PROMPTS.map(function(p){
+    return fetch('/api/figure',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({prompt:p})})
+      .then(function(r){return r.json();})
+      .then(function(d){return d&&d.ok?d.data_url:null;})
+      .catch(function(){return null;});
+  })).then(function(rs){
+    FILLERS=rs.filter(Boolean);
+    return FILLERS;
+  });
+}
+
+/* 画布扩展样式：测量 iframe 与最终成品共用同一份，保证分页准确 */
+var DECK_XCSS=[
+'.slide{overflow:hidden}',
+'.thead{overflow:hidden}',
+'.tbn{width:100%;height:150px;object-fit:cover;border-radius:var(--radius);margin:10px 0 2px;display:block}',
+'.insight{border-left:4px solid var(--accent);background:var(--surface-2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 22px;font-size:17px;line-height:1.6;color:var(--text-2)}',
+'.insight b{color:var(--accent)}',
+'.prow{display:flex;gap:18px;align-items:flex-start;padding:13px 2px;border-bottom:1px solid var(--border)}',
+'.prow .st{flex:none;border-radius:8px;padding:3px 14px;font-size:16px;font-weight:700;white-space:nowrap}',
+'.prow .mid{flex:1;min-width:0}',
+'.prow .ttl{font-size:21px;font-weight:600;line-height:1.4;color:var(--text-1);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}',
+'.prow .pm{font-size:15px;color:var(--text-3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}',
+'.prow .nct{flex:none;font-family:var(--font-mono);font-size:15px;color:var(--text-3);padding-top:5px}',
+'.cont-tag{display:inline-block;margin-left:16px;font-size:22px;color:var(--text-3);font-weight:400}',
+'.rbul{position:relative;padding:13px 0 13px 32px;font-size:23px;line-height:1.65;color:var(--text-1)}',
+'.rbul::before{content:"";position:absolute;left:2px;top:28px;width:12px;height:12px;border-radius:4px;background:var(--accent)}',
+'.kpinum{font-size:58px;font-weight:800;line-height:1.15}',
+'.filler{width:100%;object-fit:cover;border-radius:var(--radius);display:block;margin-top:22px}',
+'.chart{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;min-width:0}',
+'.ctitle{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--text-1)}',
+'.ctitle .cdot{width:9px;height:9px;border-radius:3px;background:linear-gradient(135deg,#2f86e0,#5aa9f0);flex:none}',
+'.ctitle .chint{margin-left:auto;font-size:11px;color:var(--text-3);font-weight:400}',
+'.donut-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}',
+'.chart svg{width:200px;height:200px;max-width:100%}',
+'.dnum{font-size:34px;fill:var(--text-1);font-weight:800}.dlab{font-size:13px;fill:var(--text-3)}',
+'.lgs{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--text-2);flex:1;min-width:130px}',
+'.lg{display:flex;align-items:center;gap:7px}.lg i{width:10px;height:10px;border-radius:3px;flex:none}.lg b{color:var(--text-1);margin-left:auto}',
+'.bars{display:flex;flex-direction:column;gap:7px}',
+'.brow{display:grid;grid-template-columns:150px 1fr 52px;gap:10px;align-items:center;font-size:13.5px}',
+'.blabel{color:var(--text-2);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+'.btrack{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;height:17px;overflow:hidden}',
+'.bfill{height:100%;border-radius:5px;background:linear-gradient(90deg,#3b8ae8,#7cc0f5)}',
+'.bval{font-weight:700;text-align:right;color:var(--accent)}',
+'.cnote{font-size:11px;color:var(--text-3);margin-top:8px}'
+].join('\n');
+/* 舞台缩放：1920×1080 固定画布居中缩放适配任意窗口（真 PPT 行为） */
+var STAGE_CSS=[
+'html,body{height:100%;margin:0}',
+'body{background:#0b0f14;overflow:hidden}',
+'.deck{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%}'
+].join('\n');
+var FIT_JS=[
+'(function(){var st=document.querySelector(\'.deck\');if(!st)return;',
+'function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);',
+'st.style.transform=\'translate(-50%,-50%) scale(\'+s+\')\';}',
+'addEventListener(\'resize\',fit);fit();',
+'var slides=document.querySelectorAll(\'.slide\');var nums=document.querySelectorAll(\'.slide-number\');',
+'function setNums(){var c=document.querySelector(\'.slide.is-active\');',
+'if(!c)return;var i=Array.prototype.indexOf.call(slides,c)+1;',
+'nums.forEach(function(n){n.setAttribute(\'data-current\',i);n.setAttribute(\'data-total\',slides.length);});}',
+'setNums();',
+'new MutationObserver(setNums).observe(st,{subtree:true,attributes:true,attributeFilter:[\'class\']});})();'
+].join('');
+
+/* 在隐藏 iframe（1920×1080、隔离样式）内按最终 CSS 实测每块内容高度 */
+function measureBlocks(css,blocks){
+  var f=document.createElement('iframe');
+  f.style.cssText='position:fixed;left:-9999px;top:0;width:1920px;height:1080px;visibility:hidden;border:0;pointer-events:none';
+  document.body.appendChild(f);
+  var d=f.contentDocument;
+  d.open();
+  d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+css+
+    'html,body{margin:0;background:#fff}.deck{position:relative;width:1920px;height:1080px}'+
+    DECK_XCSS+'</style></head><body data-theme="corporate-clean"><div class="deck"></div></body></html>');
+  d.close();
+  var box=d.createElement('div');
+  box.style.cssText='position:absolute;left:96px;right:96px;top:0';
+  d.querySelector('.deck').appendChild(box);
+  var hs=blocks.map(function(h){
+    var w=d.createElement('div');
+    box.appendChild(w);w.innerHTML=h;
+    var el=w.firstElementChild;
+    var hh=el?el.getBoundingClientRect().height:0;
+    box.removeChild(w);
+    return hh;
+  });
+  document.body.removeChild(f);
+  return hs;
+}
+/* 贪心装箱分页：首页含 firstHeadH，续页含 contHeadH（续页标题也要占高度）；
+   返回 [{ids:[块下标], used:该页已用高度}] —— used 供留白配图判断剩余空间 */
+function paginate(budget,firstHeadH,contHeadH,hs){
+  var pages=[],cur=[],used=firstHeadH;
+  hs.forEach(function(h,i){
+    if(cur.length&&used+h>budget){pages.push({ids:cur,used:used});cur=[];used=contHeadH;}
+    cur.push(i);used+=h;
+  });
+  if(cur.length)pages.push({ids:cur,used:used});
+  if(!pages.length)pages=[{ids:[],used:firstHeadH}];
+  return pages;
+}
+/* 留白配图：剩余 ≥150px 才插，高度取 min(剩余-36, 320)；最多插 4 张、多图轮换（控制单文件体积） */
+function fillerHTML(leftover){
+  if(!FILLERS.length||FILL_FI>=4||leftover==null||leftover<150)return'';
+  var h=Math.min(leftover-36,320);if(h<110)return'';
+  var src=FILLERS[FILL_FI%FILLERS.length];FILL_FI++;
+  return'<img class="filler" src="'+src+'" style="height:'+h+'px" alt="">';
+}
+function prowHTML(t){
+  var st={RECRUITING:['#dceefd','#1470c8'],ACTIVE_NOT_RECRUITING:['#e3edf7','#3a6ea5'],
+    NOT_YET_RECRUITING:['#edf1f6','#5a6b80'],COMPLETED:['#e9ecef','#6b7686']}[t.status]||['#f0e9e9','#8a5f5f'];
+  var pm=[t.sponsor,(t.phase||[]).join('/'),
+    t.start_date?('开始 '+t.start_date):'',
+    t.enrollment!=null?('入组 '+t.enrollment):''].filter(Boolean).join(' · ');
+  return'<div class="prow">'+
+    '<span class="st" style="background:'+st[0]+';color:'+st[1]+'">'+esc(t.status_cn||t.status||'')+'</span>'+
+    '<span class="mid"><span class="ttl">'+esc(t.title||t.nct)+'</span>'+
+    (pm?'<span class="pm">'+esc(pm)+'</span>':'')+'</span>'+
+    '<span class="nct">'+esc(t.nct)+'</span></div>';
+}
+var DECK_BUDGET=1080-144-28;  /* 画布高 - 上下 padding - 安全余量 */
+
+/* 组页：返回幻灯片数组 S（在 1920×1080 画布内实测分页，防溢出） */
+function buildDeck(v,IMG,css){
+  FILL_FI=0;
+  var filters=activeFilterDesc();
+  var now=new Date();
+  var pad=function(x){return(x<10?'0':'')+x;};
+  var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  var nT=0,nP=0,nN=0,nR=0;
+  v.forEach(function(x){nT+=x.trials.length;nP+=x.papers.length;nN+=x.news.length;
+    nR+=x.trials.filter(function(t){return t.status==='RECRUITING';}).length;});
+  var S=[];
+  var foot='<div class="deck-footer"><span class="dim2">AImednews · 数据以编号来源为准</span>'+
+    '<span class="slide-number" data-current="1" data-total="1"></span></div>';
+  /* 1 封面（hero 全幅背景 + logo） */
+  var hero=IMG['/assets/FigureHero.jpg']||'',logo=IMG['/assets/FigureLogo.png']||'';
+  S.push('<section class="slide" data-title="封面" style="padding:0">'+
+    '<div style="position:absolute;inset:0;'+(hero?
+      'background:url(\''+hero+'\') center/cover no-repeat':
+      'background:linear-gradient(135deg,#16202c,#1a3a5c)')+'"></div>'+
+    '<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.30),rgba(10,12,16,.88))"></div>'+
+    '<div style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:72px 96px 88px">'+
+    (logo?'<img src="'+logo+'" style="width:72px;height:72px;border-radius:16px;margin-bottom:20px">':'')+
+    '<p class="kicker" style="color:#9fc3eb">AImednews · Clinical Intelligence</p>'+
+    '<h1 class="h1 anim-fade-up" data-anim="fade-up" style="color:#fff">肺癌（NSCLC）<br>'+
+    '<span style="color:#7cc0f5">诊疗情报数据报告</span></h1>'+
+    '<p class="lede" style="color:#c6d4e4">生成于 '+stamp+' ｜ 试验 '+nT+'（招募中 '+nR+'）· 文献 '+nP+' · 新闻 '+nN+'</p>'+
+    '<p style="color:#93a5bb;font-size:17px">'+(filters.length?'当前筛选：'+esc(filters.join(' · ')):'全量视图（未筛选）')+'</p>'+
+    '<div class="notes">数据来源：ClinicalTrials.gov v2 实时 + PubTator 3 + OpenTargets + Tavily。AI 内容由 DeepSeek 生成，仅供参考。</div>'+
+    foot+'</section>');
+  /* 2 KPI */
+  var kpis=[['临床试验',nT,'项'],['招募中',nR,'项'],['文献',nP,'篇'],['新闻补充',nN,'条'],
+            ['启用主题',v.length,'个'],['归档天数',(DATA.archive_days||[]).length,'天']];
+  var kpiHtml='<div class="grid g3 mt-l anim-stagger-list" data-anim-target>'+
+    kpis.map(function(k){return'<div class="card card-accent"><div class="kpinum">'+
+      k[1]+'<span style="font-size:19px;font-weight:400;color:var(--text-3)"> '+k[2]+'</span></div>'+
+      '<p class="dim" style="margin:6px 0 0;font-size:18px">'+k[0]+'</p></div>';}).join('')+'</div>';
+  var kLeft=DECK_BUDGET-measureBlocks(css,['<div><p class="kicker">Overview</p>'+
+    '<h2 class="h2">数据总览</h2>'+kpiHtml+'</div>'])[0];
+  S.push('<section class="slide" data-title="数据总览"><p class="kicker">Overview</p>'+
+    '<h2 class="h2">数据总览</h2>'+kpiHtml+fillerHTML(kLeft)+foot+'</section>');
+  /* 2.5 总览 · AI 跨主题综合解读（实测分页） */
+  var g=(DATA.global||{});
+  if(g.synth){
+    var glines=String(g.synth).split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);
+    var gbl=glines.map(function(l){
+      return'<div class="rbul">'+deckRich(l.replace(/^- /,'').replace(/\[\d{1,3}\]/g,''))+'</div>';});
+    var gHead='<div class="thead"><p class="kicker">Overview · AI</p>'+
+      '<h2 class="h2">AI 跨主题综合解读</h2>'+
+      '<p class="dim" style="font-size:19px">DeepSeek 综合 '+v.length+' 个主题证据 · 引用 '+
+      (g.refs||[]).length+' 条 · 仅供参考，事实以看板编号来源为准</p></div>';
+    var gcont=function(n){
+      return'<div class="thead"><p class="kicker">Overview · AI · 续</p>'+
+        '<h2 class="h2">AI 跨主题综合解读<span class="cont-tag">('+n+')</span></h2></div>';};
+    var ghs=measureBlocks(css,[gHead,gcont(2)].concat(gbl));
+    var gpages=paginate(DECK_BUDGET,ghs[0],ghs[1],ghs.slice(2));
+    gpages.forEach(function(pg,pi){
+      S.push('<section class="slide" data-title="AI 总览 '+(pi+1)+'">'+
+        (pi===0?gHead:gcont(pi+1))+
+        '<div style="margin-top:4px">'+pg.ids.map(function(i){return gbl[i];}).join('')+'</div>'+
+        (pi===gpages.length-1?fillerHTML(DECK_BUDGET-pg.used):'')+
+        foot+'</section>');
+    });
+  }
+  /* 3 图表（当前筛选下的渲染结果，每页两张） */
+  var charts=Array.from($('charts').children||[]);
+  for(var c=0;c<charts.length;c+=2){
+    var pair=charts.slice(c,c+2).map(function(ch){
+      var el=ch.cloneNode(true);el.removeAttribute('style');
+      return'<div class="chart">'+el.innerHTML+'</div>';}).join('');
+    S.push('<section class="slide" data-title="图表 '+((c/2|0)+1)+'"><p class="kicker">Charts</p>'+
+      '<h2 class="h2">情报图表 '+((c/2|0)+1)+' / '+Math.ceil(charts.length/2)+'</h2>'+
+      '<div class="grid g2 mt-m">'+pair+'</div>'+foot+'</section>');
+  }
+  /* 4 主题页：实测分页，装不下的试验自动开（续）页；有筛选时跳过零命中主题 */
+  v.forEach(function(x){
+    if(filters.length&&!x.trials.length&&!x.papers.length&&!x.news.length)return;
+    var P=x.P;
+    var banner=(TOPIC_IMG[P.id]&&IMG[TOPIC_IMG[P.id]])?'<img class="tbn" src="'+IMG[TOPIC_IMG[P.id]]+'">':'';
+    var syn=(P.synth||'').trim();
+    if(syn.length>320)syn=syn.slice(0,320)+'…';
+    var headHtml='<div class="thead"><p class="kicker">Topic</p>'+
+      '<h2 class="h2">'+esc(P.title)+'</h2>'+
+      '<p class="dim" style="font-size:20px;margin:0 0 4px">'+esc(P.subtitle||'')+'</p>'+banner+
+      (syn?'<div class="insight" style="margin-top:12px"><b>AI 关键解读</b> · '+deckRich(syn)+'</div>':'')+'</div>';
+    var contHead=function(n){
+      return'<div class="thead"><p class="kicker">Topic · 续</p>'+
+        '<h2 class="h2">'+esc(P.title)+'<span class="cont-tag">('+n+')</span></h2></div>';};
+    var rows=x.trials.slice(0,15).map(prowHTML);
+    var hs=measureBlocks(css,[headHtml,contHead(2)].concat(rows));
+    var pages=paginate(DECK_BUDGET,hs[0],hs[1],hs.slice(2));
+    pages.forEach(function(pg,pi){
+      var head=pi===0?headHtml:contHead(pi+1);
+      var body=pg.ids.length?pg.ids.map(function(i){return rows[i];}).join(''):
+        '<p class="dim" style="font-size:20px;margin-top:16px">当前筛选无匹配试验</p>';
+      S.push('<section class="slide" data-title="'+esc(P.title.slice(0,18))+(pi?'·续':'')+'">'+
+        head+'<div style="margin-top:4px">'+body+'</div>'+
+        (pi===pages.length-1?fillerHTML(DECK_BUDGET-pg.used):'')+
+        '<div class="notes">'+esc(P.title)+' · 试验 '+x.trials.length+' 项（PPT 展示前 15，其余见互动看板）· 文献 '+
+        x.papers.length+' 篇 · 新闻 '+x.news.length+' 条 · 本页 '+pg.ids.length+' 项</div>'+foot+'</section>');
+    });
+  });
+  /* 5 AI 筛选报告：要点逐条实测分页 */
+  if(DRILL_REPORT&&DRILL_REPORT.sig===drillSig()&&DRILL_REPORT.data.answer){
+    var R=DRILL_REPORT.data;
+    var lines=String(R.answer).split(/\n+/).filter(Boolean);
+    var bl=lines.map(function(l){return'<div class="rbul">'+deckRich(l.replace(/^- /,''))+'</div>';});
+    var rHead='<div class="thead"><p class="kicker">AI Report</p>'+
+      '<h2 class="h2">AI 筛选总结报告</h2>'+
+      '<p class="dim" style="font-size:19px">'+esc((R.filters||[]).join(' · '))+
+      ' · 生成于 '+esc(R.created||'')+' · DeepSeek · 引用 '+(R.refs||[]).length+' 条</p></div>';
+    var rcont=function(n){
+      return'<div class="thead"><p class="kicker">AI Report · 续</p>'+
+        '<h2 class="h2">AI 筛选总结报告<span class="cont-tag">('+n+')</span></h2></div>';};
+    var rhs=measureBlocks(css,[rHead,rcont(2)].concat(bl));
+    var rpages=paginate(DECK_BUDGET,rhs[0],rhs[1],rhs.slice(2));
+    rpages.forEach(function(pg,pi){
+      var head=pi===0?rHead:rcont(pi+1);
+      S.push('<section class="slide" data-title="AI 报告 '+(pi+1)+'">'+head+
+        '<div style="margin-top:4px">'+pg.ids.map(function(i){return bl[i];}).join('')+'</div>'+
+        (pi===rpages.length-1?fillerHTML(DECK_BUDGET-pg.used):'')+
+        foot+'</section>');
+    });
+  }
+  /* 6 结尾（含数据摘要） */
+  S.push('<section class="slide center tc" data-title="Thanks"><div>'+
+    '<p class="kicker">AImednews</p>'+
+    '<h1 class="h1 anim-rise-in" data-anim="rise-in">感谢<span class="gradient-text">观看</span></h1>'+
+    '<p class="dim" style="font-size:19px;margin:14px auto 0">试验 '+nT+' 项 · 招募中 '+nR+
+    ' · 文献 '+nP+' 篇 · 新闻 '+nN+' 条 · 归档 '+(DATA.archive_days||[]).length+' 天 · 生成于 '+stamp+'</p>'+
+    '<p class="lede" style="margin:16px auto">AI 解读仅供参考 · 事实以看板编号来源为准</p>'+
+    '<p class="dim2" style="font-size:15px;margin:10px auto 0">← → 翻页 · F 全屏 · O 概览 ｜ 互动版看板：localhost:8899</p>'+
+    '</div>'+foot+'</section>');
+  return S;
+}
+/* 单文件封装：内联 CSS + 舞台缩放 JS + runtime */
+function assembleDeck(S,css,runtimeJs,stamp){
+  return'<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<title>肺癌（NSCLC）诊疗情报数据报告 · '+stamp+'</title>'+
+    '<style>'+css+'\n'+STAGE_CSS+'</style></head>'+
+    '<body data-theme="corporate-clean"><div class="deck">'+
+    S.join('\n')+'</div><scr'+'ipt>'+FIT_JS+'</scr'+'ipt>'+
+    '<scr'+'ipt>'+runtimeJs.replace(/<\/script>/g,'<\\/scr'+'ipt>')+
+    '</scr'+'ipt></body></html>';
+}
+
+/* ═══ 导出真实 PowerPoint（.pptx：按当前筛选导出 + 原生图表/表格 + 主题配图） ═══ */
+function exportPPTX(){
+  /* 所见即所得：用看板当前视图 view() 计算命中条目，精确传给导出端 */
+  var vv=(typeof view==='function')?view():[];
+  var sel={trials:{},papers:{},news:{},targets:{}};
+  var nT=0,nP=0,nN=0;
+  vv.forEach(function(x){
+    var pid=x.P.id;
+    sel.trials[pid]=x.trials.map(function(t){return t.nct||t.title||'';}).filter(Boolean);
+    sel.papers[pid]=x.papers.map(function(p){return String(p.pmid||'');}).filter(Boolean);
+    sel.news[pid]=x.news.map(function(n){return n.url||'';}).filter(Boolean);
+    sel.targets[pid]=!!x.showTargets;
+    nT+=sel.trials[pid].length;nP+=sel.papers[pid].length;nN+=sel.news[pid].length;
+  });
+  var includeConf=!!(document.getElementById('exportConf')&&document.getElementById('exportConf').checked);
+  var body={
+    refresh:false,
+    include_conferences:includeConf,
+    topic_ids:vv.map(function(x){return x.P.id;}),
+    year:(F.year==null?'all':String(F.year)),
+    month:(F.month==null?'all':String(F.month)),
+    status:(F.st||'all'),
+    q:(F.q||''),
+    sel:sel
+  };
+  var desc=[];
+  if(!includeConf)desc.push('不含会议内容');
+  if(vv.length<PREP.topics.length)desc.push('主题 '+vv.length+'/'+PREP.topics.length);
+  if(body.year!=='all')desc.push(body.year+' 年');
+  if(body.month!=='all')desc.push(body.month+' 月');
+  if(body.status!=='all')desc.push('状态筛选');
+  if((F.ph||'all')!=='all')desc.push(F.ph);
+  if((F.tx||'all')!=='all')desc.push('治疗方式');
+  if(typeof F.drug==='number'&&F.drug>=0)desc.push('药物筛选');
+  if(F.sp)desc.push('申办方');
+  if(body.q)desc.push('关键词「'+body.q.slice(0,12)+'」');
+  var d=new Date(),p2=function(x){return(x<10?'0':'')+x;};
+  var name='AImednews-NSCLC-'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+
+           '-'+p2(d.getHours())+p2(d.getMinutes())+'.pptx';
+  toast('正在生成 PPTX：命中 试验 '+nT+' 条 / 文献 '+nP+' 篇 / 新闻 '+nN+' 条'+
+        (desc.length?'（'+desc.join('·')+'）':'')+'…');
+  fetch('/api/pptx',{method:'POST',headers:{'Content-Type':'application/json'},
+                     body:JSON.stringify(body)})
+    .then(function(r){
+      if(!r.ok)return r.json().then(function(j){throw new Error(j.error||('HTTP '+r.status));});
+      return r.blob();
+    })
+    .then(function(blob){
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);a.download=name;
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},5000);
+      toast('PPTX 已生成并下载：'+name+'（试验 '+nT+' / 文献 '+nP+' / 新闻 '+nN+'）');
+    })
+    .catch(function(e){toast('导出失败：'+e.message);});
+}
+
+function exportPPT(){
+  if(!DATA){toast('数据尚未加载');return;}
+  var filters=activeFilterDesc();
+  var needReport=filters.length&&!(DRILL_REPORT&&DRILL_REPORT.sig===drillSig());
+  $('loader').classList.add('show');
+  $('loadTxt').textContent=needReport?'正在生成筛选总结报告并准备 Gemini 配图…（约 30-90 秒）'
+    :'正在用 Gemini 生成留白配图（首次约 30-90 秒，之后走磁盘缓存）…';
+  var prep=needReport?
+    fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(collectReportPayload())})
+      .then(function(r){return r.json();})
+      .catch(function(){return null;}):
+    Promise.resolve(null);
+  var fills=fetchFillers();
+  prep.then(function(rep){
+    if(rep&&!rep.error){DRILL_REPORT={sig:drillSig(),data:rep};renderDrill();}
+    else if(rep&&rep.error)toast('报告生成失败，PPT 将不包含报告');
+    return fills;
+  }).then(function(){
+    if(!FILLERS.length)toast('Gemini 配图未生成（未配置或网络失败），本次 PPT 不含留白配图');
+    toast('正在组装幻灯片（实测分页 + 内联图片，约 2-5 秒）…');
+    var v=view(),imgUrls=['/assets/FigureLogo.png','/assets/FigureHero.jpg'];
+    v.forEach(function(x){if(TOPIC_IMG[x.P.id])imgUrls.push(TOPIC_IMG[x.P.id]);});
+    imgUrls=Array.from(new Set(imgUrls));
+    var cssUrls=['/assets/ppt-fonts.css','/assets/ppt-base.css','/assets/ppt-theme.css','/assets/ppt-anim.css'];
+    return Promise.all([
+      Promise.all(imgUrls.map(toDataURL)),
+      Promise.all(cssUrls.map(function(u){return fetch(u).then(function(r){return r.text();});})),
+      fetch('/assets/ppt-runtime.js').then(function(r){return r.text();})
+    ]).then(function(res){
+      var IMG={},imgData=res[0];
+      imgUrls.forEach(function(u,i){IMG[u]=imgData[i];});
+      var css=res[1].join('\n')+'\n'+DECK_XCSS,runtimeJs=res[2];
+      var S=buildDeck(v,IMG,css);
+      var now=new Date();
+      var pad=function(x){return(x<10?'0':'')+x;};
+      var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+      var html=assembleDeck(S,css,runtimeJs,stamp);
+      var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+      var link=document.createElement('a');
+      link.href=URL.createObjectURL(blob);
+      link.download='AImednews-NSCLC报告-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+pad(now.getHours())+pad(now.getMinutes())+'.html';
+      document.body.appendChild(link);link.click();
+      setTimeout(function(){URL.revokeObjectURL(link.href);link.remove();},4000);
+      toast('已导出 '+S.length+' 页幻灯片（1920×1080 自适应缩放 · 实测分页防溢出）');
+    });
+  })
+  .catch(function(e){toast('导出失败：'+e);})
+  .finally(function(){$('loadTxt').textContent='正在从 ClinicalTrials.gov 拉取最新试验数据…';
+    $('loader').classList.remove('show');});
+}
+
+/* ═══ 专题（情报问答）导出 PPT：封面 / AI 解读 / 图表 / 试验 / 来源索引 / 结尾 ═══ */
+/* 从专题试验集生成图表卡（与主看板同款 donut/bars，无交互 meta） */
+function sectionChartCards(trials){
+  var stCnt={},phCnt={},txCnt={},drugAgg={},trendY={},spCnt={};
+  trials.forEach(function(t){
+    var g=ST_NAME[stGroup(t.status)];stCnt[g]=(stCnt[g]||0)+1;
+    (t.phase||[]).forEach(function(p){phCnt[p]=(phCnt[p]||0)+1;});
+    txModes(t).forEach(function(m){txCnt[m]=(txCnt[m]||0)+1;});
+    var seen={};
+    (t.interventions||[]).forEach(function(iv){
+      var c=txClass(iv.name);
+      if(!c||seen[c.name])return;seen[c.name]=1;
+      if(!drugAgg[c.name])drugAgg[c.name]={n:0,ri:c.ri};
+      drugAgg[c.name].n++;});
+    var p=parseYM(t.start_date||t.submit_date||t.first_post||t.date);
+    if(p.y)trendY[p.y]=(trendY[p.y]||0)+1;
+    var sp=(t.sponsor||'').trim();
+    if(sp)spCnt[sp]=(spCnt[sp]||0)+1;
+  });
+  var stData=['招募中','进行中','尚未开始','已完成','终止/暂停'].filter(function(k){return stCnt[k];})
+    .map(function(k){return{label:k,value:stCnt[k]};});
+  var phData=['I期','II期','III期','IV期','不适用'].filter(function(k){return phCnt[k];})
+    .map(function(k){return{label:k,value:phCnt[k]};});
+  var txData=TX_ORDER.filter(function(m){return txCnt[m];})
+    .map(function(m){return{label:m,value:txCnt[m]};});
+  var drugRows=Object.keys(drugAgg).map(function(k){return{k:k,n:drugAgg[k].n,ri:drugAgg[k].ri};})
+    .sort(function(a,b){return b.n-a.n;}).slice(0,10);
+  var drugData=drugRows.map(function(d){return{label:d.k+'·'+TX_RULES[d.ri][2],value:d.n};});
+  var trendData=Object.keys(trendY).sort().reverse().slice(0,10)
+    .map(function(k){return{label:k+'年',value:trendY[k]};});
+  var spRows=Object.keys(spCnt).map(function(k){return{k:k,n:spCnt[k]};})
+    .sort(function(a,b){return b.n-a.n;}).slice(0,10);
+  var spData=spRows.map(function(d){var lb=d.k.length>20?d.k.slice(0,19)+'…':d.k;
+    return{label:lb,value:d.n};});
+  var cards=[];
+  if(stData.length)cards.push(['试验状态分布',donutSVG(stData),'按 CT.gov 最新状态']);
+  if(txData.length)cards.push(['治疗模式分布',donutSVG(txData),'按干预措施自动归类']);
+  if(drugData.length)cards.push(['高频在研药物 · 靶点',barsHTML(drugData),'含该药物干预的试验数']);
+  if(phData.length)cards.push(['试验分期分布',barsHTML(phData),'一项试验可属多期']);
+  if(trendData.length)cards.push(['试验年度分布',barsHTML(trendData),'按开始年份']);
+  if(spData.length)cards.push(['申办方 Top 10',barsHTML(spData),'按牵头申办方统计']);
+  return cards;
+}
+/* 专题幻灯片组：问题为封面主题，图表由专题试验实时统计（1920×1080 实测分页） */
+function buildSectionDeck(s,IMG,css){
+  FILL_FI=0;
+  var pad=function(x){return(x<10?'0':'')+x;},now=new Date();
+  var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  var q=String(s.question||''),qt=q.length>28?q.slice(0,28)+'…':q;
+  var trials=s.trials||[],refs=s.refs||[];
+  var S=[];
+  var foot='<div class="deck-footer"><span class="dim2">AImednews · 数据以编号来源为准</span>'+
+    '<span class="slide-number" data-current="1" data-total="1"></span></div>';
+  /* 1 封面 */
+  var hero=IMG['/assets/FigureHero.jpg']||'',logo=IMG['/assets/FigureLogo.png']||'';
+  var qSize=q.length>42?42:(q.length>26?54:68);
+  S.push('<section class="slide" data-title="封面" style="padding:0">'+
+    '<div style="position:absolute;inset:0;'+(hero?
+      'background:url(\''+hero+'\') center/cover no-repeat':
+      'background:linear-gradient(135deg,#16202c,#1a3a5c)')+'"></div>'+
+    '<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.30),rgba(10,12,16,.88))"></div>'+
+    '<div style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:72px 96px 88px">'+
+    (logo?'<img src="'+logo+'" style="width:72px;height:72px;border-radius:16px;margin-bottom:20px">':'')+
+    '<p class="kicker" style="color:#9fc3eb">AImednews · 情报问答专题</p>'+
+    '<h1 class="h1 anim-fade-up" data-anim="fade-up" style="color:#fff;font-size:'+qSize+'px">'+esc(q)+'</h1>'+
+    '<p class="lede" style="color:#c6d4e4">生成于 '+stamp+' ｜ 试验 '+trials.length+' 项 · 引用 '+refs.length+
+    ' 条 · CT.gov 检索词「'+esc(s.ct_term||'—')+'」</p>'+
+    '<div class="notes">AI 解读由 DeepSeek 生成，仅供参考；事实以编号来源为准。</div>'+foot+'</section>');
+  /* 2 AI 解读（实测分页） */
+  var lines=String(s.answer||'').split(/\n+/).filter(Boolean);
+  if(lines.length){
+    var bl=lines.map(function(l){return'<div class="rbul">'+deckRich(l.replace(/^- /,''))+'</div>';});
+    var aHead='<div class="thead"><p class="kicker">Q&amp;A · AI</p>'+
+      '<h2 class="h2" style="font-size:46px">AI 解读</h2>'+
+      '<p class="dim" style="font-size:19px">'+esc(qt)+' · 引用 '+refs.length+' 条 · 仅供参考</p></div>';
+    var acont=function(n){return'<div class="thead"><p class="kicker">Q&amp;A · AI · 续</p>'+
+      '<h2 class="h2" style="font-size:46px">AI 解读<span class="cont-tag">('+n+')</span></h2></div>';};
+    var ahs=measureBlocks(css,[aHead,acont(2)].concat(bl));
+    var apages=paginate(DECK_BUDGET,ahs[0],ahs[1],ahs.slice(2));
+    apages.forEach(function(pg,pi){
+      S.push('<section class="slide" data-title="AI 解读 '+(pi+1)+'">'+
+        (pi===0?aHead:acont(pi+1))+
+        '<div style="margin-top:4px">'+pg.ids.map(function(i){return bl[i];}).join('')+'</div>'+
+        (pi===apages.length-1?fillerHTML(DECK_BUDGET-pg.used):'')+foot+'</section>');
+    });
+  }
+  /* 3 图表：先「专题证据构成」（总览没有），再试验统计图（每页两张，标题带问题） */
+  var kindCnt={};
+  refs.forEach(function(r){var k=r.kind||'其他';kindCnt[k]=(kindCnt[k]||0)+1;});
+  var cards=[];
+  if(refs.length){
+    var srcData=Object.keys(kindCnt).map(function(k){return{label:k,value:kindCnt[k]};})
+      .sort(function(a,b){return b.value-a.value;});
+    cards.push(['专题证据构成',donutSVG(srcData),'该专题引用来源分布 · 总数 '+refs.length]);
+  }
+  cards=cards.concat(sectionChartCards(trials));
+  for(var c=0;c<cards.length;c+=2){
+    var pair=cards.slice(c,c+2).map(function(cd){return chartCard(cd[0],cd[1],'',cd[2]);}).join('');
+    S.push('<section class="slide" data-title="图表 '+((c/2|0)+1)+'">'+
+      '<p class="kicker">Charts · '+esc(qt)+'</p>'+
+      '<h2 class="h2" style="font-size:40px">专题图表 · '+esc(qt)+' '+((c/2|0)+1)+' / '+Math.ceil(cards.length/2)+'</h2>'+
+      '<div class="grid g2 mt-m">'+pair+'</div>'+foot+'</section>');
+  }
+  /* 4 关联试验（实测分页） */
+  var tHead='<div class="thead"><p class="kicker">Trials</p>'+
+    '<h2 class="h2" style="font-size:46px">关联临床试验</h2>'+
+    '<p class="dim" style="font-size:19px">'+esc(qt)+' · ClinicalTrials.gov 按问题实时检索</p></div>';
+  var tcont=function(n){return'<div class="thead"><p class="kicker">Trials · 续</p>'+
+    '<h2 class="h2" style="font-size:46px">关联临床试验<span class="cont-tag">('+n+')</span></h2></div>';};
+  var rows=trials.slice(0,20).map(prowHTML);
+  var ths=measureBlocks(css,[tHead,tcont(2)].concat(rows));
+  var tpages=paginate(DECK_BUDGET,ths[0],ths[1],ths.slice(2));
+  tpages.forEach(function(pg,pi){
+    var body=pg.ids.length?pg.ids.map(function(i){return rows[i];}).join(''):
+      '<p class="dim" style="font-size:20px;margin-top:16px">该专题暂无关联试验</p>';
+    S.push('<section class="slide" data-title="试验'+(pi?'·续':'')+'">'+
+      (pi===0?tHead:tcont(pi+1))+
+      '<div style="margin-top:4px">'+body+'</div>'+
+      (pi===tpages.length-1?fillerHTML(DECK_BUDGET-pg.used):'')+
+      '<div class="notes">'+esc(qt)+' · 试验 '+trials.length+' 项（PPT 展示前 20，其余见互动看板）· 本页 '+pg.ids.length+' 项</div>'+foot+'</section>');
+  });
+  /* 5 来源索引（实测分页） */
+  if(refs.length){
+    var rHead='<div class="thead"><p class="kicker">References</p>'+
+      '<h2 class="h2" style="font-size:46px">来源索引</h2>'+
+      '<p class="dim" style="font-size:19px">'+refs.length+' 条 · 全部可溯源</p></div>';
+    var rcont=function(n){return'<div class="thead"><p class="kicker">References · 续</p>'+
+      '<h2 class="h2" style="font-size:46px">来源索引<span class="cont-tag">('+n+')</span></h2></div>';};
+    var rrows=refs.map(function(r,i){
+      return'<div style="display:flex;gap:14px;padding:8px 2px;border-bottom:1px solid var(--border)">'+
+        '<b style="color:var(--accent);flex:none;font-size:16px">['+(i+1)+']</b>'+
+        '<span style="min-width:0;font-size:16px;color:var(--text-1)">'+esc(r.label)+
+        '<span class="dim2" style="display:block;font-size:13px">'+esc(r.kind)+' · '+esc(r.url||'')+'</span></span></div>';});
+    var rhs=measureBlocks(css,[rHead,rcont(2)].concat(rrows));
+    var rpages=paginate(DECK_BUDGET,rhs[0],rhs[1],rhs.slice(2));
+    rpages.forEach(function(pg,pi){
+      S.push('<section class="slide" data-title="来源索引'+(pi?'·续':'')+'">'+
+        (pi===0?rHead:rcont(pi+1))+
+        '<div style="margin-top:4px">'+pg.ids.map(function(i){return rrows[i];}).join('')+'</div>'+foot+'</section>');
+    });
+  }
+  /* 6 结尾 */
+  S.push('<section class="slide center tc" data-title="Thanks"><div>'+
+    '<p class="kicker">AImednews</p>'+
+    '<h1 class="h1 anim-rise-in" data-anim="rise-in">感谢<span class="gradient-text">观看</span></h1>'+
+    '<p class="dim" style="font-size:19px;margin:14px auto 0">「'+esc(qt)+'」· 试验 '+trials.length+
+    ' 项 · 引用 '+refs.length+' 条 · 生成于 '+stamp+'</p>'+
+    '<p class="lede" style="margin:16px auto">AI 解读仅供参考 · 事实以编号来源为准</p>'+
+    '<p class="dim2" style="font-size:15px;margin:10px auto 0">← → 翻页 · F 全屏 · O 概览 ｜ 互动版看板：localhost:8899</p>'+
+    '</div>'+foot+'</section>');
+  return S;
+}
+function exportSectionPPT(id){
+  var s=(DATA.sections||[]).filter(function(x){return x.id===id;})[0];
+  if(!s){toast('未找到该专题');return;}
+  $('loader').classList.add('show');
+  $('loadTxt').textContent='正在组装专题 PPT（Gemini 配图缓存 + 实测分页，约 3-30 秒）…';
+  fetchFillers().then(function(){
+    if(!FILLERS.length)toast('Gemini 配图未生成（未配置或网络失败），本次 PPT 不含留白配图');
+    toast('正在组装幻灯片（实测分页 + 内联图片，约 2-5 秒）…');
+    var imgUrls=['/assets/FigureLogo.png','/assets/FigureHero.jpg'];
+    var cssUrls=['/assets/ppt-fonts.css','/assets/ppt-base.css','/assets/ppt-theme.css','/assets/ppt-anim.css'];
+    return Promise.all([
+      Promise.all(imgUrls.map(toDataURL)),
+      Promise.all(cssUrls.map(function(u){return fetch(u).then(function(r){return r.text();});})),
+      fetch('/assets/ppt-runtime.js').then(function(r){return r.text();})
+    ]).then(function(res){
+      var IMG={};imgUrls.forEach(function(u,i){IMG[u]=res[0][i];});
+      var css=res[1].join('\n')+'\n'+DECK_XCSS;
+      var S=buildSectionDeck(s,IMG,css);
+      var now=new Date(),pad=function(x){return(x<10?'0':'')+x;};
+      var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+      var html=assembleDeck(S,css,res[2],stamp);
+      var blob=new Blob([html],{type:'text/html;charset=utf-8'});
+      var link=document.createElement('a');
+      link.href=URL.createObjectURL(blob);
+      link.download='AImednews-专题-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+pad(now.getHours())+pad(now.getMinutes())+'.html';
+      document.body.appendChild(link);link.click();
+      setTimeout(function(){URL.revokeObjectURL(link.href);link.remove();},4000);
+      toast('已导出 '+S.length+' 页专题幻灯片（含图表 · 1920×1080 自适应缩放）');
+    });
+  })
+  .catch(function(e){toast('导出失败：'+e);})
+  .finally(function(){$('loadTxt').textContent='正在从 ClinicalTrials.gov 拉取最新试验数据…';
+    $('loader').classList.remove('show');});
+}
+
+/* 验证钩子：?verifyExport=1 → 页面内组装并在 1920×1080 iframe 逐页测溢出（供无头测试） */
+(function(){
+  if(!/[?&]verifyExport=1/.test(location.search))return;
+  var iv=setInterval(function(){
+    if(!DATA||!PREP.topics.length)return;
+    clearInterval(iv);
+    var v=view();
+    var imgUrls=['/assets/FigureLogo.png','/assets/FigureHero.jpg'];
+    v.forEach(function(x){if(TOPIC_IMG[x.P.id])imgUrls.push(TOPIC_IMG[x.P.id]);});
+    imgUrls=Array.from(new Set(imgUrls));
+    var cssUrls=['/assets/ppt-fonts.css','/assets/ppt-base.css','/assets/ppt-theme.css','/assets/ppt-anim.css'];
+    fetchFillers().then(function(){
+    return Promise.all([
+      Promise.all(imgUrls.map(toDataURL)),
+      Promise.all(cssUrls.map(function(u){return fetch(u).then(function(r){return r.text();});})),
+      fetch('/assets/ppt-runtime.js').then(function(r){return r.text();})
+    ]).then(function(res){
+      var IMG={},imgData=res[0];
+      imgUrls.forEach(function(u,i){IMG[u]=imgData[i];});
+      var css=res[1].join('\n')+'\n'+DECK_XCSS;
+      var S=buildDeck(v,IMG,css);
+      var saveP=/[?&]saveDeck=1/.test(location.search)?
+        fetch('/api/deck/preview',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({html:assembleDeck(S,css,res[2],'preview')})})
+          .then(function(r){return r.json();}).catch(function(){return null;}):
+        Promise.resolve(null);
+      var f=document.createElement('iframe');
+      f.style.cssText='position:fixed;left:-9999px;top:0;width:1920px;height:1080px;visibility:hidden;border:0';
+      document.body.appendChild(f);
+      var d=f.contentDocument;
+      d.open();
+      d.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+css+'\n'+STAGE_CSS+
+        '</style></head><body data-theme="corporate-clean"><div class="deck">'+
+        S.join('\n')+'</div></body></html>');
+      d.close();
+      saveP.then(function(sv){
+        setTimeout(function(){
+          var slides=d.querySelectorAll('.slide');
+          var bad=[];
+          Array.prototype.forEach.call(slides,function(s,i){
+            /* 按子元素真实布局框检测（flex 居中裁剪时 scrollHeight 测不出，必须用 bbox）；
+               边界按该页实际 padding 判定（封面 padding:0 全幅设计不误报） */
+            var sr=s.getBoundingClientRect(),maxB=-1e9,minT=1e9;
+            var csS=d.defaultView.getComputedStyle(s);
+            var pt=parseFloat(csS.paddingTop)||0,pb=parseFloat(csS.paddingBottom)||0;
+            Array.prototype.forEach.call(s.children,function(ch){
+              var cs=d.defaultView.getComputedStyle(ch);
+              if(cs.position==='absolute'||cs.display==='none')return;
+              var r=ch.getBoundingClientRect();
+              if(r.bottom>maxB)maxB=r.bottom;
+              if(r.top<minT)minT=r.top;
+            });
+            if(maxB>sr.bottom-pb+8||minT<sr.top+pt-8)
+              bad.push('#'+(i+1)+' '+s.getAttribute('data-title')+
+                ' 内容侵入边距（底 '+Math.round(maxB-(sr.bottom-pb))+' / 顶 '+Math.round((sr.top+pt)-minT)+'）');
+          });
+          /* ?sec=1：追加验证首个问答专题 PPT（含图表页） */
+          var secInfo=null;
+          var sec1=(DATA.sections||[])[0];
+          if(sec1&&/[?&]sec=1/.test(location.search)){
+            var S2=buildSectionDeck(sec1,IMG,css);
+            var f2=document.createElement('iframe');
+            f2.style.cssText='position:fixed;left:-9999px;top:0;width:1920px;height:1080px;visibility:hidden;border:0';
+            document.body.appendChild(f2);
+            var d2=f2.contentDocument;
+            d2.open();
+            d2.write('<!DOCTYPE html><html><head><meta charset="utf-8"><style>'+css+'\n'+STAGE_CSS+
+              '</style></head><body data-theme="corporate-clean"><div class="deck">'+
+              S2.join('\n')+'</div></body></html>');
+            d2.close();
+            var sl2=d2.querySelectorAll('.slide'),bad2=[];
+            Array.prototype.forEach.call(sl2,function(s,i){
+              var sr=s.getBoundingClientRect(),maxB=-1e9,minT=1e9;
+              var csS=d2.defaultView.getComputedStyle(s);
+              var pt=parseFloat(csS.paddingTop)||0,pb=parseFloat(csS.paddingBottom)||0;
+              Array.prototype.forEach.call(s.children,function(ch){
+                var cs=d2.defaultView.getComputedStyle(ch);
+                if(cs.position==='absolute'||cs.display==='none')return;
+                var r=ch.getBoundingClientRect();
+                if(r.bottom>maxB)maxB=r.bottom;
+                if(r.top<minT)minT=r.top;
+              });
+              if(maxB>sr.bottom-pb+8||minT<sr.top+pt-8)
+                bad2.push('#'+(i+1)+' '+s.getAttribute('data-title')+
+                  ' 内容侵入边距（底 '+Math.round(maxB-(sr.bottom-pb))+' / 顶 '+Math.round((sr.top+pt)-minT)+'）');
+            });
+            secInfo={q:sec1.question.slice(0,24),slides:sl2.length,overflow:bad2,
+              donuts:d2.querySelectorAll('.slide .chart svg').length,
+              bars:d2.querySelectorAll('.slide .brow').length};
+            f2.remove();
+            if(/[?&]saveDeck=1/.test(location.search))
+              fetch('/api/deck/preview',{method:'POST',headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({html:assembleDeck(S2,css,res[2],'preview-section'),name:'section'})});
+          }
+          var out=document.createElement('pre');
+          out.id='verifyOut';
+          out.textContent='VERIFY '+JSON.stringify({slides:slides.length,overflow:bad,
+            section:secInfo,saved:sv&&sv.saved||null});
+          document.body.appendChild(out);
+          f.remove();
+        },800);
+      });
+    });
+    });
+  },400);
+})();
+$('exportPPTBtn').onclick=exportPPT;
+if($('exportPPTXBtn'))$('exportPPTXBtn').onclick=exportPPTX;
+$('autoRef').onchange=function(){
+  if(AUTO_TIMER){clearInterval(AUTO_TIMER);AUTO_TIMER=null;}
+  if(this.checked){AUTO_TIMER=setInterval(function(){loadData(true,true);},5*60*1000);
+    toast('已开启自动刷新（每 5 分钟）');}
+};
+
+/* ═══════════ LLM 设置 ═══════════ */
+function openLLM(){
+  $('llmModal').classList.add('show');
+  $('llmStat').textContent='加载当前配置…';
+  fetch('/api/llm/config').then(function(r){return r.json();}).then(function(c){
+    $('llmBase').value=c.base_url||'';
+    $('llmModel').value=c.model||'';
+    $('llmKey').value='';
+    $('llmKey').placeholder=c.has_key?'已配置（'+c.key_masked+'），留空保持不变':'未配置';
+    $('llmStat').textContent='当前模型：'+(c.model||'—')+(c.has_key?' · Key '+c.key_masked:' · 未配置 Key');
+  }).catch(function(e){$('llmStat').textContent='读取配置失败：'+e;});
+}
+function saveLLM(){
+  var b={base_url:$('llmBase').value.trim(),model:$('llmModel').value.trim(),persist:true};
+  var k=$('llmKey').value.trim();if(k)b.api_key=k;
+  $('llmStat').textContent='保存中…';
+  fetch('/api/llm/config',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(b)})
+   .then(function(r){return r.json();})
+   .then(function(c){
+     if(c.error){$('llmStat').textContent='保存失败：'+c.error;return;}
+     $('llmKey').value='';
+     $('llmKey').placeholder=c.has_key?'已配置（'+c.key_masked+'），留空保持不变':'未配置';
+     $('llmStat').textContent='✓ 已保存并写入 .env（重启后仍生效）';
+     toast('LLM 设置已保存');})
+   .catch(function(e){$('llmStat').textContent='保存失败：'+e;});
+}
+function testLLM(){
+  var b={base_url:$('llmBase').value.trim(),model:$('llmModel').value.trim()};
+  var k=$('llmKey').value.trim();if(k)b.api_key=k;
+  $('llmStat').textContent='测试连接中…（最多 30 秒）';
+  fetch('/api/llm/test',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(b)})
+   .then(function(r){return r.json();})
+   .then(function(t){
+     $('llmStat').textContent=t.ok?
+       '✓ 连接正常 · '+(t.model||'—')+' · '+t.latency_ms+'ms · 回复「'+t.reply+'」':
+       '✗ 连接失败：'+t.error;})
+   .catch(function(e){$('llmStat').textContent='✗ 请求异常：'+e;});
+}
+$('llmBtn').onclick=openLLM;
+$('llmClose').onclick=function(){$('llmModal').classList.remove('show');};
+$('llmSave').onclick=saveLLM;
+$('llmTest').onclick=testLLM;
+$('llmModal').onclick=function(e){if(e.target===this)this.classList.remove('show');};
+document.addEventListener('keydown',function(e){
+  if(e.key==='r'&&!e.metaKey&&!e.ctrlKey&&document.activeElement.tagName!=='INPUT'
+     &&document.activeElement.tagName!=='SELECT'){loadData(true,false);}
+});
+
+loadData(false,true);
+</script>
+</body>
+</html>

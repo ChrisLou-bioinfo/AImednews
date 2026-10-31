@@ -1,0 +1,7 @@
+# 采集与生成依赖
+tavily-python>=0.5
+python-dotenv>=1.0
+requests>=2.31
+
+# 导出可编辑 PPTX（webapp/ppt_deck.py）；同时需要服务端 python-pptx
+python-pptx>=0.6.23

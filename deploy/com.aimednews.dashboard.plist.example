@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  macOS launchd 定时任务示例：每日 08:00 重建看板。
+  使用前把 __ROOT__ 替换成本仓库的绝对路径：
+      sed "s#__ROOT__#$PWD#g" deploy/com.aimednews.dashboard.plist.example \
+        > ~/Library/LaunchAgents/com.aimednews.dashboard.plist
+      launchctl load ~/Library/LaunchAgents/com.aimednews.dashboard.plist
+  Linux 用户用 cron 即可：  0 8 * * * /path/to/news/run_daily.sh
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.aimednews.dashboard</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>__ROOT__/news/run_daily.sh</string>
+  </array>
+  <key>WorkingDirectory</key><string>__ROOT__</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHON</key><string>/usr/bin/python3</string>
+    <key>TIKTOKEN_CACHE_DIR</key><string>/tmp/tiktoken</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>0</integer></dict>
+  <key>RunAtLoad</key><false/>
+  <key>StandardOutPath</key><string>__ROOT__/output/cron.log</string>
+  <key>StandardErrorPath</key><string>__ROOT__/output/cron.log</string>
+</dict>
+</plist>

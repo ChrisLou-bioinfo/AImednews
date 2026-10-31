@@ -1,0 +1,37 @@
+# ── 密钥与本机环境 ──────────────────────────────
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+
+# ── 生成物（开源不跟踪，运行时重建）────────────
+output/
+!output/.gitkeep
+
+# ── 与本项目无关的本地实验文件（保留在磁盘，不入库）──
+figwork/
+renders/
+genai_timeline*.py
+genai_timeline*
+genai_development_path.png
+.video_agent/
+gen_timeline_figure.py
+122333*.png
+composite_small.png
+search.py
+collect_news.py
+*.bak
+
+# ── 未引用的重复素材（体积大，前端只用 .jpg 与 Logo）──
+webapp/assets/FigureHero.png
+webapp/assets/FigureTopic[0-9].png
+webapp/assets/*.json
+webapp/assets/*.log
+
+# ── 系统/编辑器 ────────────────────────────────
+.DS_Store
+*.swp
+.idea/
+.vscode/
