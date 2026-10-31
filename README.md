@@ -1,5 +1,9 @@
 # 肺癌分子诊疗情报看板 · NSCLC Intelligence Dashboard
 
+![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)
+![Non-commercial](https://img.shields.io/badge/use-non--commercial-orange.svg)
+![Attribution required](https://img.shields.io/badge/attribution-required-blue.svg)
+
 > 每日自动构建的肺癌（EGFR/MET 异常 NSCLC）科研情报看板：把**注册试验、文献、靶点药物、会议数据**汇成一份可溯源、可筛选、可导出 PPT 的中文情报端。
 
 **English**: A self-hosted, daily-rebuilt intelligence dashboard for EGFR/MET-altered NSCLC. It aggregates ClinicalTrials.gov, PubTator 3, Open Targets and conference coverage into one evidence-traced dataset — every claim carries a numbered citation — and ships with an interactive web UI plus one-click export to an editable PowerPoint deck.
