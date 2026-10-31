@@ -57,6 +57,9 @@ FONT_EN = "Arial Unicode MS"
 
 TODAY = dt.datetime.now().strftime("%Y-%m-%d")
 
+# 署名信息（CC BY-NC 4.0 要求随生成物传播）
+ATTRIBUTION = "© 2026 Chris Lou · CC BY-NC 4.0 · loujiacheng1986@foxmail.com"
+
 
 # ── 低层工具 ──────────────────────────────────────────────
 def _ea_font(run, name: str) -> None:
@@ -346,7 +349,8 @@ def _slide_cover(prs, payload, agg, flt_desc: str = ""):
           f"数据截止 {payload.get('latest_generated_at') or TODAY}　"
           f"主题 {agg['n_topics']} 个　证据条目 {agg['n_trials'] + agg['n_papers']} 条　"
           f"来源索引 {agg['n_refs']} 条", 13, False, C_MUTED)
-    _footer(s, "AI 生成内容仅供学术参考；全部结论附来源编号，请以原始文献/注册信息为准。")
+    _footer(s, "AI 生成内容仅供学术参考；全部结论附来源编号，请以原始文献/注册信息为准。\n"
+               + ATTRIBUTION)
 
 
 def _slide_overview(prs, payload, agg, page, flt_desc: str = "",
@@ -620,6 +624,8 @@ def _slide_closing(prs, agg):
     _text(s, Inches(0.9), Inches(6.2), Inches(11.2), Inches(0.4),
           f"AImednews · 生成于 {TODAY} · 来源：PubTator 3 / ClinicalTrials.gov / "
           "Open Targets / Tavily", 11, False, C_MUTED)
+    _text(s, Inches(0.9), Inches(6.62), Inches(11.4), Inches(0.3),
+          ATTRIBUTION + " · 非商业用途，引用请注明出处", 10, False, C_MUTED)
 
 
 # ── 入口 ──────────────────────────────────────────────────

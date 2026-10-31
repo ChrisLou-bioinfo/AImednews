@@ -1352,7 +1352,7 @@ def main():
 <button id="expand">收起全部</button></span></div></header>
 <div class="container">{body}</div>
 <footer>{esc(cfg['author'])} · 证据：PubTator 3 / ClinicalTrials.gov / OpenTargets · 新闻补充：Tavily ·
-AI 生成内容仅供参考，请以原始来源为准 · 点击主题标题折叠</footer>
+AI 生成内容仅供参考，请以原始来源为准 · 点击主题标题折叠<br>{esc(cfg.get('attribution', ''))}</footer>
 <button id="totop">↑</button>
 <script>{JS}</script></body></html>"""
 

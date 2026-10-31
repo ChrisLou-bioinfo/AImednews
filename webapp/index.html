@@ -1188,7 +1188,9 @@ function renderFoot(){
   var d=DATA||{};
   $('foot').innerHTML='数据来源：ClinicalTrials.gov v2 实时 · PubTator 3 · OpenTargets · Tavily（新闻补充）'+
     ' ｜ 归档 '+(d.archive_days||[]).length+' 天 · 最近归档构建 '+esc(d.latest_generated_at||'—')+
-    ' ｜ AI 解读由 DeepSeek 生成 · 仅供参考 · 事实以编号来源为准';
+    ' ｜ AI 解读由 DeepSeek 生成 · 仅供参考 · 事实以编号来源为准'+
+    '<br><span style="opacity:.75">© 2026 Chris Lou · CC BY-NC 4.0 非商业许可 · '+
+    '引用请注明出处 · loujiacheng1986@foxmail.com</span>';
 }
 var STAGE_CN={6:'已获批',5:'IV期',4:'III期',3:'II期',2:'I期',1:'临床前',0:'—'};
 function stageCn(s){

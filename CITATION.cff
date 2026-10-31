@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "AImednews: NSCLC Molecular Intelligence Dashboard"
+message: >-
+  本项目采用 CC BY-NC 4.0（仅限非商业用途）。使用、改编或引用时请署名并保留
+  作者邮箱；商业使用请联系作者授权。
+type: software
+authors:
+  - family-names: Lou
+    given-names: Chris
+    alias: ChrisLou-bioinfo
+    email: loujiacheng1986@foxmail.com
+repository-code: "https://github.com/ChrisLou-bioinfo/AImednews"
+url: "https://github.com/ChrisLou-bioinfo/AImednews"
+license: CC-BY-NC-4.0
+license-url: "https://github.com/ChrisLou-bioinfo/AImednews/blob/main/LICENSE"
+keywords:
+  - NSCLC
+  - EGFR
+  - MET
+  - clinical trials
+  - evidence tracing
+  - dashboard
+  - large language model
+abstract: >-
+  每日自动构建的肺癌（EGFR/MET 异常 NSCLC）科研情报看板：整合 ClinicalTrials.gov、
+  PubTator 3、Open Targets 三层证据与会议报道，全部结论带编号引用可回溯，
+  提供交互式筛选与可编辑 PowerPoint 导出。
+date-released: "2026-10-31"
+version: "1.0.0"

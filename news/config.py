@@ -199,6 +199,9 @@ DASHBOARD = {
     "title": "肺癌 EGFR/MET NSCLC 科研情报看板",
     "subtitle": "MedEvidence 证据体系为主 · 全文来源索引 · Tavily 新闻补充",
     "author": "AImednews",
+    # 署名与许可（CC BY-NC 4.0 要求随生成物传播，勿删）
+    "attribution": "© 2026 Chris Lou · CC BY-NC 4.0 非商业许可 · "
+                   "引用请注明出处 · loujiacheng1986@foxmail.com",
     "default_days": 21,
     "search_depth": "advanced",   # Tavily: basic=1 credit/次, advanced=2 credits/次
     "top_news_per_topic": 5,      # Tavily 为补充源，数量受控

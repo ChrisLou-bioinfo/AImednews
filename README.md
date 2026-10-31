@@ -4,6 +4,8 @@
 
 **English**: A self-hosted, daily-rebuilt intelligence dashboard for EGFR/MET-altered NSCLC. It aggregates ClinicalTrials.gov, PubTator 3, Open Targets and conference coverage into one evidence-traced dataset — every claim carries a numbered citation — and ships with an interactive web UI plus one-click export to an editable PowerPoint deck.
 
+> **许可**：本项目采用 [CC BY-NC 4.0](LICENSE) —— **仅限非商业用途**；任何使用、改编、演示或论文引用**必须署名并标注出处**，且须保留作者邮箱 `loujiacheng1986@foxmail.com`。商业使用请另行联系作者授权。
+
 **核心原则：所有结论必须可溯源。** AI 生成的每一句话都强制内联编号引用 `[n]`，编号指向页面内的来源索引（PMID / NCT / 靶点页面 / 新闻原文）；越界编号在构建时自动剔除。
 
 ![看板界面](docs/screenshots/dashboard.png)
@@ -215,6 +217,37 @@ output/                     构建产物（不入库）
 
 ## License
 
-代码：[MIT](LICENSE)。数据：遵循各自上游许可（见上表）。
+本项目采用 **Creative Commons Attribution-NonCommercial 4.0 International（CC BY-NC 4.0）**，完整条款见 [LICENSE](LICENSE)。
+
+| 条款 | 说明 |
+|---|---|
+| **非商业用途** | 不得将本项目主要用于商业目的或获取商业利益；商业使用需联系作者授权 |
+| **必须署名** | 使用、复制、改编、再分发或用于论文/报告/课程/产品时，必须标注项目名、作者、邮箱与项目地址 |
+| **保留标识** | 分发或改编时不得删除 LICENSE 中的作者署名与邮箱 |
+| **上游数据** | ClinicalTrials.gov / PubMed-PubTator / Open Targets / Tavily 的数据仍归各平台所有，需遵守其各自条款（Open Targets 为 CC BY 4.0） |
+
+### 引用方式（必填署名信息）
+
+```
+项目名称：肺癌分子诊疗情报看板 (AImednews)
+作者：Chris Lou (GitHub: ChrisLou-bioinfo)
+邮箱：loujiacheng1986@foxmail.com
+项目地址：https://github.com/ChrisLou-bioinfo/AImednews
+许可：CC BY-NC 4.0
+```
+
+学术引用 / BibTeX：
+
+```bibtex
+@software{lou2026aimednews,
+  author       = {Lou, Chris},
+  title        = {AImednews: NSCLC Molecular Intelligence Dashboard},
+  year         = {2026},
+  howpublished = {\url{https://github.com/ChrisLou-bioinfo/AImednews}},
+  note         = {CC BY-NC 4.0. Contact: loujiacheng1986@foxmail.com}
+}
+```
+
+> 看板页脚与导出 PPT 的页脚均内嵌该署名信息，随生成物一并传播。
 
 欢迎 Issue / PR：新增主题、新增会议、改进抽取规则都只需改 `news/config.py` 或对应函数。
