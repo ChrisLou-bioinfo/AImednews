@@ -4,7 +4,7 @@
 
 **English**: A self-hosted, daily-rebuilt intelligence dashboard for EGFR/MET-altered NSCLC. It aggregates ClinicalTrials.gov, PubTator 3, Open Targets and conference coverage into one evidence-traced dataset — every claim carries a numbered citation — and ships with an interactive web UI plus one-click export to an editable PowerPoint deck.
 
-> **许可**：本项目采用 [CC BY-NC 4.0](LICENSE) —— **仅限非商业用途**；任何使用、改编、演示或论文引用**必须署名并标注出处**，且须保留作者邮箱 `loujiacheng1986@foxmail.com`。商业使用请另行联系作者授权。
+> **许可**：本项目采用 [CC BY-NC 4.0](LICENSE) —— **仅限非商业用途**；任何使用、改编、演示或论文引用**必须署名并标注出处**，且须保留作者邮箱 `loujiacheng1986@foxmail.com`（详见 [NOTICE.md](NOTICE.md)）。商业使用请另行联系作者授权。
 
 **核心原则：所有结论必须可溯源。** AI 生成的每一句话都强制内联编号引用 `[n]`，编号指向页面内的来源索引（PMID / NCT / 靶点页面 / 新闻原文）；越界编号在构建时自动剔除。
 
@@ -217,7 +217,8 @@ output/                     构建产物（不入库）
 
 ## License
 
-本项目采用 **Creative Commons Attribution-NonCommercial 4.0 International（CC BY-NC 4.0）**，完整条款见 [LICENSE](LICENSE)。
+本项目采用 **Creative Commons Attribution-NonCommercial 4.0 International（CC BY-NC 4.0）**：
+法律条款见 [LICENSE](LICENSE)，作者要求的署名方式与联系方式见 [NOTICE.md](NOTICE.md)。
 
 | 条款 | 说明 |
 |---|---|
