@@ -66,7 +66,7 @@
 **环境**：Python 3.10+；macOS / Linux 均可。
 
 ```bash
-git clone https://github.com/<your-account>/AImednews.git
+git clone https://github.com/ChrisLou-bioinfo/AImednews.git
 cd AImednews
 python3 -m pip install -r requirements.txt
 
