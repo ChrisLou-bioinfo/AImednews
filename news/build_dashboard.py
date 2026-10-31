@@ -313,7 +313,7 @@ def _esummary(pmids):
         r = HTTP.get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
                      params={"db": "pubmed", "id": ",".join(map(str, pmids)),
                              "retmode": "json", "tool": "AImednews",
-                             "email": "amednews@example.org"}, timeout=30)
+                             "email": "aimednews@example.org"}, timeout=30)
         return (r.json().get("result") or {})
     except Exception as e:
         _log(f"    pubdate warn: {e}")
@@ -367,7 +367,7 @@ def collect_papers_pubmed(query, book, cfg):
             "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
             params={"db": "pubmed", "term": query, "retmax": n_search,
                     "sort": "pub_date", "retmode": "json",
-                    "tool": "AImednews", "email": "amednews@example.org"},
+                    "tool": "AImednews", "email": "aimednews@example.org"},
             timeout=30).json())
         ids = es.get("esearchresult", {}).get("idlist", []) or []
     except Exception as e:
