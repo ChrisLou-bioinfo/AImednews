@@ -1,14 +1,3 @@
-肺癌分子诊疗情报看板 (AImednews)
-NSCLC Molecular Intelligence Dashboard
-
-版权所有 © 2026 Chris Lou (GitHub: ChrisLou-bioinfo)
-联系邮箱 / Contact: loujiacheng1986@foxmail.com
-
-────────────────────────────────────────────────────────────────────────
-使用条件摘要（中文，具有约束力的仍是下方完整法律条款）
-Terms Summary in Chinese — the binding terms are the full legal code below
-────────────────────────────────────────────────────────────────────────
-
 1. 非商业用途（NonCommercial）
    本项目仅授权**非商业性**使用。你可以自由复制、分发、改编、二次开发，
    但不得主要用于商业目的或获取商业利益（商业性判断以 CC BY-NC 4.0 定义为准）。
@@ -449,4 +438,28 @@ the avoidance of doubt, this paragraph does not form part of the
 public licenses.
 
 Creative Commons may be contacted at creativecommons.org.
+────────────────────────────────────────────────────────────────────────
+附加说明（作者要求，作为署名义务的具体化；不与上方许可条款冲突）
+Additional attribution requirements (author's terms; consistent with the license above)
+────────────────────────────────────────────────────────────────────────
 
+1. 非商业用途 NonCommercial：本项目仅授权非商业性使用；
+   如需商业使用，请另行联系 loujiacheng1986@foxmail.com 取得授权。
+
+2. 必须署名 Must attribute：任何使用、复制、改编、再分发或用于论文、报告、
+   课程、演示、产品时，必须显著标注以下全部信息：
+
+       项目名称：肺癌分子诊疗情报看板 (AImednews)
+       作者：Chris Lou (GitHub: ChrisLou-bioinfo)
+       邮箱：loujiacheng1986@foxmail.com
+       项目地址：https://github.com/ChrisLou-bioinfo/AImednews
+       许可：CC BY-NC 4.0
+
+3. 保留标识 Retain the notice：分发或改编时不得删除本文件，
+   也不得删除上述作者署名、邮箱与项目地址。
+
+4. 上游数据 Upstream data：本许可不改变 ClinicalTrials.gov、
+   PubMed/PubTator 3、Open Targets、Tavily 等上游数据的版权与条款
+   （Open Targets 为 CC BY 4.0）。
+
+版权所有 © 2026 Chris Lou · loujiacheng1986@foxmail.com
