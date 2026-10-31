@@ -19,6 +19,7 @@
 ## 目录
 
 - [功能](#功能)
+- [部署（agent 一键）](#部署推荐复制给-agent-平台)
 - [快速开始](#快速开始)
 - [配置](#配置)
 - [导出 PowerPoint](#导出-powerpoint)
@@ -64,6 +65,29 @@
 <td><img src="docs/screenshots/ppt-topic.png" width="420" colspan="2"></td>
 </tr>
 </table>
+
+---
+
+## 部署（推荐：复制给 agent 平台）
+
+本仓库是纯本地 Python 应用，**把下面这段提示词整段复制到你的 AI agent 平台**（DSH / Claude Code / Cursor / Codex / 通义灵码等），
+agent 会自己克隆、装依赖、向你要密钥、构建数据、起服务并验证：
+
+```text
+请把 GitHub 仓库 https://github.com/ChrisLou-bioinfo/AImednews 部署到当前机器并启动看板。
+1) 克隆到 ./AImednews 并进入；2) 建 .venv 装 requirements.txt；
+3) 复制 .env.example 为 .env，向我索取 TAVILY_API_KEY 与 DEEPSEEK_*（没有密钥就用冒烟参数先跑起来）；
+4) 有密钥执行 python news/build_dashboard.py --days 7 --synth，
+   无密钥执行 python news/build_dashboard.py --days 7 --no-news --no-lit --no-targets；
+5) 后台启动 python webapp/server.py --port 8899，验证 /api/health 返回 {"ok":true}；
+6) 若支持 systemd/cron/launchd，配置每日 08:00 自动重建（news/run_daily.sh）；
+7) 汇报访问地址、产物路径、日志位置、缺失配置与停服命令。
+约束：不要改业务代码，不要用 Docker，报错先查 docs/DEPLOY.md。
+```
+
+也可以手动安装：`bash scripts/setup.sh`（自动建 venv、装依赖、生成 `.env` 模板、做一次构建）。
+
+完整部署说明（手动安装 / systemd / launchd / cron / 常见问题 / 自检清单）见 **[docs/DEPLOY.md](docs/DEPLOY.md)**。
 
 ---
 

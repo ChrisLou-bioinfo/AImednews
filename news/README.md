@@ -9,10 +9,10 @@
 python3 news/build_dashboard.py --days 7 --synth
 
 # 仅重建视图，不联网（调试模板时很快）
-python3 news/build_dashboard.py --days 7 --no-news --no-lit --no-synth
+python3 news/build_dashboard.py --days 7 --no-news --no-lit --no-targets
 ```
 
-常用参数：`--days`（新闻回溯天数）、`--jobs`（并发主题数）、`--no-news` / `--no-lit`（跳过采集）、`--no-synth`（跳过 AI 总结）。
+常用参数：`--days`（新闻回溯天数）、`--jobs`（并发主题数）、`--synth`（生成 AI 解读，缺省即跳过）、`--no-news` / `--no-lit` / `--no-targets` / `--no-trials`（跳过对应采集，便于离线调试）。
 
 产物：
 

@@ -1,0 +1,8 @@
+[Unit]
+Description=AImednews daily data rebuild
+
+[Service]
+Type=oneshot
+WorkingDirectory=__ROOT__
+Environment=PYTHON=__ROOT__/.venv/bin/python
+ExecStart=/bin/bash __ROOT__/news/run_daily.sh

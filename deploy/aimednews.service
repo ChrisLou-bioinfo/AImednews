@@ -1,0 +1,23 @@
+# systemd 单元示例（Linux 服务器常驻 + 每日重建）
+#
+#   sudo cp deploy/aimednews.service /etc/systemd/system/
+#   sudo sed -i "s#__ROOT__#$(pwd)#g" /etc/systemd/system/aimednews.service
+#   sudo systemctl daemon-reload && sudo systemctl enable --now aimednews
+#
+# 每日 08:00 自动重建可另建 timer（见 docs/DEPLOY.md），或直接用 cron 调 run_daily.sh。
+
+[Unit]
+Description=AImednews NSCLC intelligence dashboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=__ROOT__
+Environment=PYTHONUNBUFFERED=1
+ExecStart=__ROOT__/.venv/bin/python webapp/server.py --port 8899
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
