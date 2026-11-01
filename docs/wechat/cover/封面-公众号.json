@@ -1,0 +1,18 @@
+{
+  "lang": "zh",
+  "title": [
+    "肺癌情报看板",
+    "开源了",
+    "每个结论可溯源"
+  ],
+  "date": "2026.11.01",
+  "theme": "lung cancer molecular diagnostics, targeted therapy, DNA double helix, clinical trial data, evidence network, medical data visualization, dark navy blue background, clean minimal, professional",
+  "foot": "Chris生命科学小站",
+  "art": "docs/wechat/cover/封面-公众号-art.png",
+  "out": "docs/wechat/cover/封面-公众号.png",
+  "prompt": "IMPORTANT: Create an ultra-wide cinematic landscape banner illustration with aspect ratio 2.35 to 1, MUCH WIDER THAN TALL (at least 2 times wider than its height). Do NOT produce portrait or square. Subject: a scientific journal cover artwork about lung cancer molecular diagnostics, targeted therapy, DNA double helix, clinical trial data, evidence network, medical data visualization, dark navy blue background, clean minimal, professional. Style: modern biomedical journal cover art in the style of a Nature cover; deep navy blue background, fine silver and white line art, warm amber and gold glow as the only warm accent, faint scientific grid; high detail, elegant, sophisticated, soft volumetric light. Composition: place the main scientific motif (abstract molecular, cellular or anatomical shapes, fine line art, glowing nodes, constellation-like data networks) on the RIGHT half of the image. Keep the LEFT third as clean negative space with only a very dark gradient, reserved for a title. Strict rules: no text, no letters, no numbers, no logos anywhere in the image. Abstract scientific illustration only, no photorealistic bodies. Flat editorial vector-scientific look, not photographic.",
+  "size": [
+    900,
+    383
+  ]
+}

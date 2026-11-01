@@ -37,5 +37,6 @@ webapp/assets/*.log
 .vscode/
 
 # ── 公众号打包产物（由 docs/wechat/pack.sh 生成）──
-docs/wechat/fig[0-9]-*.png
+docs/wechat/fig[0-9]-*
+docs/wechat/cover/*-art.png
 docs/wechat/wechat/
