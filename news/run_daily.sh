@@ -9,7 +9,18 @@ set -u
 
 # 项目根目录：由脚本位置推导，不依赖调用者的当前目录
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PY="${PYTHON:-python3}"
+# 解释器：优先环境变量；否则在常见路径里挑一个"装了依赖"的（launchd 的最小 PATH
+# 常指向系统 python3，那里没有 tavily，会直接 ModuleNotFoundError）
+if [ -n "${PYTHON:-}" ]; then
+  PY="$PYTHON"
+else
+  PY=""
+  for cand in /usr/local/Homebrew/bin/python3 /opt/homebrew/bin/python3 "$(command -v python3 2>/dev/null)"; do
+    [ -n "$cand" ] && [ -x "$cand" ] || continue
+    if "$cand" -c "import tavily" >/dev/null 2>&1; then PY="$cand"; break; fi
+  done
+  [ -n "$PY" ] || PY="python3"
+fi
 LOG="$ROOT/output/cron.log"
 BUILD_ARGS="${BUILD_ARGS:---days 7 --synth}"
 KEEP_DAYS="${KEEP_DAYS:-30}"

@@ -10,6 +10,9 @@
 
 > **许可**：本项目采用 [CC BY-NC 4.0](LICENSE) —— **仅限非商业用途**；任何使用、改编、演示或论文引用**必须署名并标注出处**，且须保留作者邮箱 `loujiacheng1986@foxmail.com`（详见 [NOTICE.md](NOTICE.md)）。商业使用请另行联系作者授权。
 
+> **当前演示配置**：血液肿瘤（含儿童 ALL/AML、淋巴瘤、CAR-T 与移植），会议库为 ASH / EHA / SIOP / ASPHO。
+> 主题与会议全部在 `news/config.py` 中配置，换病种只需改这一个文件（本仓库早前以 EGFR/MET NSCLC 为演示）。
+
 **核心原则：所有结论必须可溯源。** AI 生成的每一句话都强制内联编号引用 `[n]`，编号指向页面内的来源索引（PMID / NCT / 靶点页面 / 新闻原文）；越界编号在构建时自动剔除。
 
 ![看板界面](docs/screenshots/dashboard.png)

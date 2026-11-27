@@ -49,8 +49,8 @@ PALETTE = [C_GREEN, C_BLUE, C_AMBER, RGBColor(0x9B, 0x8C, 0xE8),
            RGBColor(0xE5, 0x6A, 0x5E), RGBColor(0x4F, 0xC3, 0xD6)]
 
 ASSETS = pathlib.Path(__file__).resolve().parent / "assets"
-TOPIC_FIG = {"egfr_l1_later": "FigureTopic1.jpg", "egfr_tp53": "FigureTopic2.jpg",
-             "egfr_resistance": "FigureTopic3.jpg", "met_primary": "FigureTopic4.jpg"}
+# 现有 4 张机制图为肺癌主题；血液肿瘤版暂不配图（配好新图后按主题 id 映射即可）
+TOPIC_FIG = {}
 
 FONT_CN = "Arial Unicode MS"   # 实测：中英混排在 LibreOffice/PowerPoint 下不丢字
 FONT_EN = "Arial Unicode MS"
@@ -332,11 +332,13 @@ def _slide_cover(prs, payload, agg, flt_desc: str = ""):
     _rect(s, 0, 0, Inches(0.16), SLIDE_H, C_GREEN)
     _rect(s, Inches(0.9), Inches(5.35), Inches(1.4), Inches(0.05), C_GREEN)
     _text(s, Inches(0.9), Inches(1.55), Inches(11.2), Inches(0.4),
-          "NSCLC · MOLECULAR INTELLIGENCE BRIEFING", 13, True, C_GREEN)
+          _clean(payload.get("brand_en") or "HEMATOLOGIC ONCOLOGY · EVIDENCE BRIEFING", 60),
+          13, True, C_GREEN)
+    _title_cn = _clean(payload.get("brand_cn") or "血液肿瘤（含儿童）诊疗情报", 22)
     _text(s, Inches(0.9), Inches(2.02), Inches(11.5), Inches(0.85),
-          "肺癌 EGFR/MET 靶向治疗", 40, True, C_WHITE)
+          _title_cn, 40, True, C_WHITE)
     _text(s, Inches(0.9), Inches(2.92), Inches(11.5), Inches(0.85),
-          "科研情报与会议速递", 40, True, C_WHITE)
+          _clean(payload.get("brand_sub") or "科研情报与会议速递", 24), 40, True, C_WHITE)
     _text(s, Inches(0.9), Inches(4.12), Inches(11.2), Inches(0.6),
           "证据体系：PubTator 3 · ClinicalTrials.gov · Open Targets　|　新闻补充：Tavily",
           14, False, C_MUTED)
@@ -432,7 +434,7 @@ def _slide_method(prs, payload, agg, page):
     _picture_fit(s, "FigureHero.jpg", Inches(7.5), Inches(1.72),
                  Inches(5.25), Inches(3.0), crop_bottom=0.17)
     _text(s, Inches(7.5), Inches(4.92), Inches(5.25), Inches(1.5),
-          "分子诊断 → 靶向治疗 → 临床证据：看板按此链条组织四类主题，"
+          "分子分型 → 免疫/细胞治疗 → 临床证据：看板按此链条组织四类主题，"
           "并提供可回溯的来源索引。", 11, False, C_MUTED)
     _footer(s, "数据来源与许可：PubTator 3 / ClinicalTrials.gov（公共数据）；"
                "Open Targets（CC BY 4.0）；Tavily（商业检索服务）。")

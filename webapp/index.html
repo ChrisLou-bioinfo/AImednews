@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>肺癌（NSCLC）诊疗情报</title>
+<title>血液肿瘤（含儿童）诊疗情报</title>
 <link rel="icon" type="image/png" href="/assets/FigureLogo.png">
 <style>
 :root{
@@ -340,10 +340,10 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40p
 <body>
 
 <header class="app">
-  <img class="logo" src="/assets/FigureLogo.png" alt="肺癌（NSCLC）诊疗情报 logo">
+  <img class="logo" src="/assets/FigureLogo.png" alt="血液肿瘤诊疗情报 logo">
   <div class="title-wrap">
-    <h1 class="app-title">肺癌（NSCLC）<span class="hl">诊疗情报</span></h1>
-    <div class="app-sub">EGFR / MET · NSCLC ｜ ClinicalTrials.gov 实时 · PubTator 3 文献 · OpenTargets 靶点 · Tavily 新闻</div>
+    <h1 class="app-title">血液肿瘤（含儿童）<span class="hl">诊疗情报</span></h1>
+    <div class="app-sub">儿童 ALL / AML · 淋巴瘤 · CAR-T 与移植 ｜ ClinicalTrials.gov 实时 · PubTator 3 文献 · OpenTargets 靶点 · Tavily 新闻</div>
   </div>
   <div class="head-right">
     <span id="updated"><span class="live-dot"></span>加载中…</span>
@@ -394,10 +394,13 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40p
     <div class="warnbar" id="warnbar"></div>
 
     <div class="hero">
-      <img src="/assets/FigureHero.jpg" alt="Lung Cancer Treatment Intelligence">
+      <div style="height:225px;background:
+        radial-gradient(1200px 260px at 12% 120%, rgba(47,134,224,.55), transparent 60%),
+        radial-gradient(900px 240px at 88% 0%, rgba(124,192,245,.45), transparent 62%),
+        linear-gradient(135deg,#0d1b2c 0%,#143050 55%,#0b2c46 100%);"></div>
       <div class="hero-ol">
-        <div class="hero-t">肺癌（NSCLC）诊疗情报</div>
-        <div class="hero-s">Lung Cancer (NSCLC) · 分子诊断 → 靶向治疗 → 临床证据 ｜ 实时数据驱动</div>
+        <div class="hero-t">血液肿瘤（含儿童）诊疗情报</div>
+        <div class="hero-s">Pediatric-first Hematologic Oncology · 分子分型 → 免疫/细胞治疗 → 临床证据 ｜ 实时数据驱动</div>
       </div>
     </div>
 
@@ -473,40 +476,23 @@ var PALETTE=['#2f86e0','#5c7fa3','#7cc0f5','#3a6ea5','#a9c4e0','#2464b8','#8d9db
 /* 治疗模式归类：[药物名正则, 模式, 靶点, 展示名] —— 顺序即优先级 */
 var TX_SKIP=/placebo|standard of care|supportive care|best supportive|background|^study (drug|treatment|therapy)|any approved/i;
 var TX_RULES=[
-  [/amivantamab|rybrevant/i,'双抗','EGFR×c-MET','Amivantamab'],
-  [/ivonescimab|ak112/i,'双抗','PD-1×VEGF','Ivonescimab'],
-  [/zenocutuzumab/i,'双抗','HER2×HER3','Zenocutuzumab'],
-  [/volrustomig|cadonilimab|kn046|pm8002|mds1109|sh2046/i,'双抗','双靶点','其他双抗'],
-  [/patritumab|datopotamab|deruxtecan|enhertu|rezetecan/i,'ADC','HER2/HER3','DXd 类 ADC'],
-  [/telisotuzumab|vedotin/i,'ADC','MET','Vedotin 类 ADC'],
-  [/sacituzumab|govitecan|trodelvy/i,'ADC','TROP2','Sacituzumab'],
-  [/sunvozertinib|dzd9008/i,'四代TKI','EGFR C797S','Sunvozertinib'],
-  [/blu-?\s*(945|701)|bbt-?\s*176/i,'四代TKI','EGFR C797S','BLU/BBT 四代'],
-  [/osimertinib|tagrisso/i,'EGFR TKI','EGFR','Osimertinib'],
-  [/aumolertinib|almonertinib/i,'EGFR TKI','EGFR','Aumolertinib'],
-  [/lazertinib/i,'EGFR TKI','EGFR','Lazertinib'],
-  [/fulmonertinib|firmonertinib/i,'EGFR TKI','EGFR','Fulmonertinib'],
-  [/gefitinib/i,'EGFR TKI','EGFR','Gefitinib'],
-  [/erlotinib/i,'EGFR TKI','EGFR','Erlotinib'],
-  [/afatinib/i,'EGFR TKI','EGFR','Afatinib'],
-  [/dacomitinib/i,'EGFR TKI','EGFR','Dacomitinib'],
-  [/zipalertinib|cln-?\s*081|andamertinib|abivertinib/i,'EGFR TKI','EGFR ex20','Zipalertinib 等'],
-  [/capmatinib/i,'MET TKI','MET','Capmatinib'],
-  [/tepotinib/i,'MET TKI','MET','Tepotinib'],
-  [/savolitinib/i,'MET TKI','MET','Savolitinib'],
-  [/gumarontinib|glumatinib/i,'MET TKI','MET','Gumarontinib'],
-  [/cabozantinib/i,'MET TKI','MET','Cabozantinib'],
-  [/crizotinib/i,'多靶点TKI','MET/ALK','Crizotinib'],
-  [/alectinib|lorlatinib|brigatinib|ensartinib|ceritinib/i,'ALK TKI','ALK','ALK 抑制剂类'],
-  [/selpercatinib|pralsetinib/i,'TKI','RET','RET 抑制剂类'],
-  [/pembrolizumab|keytruda|nivolumab|opdivo|atezolizumab|tecentriq|durvalumab|imfinzi|sintilimab|camrelizumab|toripalimab|tislelizumab|serplulimab|cemiplimab|penpulimab|retifanlimab|budigalimab/i,'免疫检查点','PD-1/PD-L1','PD-1/PD-L1 类'],
-  [/ipilimumab|tremelimumab/i,'免疫检查点','CTLA-4','CTLA-4 类'],
-  [/carboplatin|cisplatin|pemetrexed|paclitaxel|docetaxel|gemcitabine|nedaplatin|lobaplatin|thiotepa|chemotherapy/i,'化疗','细胞毒','含铂/化疗类'],
-  [/radiotherapy|irradiation|radiation|sabr\b/i,'放疗','局部治疗','放疗/照射'],
-  [/bevacizumab|avastin|ramucirumab|anlotinib/i,'抗血管','VEGF','抗血管生成类'],
-  [/necitumumab|cetuximab|panitumumab/i,'单抗','EGFR','EGFR 单抗类']
+  [/tisagenlecleucel|kymriah|axicabtagene|yescarta|brexucabtagene|tecartus|lisocabtagene|breyanzi|idecabtagene|cilta-cel|carvytki|ciltacabtagene|anito-cel|chimeric antigen receptor|car-?t\b/i,'CAR-T','CD19/BCMA/GPRC5D','CAR-T 细胞治疗'],
+  [/blinatumomab|blincyto|mosunetuzumab|glofitamab|epcoritamab|teclistamab|talquetamab|elranatamab|bispecific|双特异/i,'双抗','CD19/CD20/BCMA/GPRC5D','双特异性抗体'],
+  [/brentuximab|adcetris|inotuzumab|besponsa|polatuzumab|loncastuximab|gemtuzumab|antibody-drug conjugate|\badc\b/i,'ADC','CD30/CD22/CD79b/CD33','抗体偶联药物'],
+  [/nivolumab|opdivo|pembrolizumab|keytruda|dostarlimab|atezolizumab|durvalumab|sintilimab|camrelizumab|tislelizumab|ipilimumab|PD-1|PD-L1/i,'免疫检查点','PD-1/PD-L1/CTLA-4','免疫检查点抑制剂'],
+  [/venetoclax|venclexta|navitoclax|BCL-?2/i,'BCL-2 抑制剂','BCL-2','BCL-2 抑制剂'],
+  [/revumenib|ziftomenib|menin/i,'menin 抑制剂','KMT2A/MEN1','menin 抑制剂'],
+  [/midostaurin|gilteritinib|quizartinib|crenolanib|FLT3/i,'FLT3 抑制剂','FLT3','FLT3 抑制剂'],
+  [/ibrutinib|acalabrutinib|zanubrutinib|pirtobrutinib|BTK/i,'BTK 抑制剂','BTK','BTK 抑制剂'],
+  [/imatinib|dasatinib|ponatinib|asciminib|bosutinib|ABL/i,'TKI','BCR-ABL1','BCR-ABL1 抑制剂'],
+  [/ruxolitinib|fedratinib|momelotinib|JAK/i,'JAK 抑制剂','JAK1/2','JAK 抑制剂'],
+  [/ivosidenib|enasidenib|IDH/i,'IDH 抑制剂','IDH1/2','IDH 抑制剂'],
+  [/vincristine|dexamethasone|prednisone|methotrexate|cytarabine|daunorubicin|doxorubicin|asparaginase|pegaspargase|cyclophosphamide|etoposide|fludarabine|busulfan|melphalan|mercaptopurine|thioguanine|clofarabine|nelarabine|azacitidine|decitabine|chemotherapy|化疗/i,'化疗','细胞毒','化疗方案'],
+  [/transplant|hsct|allogeneic|autologous|移植/i,'移植','HSCT','造血干细胞移植'],
+  [/radiotherapy|irradiation|radiation|\btbi\b/i,'放疗','局部/全身照射','放疗'],
+  [/rituximab|obinutuzumab|alemtuzumab|daratumumab|isatuximab|单抗/i,'单抗','CD20/CD38/CD52','裸抗体']
 ];
-var TX_ORDER=['EGFR TKI','四代TKI','MET TKI','ALK TKI','多靶点TKI','TKI','双抗','ADC','免疫检查点','抗血管','单抗','化疗','放疗','未分类'];
+var TX_ORDER=['CAR-T','双抗','ADC','免疫检查点','BCL-2 抑制剂','menin 抑制剂','FLT3 抑制剂','BTK 抑制剂','TKI','JAK 抑制剂','IDH 抑制剂','单抗','化疗','移植','放疗','未分类'];
 function txClass(name){
   var s=String(name||'');
   if(!s||TX_SKIP.test(s))return null;
@@ -524,17 +510,15 @@ function txModes(t){
   return ms;
 }
 var MN={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
-var TOPIC_IMG={'egfr_l1_later':'/assets/FigureTopic1.jpg','egfr_tp53':'/assets/FigureTopic2.jpg',
-  'egfr_resistance':'/assets/FigureTopic3.jpg','met_primary':'/assets/FigureTopic4.jpg'};
+var TOPIC_IMG={};  /* 血液肿瘤版暂不用主题配图；配图到位后按 id 映射即可 */
 var PRESET_Q=[
-  'EGFR 突变晚期 NSCLC 目前一线标准治疗是什么？有哪些新试验？',
-  '奥希替尼耐药后有哪些在研新药和治疗策略？',
-  '四代 EGFR TKI 最新研发进展如何？',
-  'EGFR 合并 TP53 共突变对预后和治疗选择有何影响？',
-  'MET 外显子 14 跳跃突变有哪些已获批靶向药和关键试验？',
-  'MET 扩增（非 14 跳突）NSCLC 如何治疗？',
-  'ADC / 双特异性抗体在 EGFR 突变 NSCLC 中有哪些进展？',
-  'EGFR 突变 NSCLC 的辅助/新辅助靶向治疗证据如何？'];
+  '儿童 ALL 目前一线治疗与免疫治疗（双抗/CAR-T）的定位是什么？',
+  '儿童 AML 的 menin 抑制剂、FLT3 抑制剂有哪些关键试验？',
+  'CAR-T 治疗后的 CRS 与神经毒性如何分级管理？有哪些新策略？',
+  '双特异性抗体在儿童与成人 B-ALL、淋巴瘤中的疗效差异？',
+  '淋巴瘤的 ADC（如 CD30 ADC）与免疫检查点治疗最新证据？',
+  '造血干细胞移植在 CAR-T 之后应如何安排？'
+];
 
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);
   return d.innerHTML.replace(/"/g,'&quot;');}
@@ -1542,7 +1526,7 @@ function buildDeck(v,IMG,css){
     '<div style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:72px 96px 88px">'+
     (logo?'<img src="'+logo+'" style="width:72px;height:72px;border-radius:16px;margin-bottom:20px">':'')+
     '<p class="kicker" style="color:#9fc3eb">AImednews · Clinical Intelligence</p>'+
-    '<h1 class="h1 anim-fade-up" data-anim="fade-up" style="color:#fff">肺癌（NSCLC）<br>'+
+    '<h1 class="h1 anim-fade-up" data-anim="fade-up" style="color:#fff">血液肿瘤（含儿童）<br>'+
     '<span style="color:#7cc0f5">诊疗情报数据报告</span></h1>'+
     '<p class="lede" style="color:#c6d4e4">生成于 '+stamp+' ｜ 试验 '+nT+'（招募中 '+nR+'）· 文献 '+nP+' · 新闻 '+nN+'</p>'+
     '<p style="color:#93a5bb;font-size:17px">'+(filters.length?'当前筛选：'+esc(filters.join(' · ')):'全量视图（未筛选）')+'</p>'+
@@ -1657,7 +1641,7 @@ function buildDeck(v,IMG,css){
 function assembleDeck(S,css,runtimeJs,stamp){
   return'<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">'+
     '<meta name="viewport" content="width=device-width,initial-scale=1">'+
-    '<title>肺癌（NSCLC）诊疗情报数据报告 · '+stamp+'</title>'+
+    '<title>血液肿瘤（含儿童）诊疗情报数据报告 · '+stamp+'</title>'+
     '<style>'+css+'\n'+STAGE_CSS+'</style></head>'+
     '<body data-theme="corporate-clean"><div class="deck">'+
     S.join('\n')+'</div><scr'+'ipt>'+FIT_JS+'</scr'+'ipt>'+
@@ -1702,7 +1686,7 @@ function exportPPTX(){
   if(F.sp)desc.push('申办方');
   if(body.q)desc.push('关键词「'+body.q.slice(0,12)+'」');
   var d=new Date(),p2=function(x){return(x<10?'0':'')+x;};
-  var name='AImednews-NSCLC-'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+
+  var name='AImednews-Heme-'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+
            '-'+p2(d.getHours())+p2(d.getMinutes())+'.pptx';
   toast('正在生成 PPTX：命中 试验 '+nT+' 条 / 文献 '+nP+' 篇 / 新闻 '+nN+' 条'+
         (desc.length?'（'+desc.join('·')+'）':'')+'…');
@@ -1763,7 +1747,7 @@ function exportPPT(){
       var blob=new Blob([html],{type:'text/html;charset=utf-8'});
       var link=document.createElement('a');
       link.href=URL.createObjectURL(blob);
-      link.download='AImednews-NSCLC报告-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+pad(now.getHours())+pad(now.getMinutes())+'.html';
+      link.download='AImednews-血液肿瘤报告-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+pad(now.getHours())+pad(now.getMinutes())+'.html';
       document.body.appendChild(link);link.click();
       setTimeout(function(){URL.revokeObjectURL(link.href);link.remove();},4000);
       toast('已导出 '+S.length+' 页幻灯片（1920×1080 自适应缩放 · 实测分页防溢出）');

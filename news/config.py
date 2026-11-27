@@ -1,203 +1,185 @@
 # -*- coding: utf-8 -*-
 """
-肺癌 EGFR/MET NSCLC 情报看板 v2 —— 主题配置。
+血液肿瘤（含儿童）情报看板 —— 主题配置。
 
-数据源分层（v2）：
-  主证据（MedEvidence 体系，全部带编号来源索引）：
+用途：血液肿瘤论坛讲课（重点：儿童血液肿瘤）。
+数据源分层（与 v2 一致，全部带编号来源索引）：
+  主证据（MedEvidence 体系）：
     - PubTator 3      文献（PMID + 实体标注）      → pt_query
     - ClinicalTrials  临床试验（NCT）              → ct_cond + ct_term（cond 锚定病种，防跑偏）
     - OpenTargets     靶点-疾病-药物（含临床阶段）  → genes
   补充：
-    - Tavily          新闻情报（仅作补充，明确标注）→ news_queries
+    - Tavily          新闻/会议报道（仅作补充，明确标注）→ news_queries
 
 每个主题的 AI 结论强制引用上述来源编号，构建时做引用校验（防幻觉编号）。
 """
 
 TOPICS = [
     {
-        "id": "egfr_l1_later",
-        "title": "EGFR 突变晚期 NSCLC 一线及后线治疗新进展",
-        "subtitle": "First-line & later-line treatment advances in EGFR-mutant NSCLC",
-        "genes": ["EGFR"],
-        "pt_query": "EGFR mutant non-small cell lung cancer first-line osimertinib",
+        "id": "ped_all",
+        "title": "儿童急性淋巴细胞白血病（ALL）：免疫与靶向治疗进展",
+        "subtitle": "Pediatric ALL — immunotherapy and targeted approaches",
+        "genes": ["CD19", "CD22", "ABL1", "KMT2A"],
+        "pt_query": "pediatric acute lymphoblastic leukemia blinatumomab CAR-T inotuzumab",
         "news_queries": [
-            "EGFR 突变 晚期 非小细胞肺癌 一线治疗 新进展",
-            "EGFR mutant NSCLC first-line treatment 2026",
-            "EGFR mutated lung cancer latest clinical trial results",
+            "儿童 急性淋巴细胞白血病 CAR-T 双抗 进展",
+            "pediatric ALL blinatumomab CAR-T 2026",
+            "childhood acute lymphoblastic leukemia immunotherapy trial results",
         ],
-        "ct_cond": "Non-Small Cell Lung Cancer",
-        "ct_term": "EGFR first-line OR EGFR TKI",
+        "ct_cond": "Acute Lymphoblastic Leukemia",
+        "ct_term": "(pediatric OR child OR childhood) AND (CAR-T OR blinatumomab OR inotuzumab OR targeted)",
     },
     {
-        "id": "egfr_tp53",
-        "title": "EGFR 合并 TP53 晚期 NSCLC 一线治疗进展",
-        "subtitle": "First-line therapy for EGFR plus TP53 co-mutated NSCLC",
-        "genes": ["EGFR", "TP53"],
-        "pt_query": "EGFR TP53 co-mutation non-small cell lung cancer",
+        "id": "ped_aml",
+        "title": "儿童急性髓系白血病（AML）与髓系肿瘤靶向治疗",
+        "subtitle": "Pediatric AML — menin, FLT3 and KMT2A-directed therapy",
+        "genes": ["FLT3", "KMT2A", "NPM1", "IDH1", "IDH2"],
+        "pt_query": "pediatric acute myeloid leukemia menin inhibitor FLT3 KMT2A",
         "news_queries": [
-            "EGFR TP53 共突变 非小细胞肺癌 一线治疗",
-            "EGFR TP53 co-mutation NSCLC first-line",
-            "TP53 comutation EGFR lung cancer prognosis treatment",
+            "儿童 急性髓系白血病 靶向治疗 menin 抑制剂",
+            "pediatric AML menin inhibitor revumenib 2026",
+            "childhood acute myeloid leukemia targeted therapy trial",
         ],
-        "ct_cond": "Non-Small Cell Lung Cancer",
-        "ct_term": "EGFR TP53",
+        "ct_cond": "Acute Myeloid Leukemia",
+        "ct_term": "(pediatric OR child OR childhood) AND (menin OR FLT3 OR KMT2A OR targeted)",
     },
     {
-        "id": "egfr_resistance",
-        "title": "EGFR 突变 NSCLC 耐药后治疗策略",
-        "subtitle": "Treatment strategies after acquired resistance to EGFR TKIs",
-        "genes": ["EGFR"],
-        "pt_query": "EGFR TKI acquired resistance non-small cell lung cancer osimertinib",
+        "id": "lymphoma",
+        "title": "淋巴瘤与霍奇金淋巴瘤：双抗、ADC 与免疫检查点",
+        "subtitle": "Lymphoma and Hodgkin lymphoma — bispecifics, ADCs, checkpoint blockade",
+        "genes": ["TNFRSF8", "PDCD1", "MS4A1", "ALK"],
+        "pt_query": "lymphoma bispecific antibody CD30 ADC PD-1 Hodgkin",
         "news_queries": [
-            "EGFR 突变 非小细胞肺癌 耐药 治疗策略 后线",
-            "EGFR TKI acquired resistance treatment strategy NSCLC",
-            "osimertinib resistance mechanisms treatment 2026",
+            "淋巴瘤 双特异性抗体 ADC 进展 2026",
+            "lymphoma bispecific antibody CD30 ADC results 2026",
+            "霍奇金淋巴瘤 PD-1 治疗 进展",
         ],
-        "ct_cond": "Non-Small Cell Lung Cancer",
-        "ct_term": "EGFR resistance OR osimertinib resistance",
+        "ct_cond": "Lymphoma",
+        "ct_term": "bispecific OR CD30 OR PD-1 OR antibody-drug conjugate",
     },
     {
-        "id": "met_primary",
-        "title": "原发 MET 异常肺癌靶向治疗进展解读",
-        "subtitle": "Targeted therapy for primary MET-altered lung cancer",
-        "genes": ["MET"],
-        "pt_query": "MET exon 14 skipping NSCLC MET amplification targeted therapy",
+        "id": "car_t",
+        "title": "细胞治疗与移植：CAR-T、双抗及并发症管理",
+        "subtitle": "CAR-T, bispecifics and complication management in hematologic malignancy",
+        "genes": ["CD19", "TNFRSF17", "GPRC5D", "CD22"],
+        "pt_query": "CAR-T chimeric antigen receptor cytokine release syndrome hematologic malignancy",
         "news_queries": [
-            "原发 MET 异常 肺癌 靶向治疗 进展",
-            "MET exon 14 skipping lung cancer targeted therapy 2026",
-            "MET amplification lung cancer crizotinib capmatinib latest",
+            "CAR-T 细胞治疗 血液肿瘤 进展 2026",
+            "CAR-T cytokine release syndrome management 2026",
+            "双特异性抗体 血液肿瘤 临床 数据 2026",
         ],
-        "ct_cond": "Non-Small Cell Lung Cancer",
-        "ct_term": "MET exon 14 OR MET amplification",
+        "ct_cond": "Hematologic Neoplasms",
+        "ct_term": "CAR-T OR chimeric antigen receptor OR bispecific antibody",
     },
 ]
 
-# ═══════════════════════ 年度学术会议库（新药疗效临床试验报道汇总） ═══════════════════════
+
+# ═══════════════════════ 年度学术会议库（血液肿瘤/儿童肿瘤） ═══════════════════════
 # 设计说明：
 #   - 每年每个大会一条；build 时自动生成"会议速递"主题卡（关键试验结果表 + 会议报道汇总）。
-#   - anchor_ym 是会议内容所属年月：时间筛选按它整卡纳入/排除，避免 9 月筛选带出 10 月会议内容。
-#   - 历史会议（距今超过 refresh_after_days）会直接复用最近归档里的结果，不再重复抓取，节省额度。
-#   - 新增会议只需照格式追加一条；expected_trials 可选（用于缺口补搜，成本较高，建议只给当期大会）。
+#   - anchor_ym 是会议内容所属年月：时间筛选按它整卡纳入/排除。
+#   - 历史会议（距今超过 refresh_after_days）直接复用最近归档，不重复抓取，节省额度。
+#   - expected_trials 可选（缺口定向补搜成本较高，建议只给当期最大的会）。
 CONFERENCES = [
-{
-        # 会议速递：ESMO 内容以 PubMed(ESMO/ESMO Open 期刊) + 长窗口新闻为主，
-        # 不重复抓试验（试验已在上面四个主题覆盖）。
-        "id": "esmo_congress",
-        "title": "ESMO 2026 会议速递（EGFR/MET NSCLC）",
-        "subtitle": "Latest ESMO congress evidence in EGFR/MET-altered NSCLC",
-        "genes": ["EGFR", "MET"],
-        "paper_source": "pubmed",
-        "pubmed_query": ('(ESMO[Title] OR "ESMO Open"[Journal]) AND '
-                         '(NSCLC[Title/Abstract] OR '
-                         '"non-small cell lung"[Title/Abstract])'),
-        "skip_trials": True,
-        "news_days": 120,
-        # 日期锚点：ESMO 2026 年会内容整体属于 2026 年 10 月。
-        # 时间筛选（年/月）不匹配时，整张会议卡（含无日期的关键试验表）应被排除。
-        "anchor_ym": "2026-10",
-        "news_cap": 14,
-        "papers_display": 12,
-        "papers_search": 24,
-        "extract_key_trials": True,
-        # ESMO 2026 关键注册试验清单：用于检测抽取缺口并定向补齐
-        "expected_trials": [
-            "RASolute 302", "DeLLphi-305", "CLARITY-Gastric 01", "KEYNOTE-905",
-            "ARTEMIS-011", "KRAScendo 1", "G-HOPE-001", "VOLGA", "SAFFRON",
-            "TroFuse-005", "OptiTROP-Lung04", "HARMONi-GI1", "KEYNOTE-C93",
-            "ASTRIDE", "ENERGIZE", "KEYNOTE-866", "SANOVO", "INTerpath-001",
-            "lidERA", "DOVACC", "DASL-HiCaP", "OptiTROP-Lung06",
-        ],
-        "news_queries": [
-            "ESMO 2026 关键试验 结果 汇总 阳性",
-            "ESMO 2026 presidential symposium results",
-            "ESMO 2026 late-breaking abstracts results",
-            "ESMO 2026 NSCLC EGFR 最新结果 公布",
-            "ESMO 2026 MET exon 14 lung cancer results",
-            "ESMO congress 2026 non-small cell lung cancer highlights",
-            "ESMO 2026 全部 研究 数据 一览",
-            "ESMO 2026 ADCs new combinations lung cancer",
-            "ESMO 2026 practice-changing trials summary hazard ratio",
-            "ESMO 2026 late-breaking phase 3 results table all tumour types",
-            "ESMO 2026 congress highlights all tumour types",
-        ],
-    },
     {
-        "id": "conf_wclc_2026",
-        "title": "WCLC 2026 会议速递（世界肺癌大会）",
-        "subtitle": "WCLC 2026 new drug efficacy trial reports",
-        "anchor_ym": "2026-09",
+        "id": "conf_ash_2026",
+        "title": "ASH 2026 会议速递（美国血液学会）",
+        "subtitle": "ASH 2026 new drug efficacy trial reports",
+        "anchor_ym": "2026-12",
         "news_queries": [
-            "WCLC 2026 关键试验 结果 公布",
-            "WCLC 2026 lung cancer trial results",
-            "WCLC 2026 late-breaking abstracts efficacy",
-            "WCLC 2026 新药 疗效 数据",
+            "ASH 2026 关键试验 结果 血液肿瘤",
+            "ASH 2026 late-breaking abstracts leukemia lymphoma myeloma",
+            "ASH 2026 CAR-T bispecific trial results",
+            "ASH 2026 儿童 血液肿瘤 数据",
         ],
-        "news_cap": 12,
+        "news_cap": 14,
         "news_days": 150,
         "extract_key_trials": True,
         "skip_trials": True,
-        "no_papers": True,
+        "no_papers": False,
+        "paper_source": "pubmed",
+        "pubmed_query": (
+            '(ASH 2026[All Fields]) AND (leukemia[Title/Abstract] OR lymphoma[Title/Abstract] OR myeloma[Title/Abstract] OR "CAR-T"[Title/Abstract])'
+        ),
+        "papers_display": 8,
+        "papers_search": 16,
         "refresh_after_days": 200,
     },
     {
-        "id": "conf_asco_2026",
-        "title": "ASCO 2026 会议速递（美国临床肿瘤学会）",
-        "subtitle": "ASCO 2026 new drug efficacy trial reports",
+        "id": "conf_eha_2026",
+        "title": "EHA 2026 会议速递（欧洲血液学会）",
+        "subtitle": "EHA 2026 new drug efficacy trial reports",
         "anchor_ym": "2026-06",
         "news_queries": [
-            "ASCO 2026 关键试验 结果 汇总",
-            "ASCO 2026 annual meeting practice-changing trials",
-            "ASCO 2026 late-breaking abstract results",
-            "ASCO 2026 新药 疗效 临床 数据",
+            "EHA 2026 关键试验 结果 血液肿瘤",
+            "EHA 2026 congress leukemia lymphoma results",
+            "EHA 2026 CAR-T bispecific data",
         ],
         "news_cap": 12,
         "news_days": 210,
         "extract_key_trials": True,
         "skip_trials": True,
-        "no_papers": True,
+        "no_papers": False,
+        "paper_source": "pubmed",
+        "pubmed_query": (
+            '(EHA 2026[All Fields]) AND (leukemia OR lymphoma OR myeloma)'
+        ),
+        "papers_display": 8,
+        "papers_search": 16,
         "refresh_after_days": 200,
     },
     {
-        "id": "conf_aacr_2026",
-        "title": "AACR 2026 会议速递（美国癌症研究协会）",
-        "subtitle": "AACR 2026 new drug efficacy trial reports",
-        "anchor_ym": "2026-04",
+        "id": "conf_siop_2026",
+        "title": "SIOP 2026 会议速递（国际儿童肿瘤学会）",
+        "subtitle": "SIOP 2026 pediatric oncology trial reports",
+        "anchor_ym": "2026-10",
         "news_queries": [
-            "AACR 2026 关键试验 结果",
-            "AACR 2026 annual meeting clinical trial results",
-            "AACR 2026 new drug efficacy data",
-            "AACR 2026 新药 临床 数据 公布",
+            "SIOP 2026 儿童 肿瘤 关键 结果",
+            "SIOP 2026 pediatric oncology congress results",
+            "SIOP 2026 childhood leukemia trial data",
         ],
         "news_cap": 12,
+        "news_days": 150,
+        "extract_key_trials": True,
+        "skip_trials": True,
+        "no_papers": False,
+        "paper_source": "pubmed",
+        "pubmed_query": (
+            '(SIOP 2026[All Fields]) AND (pediatric OR childhood OR paediatric OR "children")'
+        ),
+        "papers_display": 8,
+        "papers_search": 16,
+        "refresh_after_days": 200,
+    },
+    {
+        "id": "conf_aspho_2026",
+        "title": "ASPHO 2026 会议速递（美国儿童血液肿瘤学会）",
+        "subtitle": "ASPHO 2026 pediatric hematology-oncology reports",
+        "anchor_ym": "2026-05",
+        "news_queries": [
+            "ASPHO 2026 儿童 血液肿瘤 结果",
+            "ASPHO 2026 pediatric hematology oncology abstracts",
+            "ASPHO 2026 childhood leukemia results",
+        ],
+        "news_cap": 10,
         "news_days": 240,
         "extract_key_trials": True,
         "skip_trials": True,
-        "no_papers": True,
-        "refresh_after_days": 200,
-    },
-    {
-        "id": "conf_esmo_asia_2026",
-        "title": "ESMO Asia 2026 会议速递",
-        "subtitle": "ESMO Asia 2026 new drug efficacy trial reports",
-        "anchor_ym": "2026-12",
-        "news_queries": [
-            "ESMO Asia 2026 关键试验 结果",
-            "ESMO Asia 2026 abstract results",
-            "ESMO Asia 2026 new drug efficacy data",
-        ],
-        "news_cap": 10,
-        "news_days": 120,
-        "extract_key_trials": True,
-        "skip_trials": True,
-        "no_papers": True,
+        "no_papers": False,
+        "paper_source": "pubmed",
+        "pubmed_query": (
+            '(ASPHO 2026[All Fields]) AND (pediatric OR childhood OR "children")'
+        ),
+        "papers_display": 8,
+        "papers_search": 16,
         "refresh_after_days": 200,
     },
 ]
 
 
 DASHBOARD = {
-    "title": "肺癌 EGFR/MET NSCLC 科研情报看板",
-    "subtitle": "MedEvidence 证据体系为主 · 全文来源索引 · Tavily 新闻补充",
+    "title": "血液肿瘤（含儿童）诊疗情报",
+    "subtitle": "MedEvidence 证据体系为主 · 全文来源索引 · Tavily 新闻补充 · 重点：儿童血液肿瘤",
     "author": "AImednews",
     # 署名与许可（CC BY-NC 4.0 要求随生成物传播，勿删）
     "attribution": "© 2026 Chris Lou · CC BY-NC 4.0 非商业许可 · "
