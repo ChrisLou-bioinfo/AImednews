@@ -187,6 +187,14 @@ def _kpi_card(slide, left, top, w, h, value: str, label: str,
           Inches(0.32), label, 11, False, C_MUTED)
 
 
+def _stamp(iso: str | None) -> str:
+    """把 ISO 时间压成 'YYYY-MM-DD HH:MM'，用于页脚数据截至标注。"""
+    if not iso:
+        return ""
+    s = str(iso).replace("T", " ")
+    return s[:16] if len(s) >= 16 else s
+
+
 def _clean(txt: str, limit: int | None = None) -> str:
     s = re.sub(r"\*\*(.+?)\*\*", r"\1", str(txt or ""))
     s = re.sub(r"[ \t]+", " ", s).strip()
@@ -514,8 +522,9 @@ def _slide_key_trials(prs, topic, page, max_rows=13):
             r.text = v
             pos = (row.get("verdict") or "").startswith("达到")
             _font(r, 8.5, c == 7 and pos, C_GREEN if (c == 7 and pos) else C_WHITE)
-    _footer(s, f"共 {len(rows)} 行，本页展示前 {len(body)} 行 · AI 从 ESMO 会议报道抽取，"
-               "数字请以原文为准 · 每行对应来源索引编号 · 会议数据无日期字段，不随时间筛选变化。")
+    _footer(s, f"共 {len(rows)} 行，本页展示前 {len(body)} 行 · AI 从会议报道抽取，数字请以原文为准 · "
+               "— 表示来源未报告该字段（非 0，不做推测填充）· "
+               "每行对应来源索引编号 · 会议数据无日期字段，不随时间筛选变化。")
 
 
 def _slide_topic(prs, topic, page, filtered: bool = False):
@@ -587,7 +596,9 @@ def _slide_topic(prs, topic, page, filtered: bool = False):
               "（本主题不采集试验列表）", 10, False, C_MUTED)
 
     _footer(s, f"证据 {len(topic.get('trials') or []) + len(topic.get('papers') or [])} 条 · "
-               f"来源索引 {len(topic.get('refs') or [])} 条 · 编号 [n] 可回溯原文 · AI 内容仅供参考。")
+               f"来源索引 {len(topic.get('refs') or [])} 条 · "
+               f"数据截至 {_stamp(topic.get('_payload_stamp')) or TODAY} · "
+               f"编号 [n] 可回溯原文 · AI 内容仅供参考。")
 
 
 def _slide_sources(prs, topics, page, max_rows=26):
@@ -644,6 +655,7 @@ def build_pptx(payload: Dict[str, Any], flt_desc: str = "",
     _slide_charts(prs, agg, page); page += 1
 
     for t in (payload.get("topics") or []):
+        t["_payload_stamp"] = payload.get("latest_generated_at") or ""
         rows = t.get("key_trials") or []
         if flt_desc and not (rows or t.get("trials") or t.get("papers")
                              or t.get("news") or t.get("targets")):

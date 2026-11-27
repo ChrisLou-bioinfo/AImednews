@@ -1068,7 +1068,8 @@ function renderTrial(t,pid){
       (t.sponsor?'<span>申办 <b>'+esc(t.sponsor)+'</b>'+(t.sponsor_class?' · '+esc(t.sponsor_class):'')+'</span>':'')+
       (t.study_type?'<span>'+esc(t.study_type==='INTERVENTIONAL'?'干预性':t.study_type==='OBSERVATIONAL'?'观察性':t.study_type)+'</span>':'')+
       (t.allocation==='RANDOMIZED'?'<span>随机化</span>':'')+
-      (t.enrollment!=null?'<span>入组 <b>'+esc(t.enrollment)+'</b></span>':'')+
+      (t.enrollment!=null?'<span>入组 <b>'+esc(t.enrollment)+'</b></span>'
+        :'<span title="ClinicalTrials.gov 该记录未填写入组数">入组 <b>源未报告</b></span>')+
       (t.start_date?'<span>开始 <b>'+esc(t.start_date)+'</b></span>':'')+
       (t.completion||t.primary_completion?'<span>完成 '+esc(t.completion||t.primary_completion)+'</span>':'')+
     '</div>'+
@@ -1084,6 +1085,11 @@ function renderTrial(t,pid){
       esc(t.collaborators.join('、'))+'</div></details>':'')+
     '</div>';
 }
+function fmtStamp(iso){
+  if(!iso)return'';
+  var s=String(iso).replace('T',' ');
+  return s.length>=16?s.slice(0,16):s;
+}
 function renderTopic(x){
   var P=x.P,pid=P.id,ev=x.trials.length+x.papers.length+x.P.targets.length;
   var img=TOPIC_IMG[pid];
@@ -1092,6 +1098,8 @@ function renderTopic(x){
     '<div class="topic-h" onclick="this.parentNode.classList.toggle(\'collapsed\')">'+
     '<h2>'+esc(P.title)+'<span class="en">'+esc(P.subtitle)+'</span></h2>'+
     '<div class="tmeta"><span class="badge">证据 '+ev+'</span>'+
+    '<span class="badge gray" title="本卡内容来自本地归档构建；实时试验层每次刷新后再拉取">数据截至 '+
+      esc(fmtStamp(DATA.latest_generated_at)||'—')+'</span>'+
     (DATA.ct_total_counts&&DATA.ct_total_counts[pid]!=null?'<span class="badge gray">CT.gov 匹配 '+DATA.ct_total_counts[pid]+' · 本版展示 '+x.trials.length+'</span>':'')+
     '<span class="caret">▾</span></div></div><div class="tbody">';
   if(P.synth){
@@ -1108,9 +1116,10 @@ function renderTopic(x){
       '<thead><tr>'+['终点','方案','试验','瘤种/场景','HR','95%CI','N','判定','来源'].map(function(x){
         return'<th '+th+'>'+x+'</th>';}).join('')+'</tr></thead><tbody>'+
       P.key_trials.map(function(r){
-        var ci=(r.ci_low!=null&&r.ci_high!=null)?(r.ci_low+'-'+r.ci_high):'—';
-        var hr=(r.hr!=null)?String(r.hr):'—';
-        var nv=(r.n!=null)?String(r.n):'—';
+        var NA='<span title="来源报道未报告该字段">—</span>';
+        var ci=(r.ci_low!=null&&r.ci_high!=null)?(r.ci_low+'-'+r.ci_high):NA;
+        var hr=(r.hr!=null)?String(r.hr):NA;
+        var nv=(r.n!=null)?String(r.n):NA;
         var src=r.src?('<a class="cref" href="#r-'+pid+'-'+r.src+'">['+r.src+']</a>'):'—';
         return'<tr>'+
           '<td '+tdc+'>'+esc(r.endpoint||'')+'</td>'+
@@ -1119,7 +1128,10 @@ function renderTopic(x){
           '<td '+tdc+'>'+esc(r.tumor||'')+'</td>'+
           '<td '+tdc+'>'+hr+'</td><td '+tdc+'>'+ci+'</td><td '+tdc+'>'+nv+'</td>'+
           '<td '+tdc+'>'+esc(r.verdict||'')+'</td><td '+tdc+'>'+src+'</td></tr>';}).join('')+
-      '</tbody></table></div></div>';
+      '</tbody></table></div>'+
+      '<div style="font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.7">'+
+      '注：表格中 <b>—</b> 表示该字段在来源报道中<strong>未报告</strong>（不是 0，也不做推测填充）；'+
+      'HR/95%CI 须结合样本量与随访解读。</div></div>';
   }
   h+='<div class="grid2">';
   h+='<div class="sec"><b class="sTitle">🧪 临床试验<span class="n">'+x.trials.length+'</span>'+
@@ -1136,7 +1148,7 @@ function renderTopic(x){
       return'<div class="item"><div class="t"><a href="https://pubmed.ncbi.nlm.nih.gov/'+esc(p.pmid)+'/" target="_blank">'+
         esc(p.title)+'</a><span class="src">PubTator</span>'+
         (p.ref?'<a class="cref" href="#r-'+pid+'-'+p.ref+'">['+p.ref+']</a>':'')+'</div>'+
-        '<div class="s">PMID '+esc(p.pmid)+' · '+esc(p.year||'年份未注明')+'</div>'+
+        '<div class="s">PMID '+esc(p.pmid)+' · 年份 '+(p.year?esc(p.year):'源未报告')+'</div>'+
         (ents.length?'<div class="s">'+ents.map(function(e){return'<span class="tag">'+esc(e)+'</span>';}).join('')+'</div>':'')+
         '</div>';}).join(''):'<div class="empty">当前筛选无匹配</div>')+'</div>';
   if(x.showTargets&&P.targets.length){

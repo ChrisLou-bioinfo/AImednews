@@ -777,10 +777,11 @@ def render_topic(t):
                                ("终点", "方案", "试验", "瘤种/场景", "HR", "95%CI", "N", "判定", "来源"))
                      + '</tr></thead><tbody>')
         for r in t["key_trials"]:
+            NA = '<span title="来源报道未报告该字段">—</span>'
             ci = (f'{r["ci_low"]:g}–{r["ci_high"]:g}'
-                  if r.get("ci_low") is not None and r.get("ci_high") is not None else "—")
-            hr = f'{r["hr"]:g}' if r.get("hr") is not None else "—"
-            nv = r.get("n") if r.get("n") is not None else "—"
+                  if r.get("ci_low") is not None and r.get("ci_high") is not None else NA)
+            hr = f'{r["hr"]:g}' if r.get("hr") is not None else NA
+            nv = r.get("n") if r.get("n") is not None else NA
             src = (f'<a class="cref" href="#r-{tid}-{r["src"]}">[{r["src"]}]</a>'
                    if r.get("src") else "—")
             parts.append('<tr>'
@@ -791,7 +792,10 @@ def render_topic(t):
                          + f'<td {td}>{hr}</td><td {td}>{ci}</td><td {td}>{nv}</td>'
                          + f'<td {td}>{esc(r["verdict"])}</td><td {td}>{src}</td>'
                          + '</tr>')
-        parts.append('</tbody></table></div></details>')
+        parts.append('</tbody></table></div>'
+                     '<div style="font-size:11.5px;color:#8b98a9;line-height:1.7">'
+                     '注：<b>—</b> 表示该字段在来源报道中<strong>未报告</strong>'
+                     '（不是 0，也不做推测填充）。</div></details>')
     parts.append('<div class="cols">')
 
     # 靶点 / 药物
