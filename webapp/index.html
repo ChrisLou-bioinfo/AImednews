@@ -422,6 +422,7 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40p
       <button class="mini-btn" id="chartReset">↺ 重置图表</button>
     </div>
     <div class="charts" id="charts"></div>
+    <div id="gapsCard"></div>
     <div id="drill"></div>
     <div id="overview"></div>
 
@@ -729,7 +730,7 @@ function view(){
 }
 
 /* ═══════════ 渲染 ═══════════ */
-function renderAll(){renderKpis();renderCharts();renderDrill();renderOverview();renderTopics();renderFoot();refreshCounts();;try{window.glossarize&&window.glossarize();}catch(e){}}
+function renderAll(){renderKpis();renderCharts();renderGaps();renderDrill();renderOverview();renderTopics();renderFoot();refreshCounts();;try{window.glossarize&&window.glossarize();}catch(e){}}
 
 /* ═══════════ 总览：AI 跨主题总结 + 筛选命中 ═══════════ */
 function renderOverview(){
@@ -930,6 +931,71 @@ function chartCard(title,body,hint,note){
     (hint?'<span class="chint">'+esc(hint)+'</span>':'')+'</div>'+
     body+(note?'<div class="cnote">'+esc(note)+'</div>':'')+'</div>';
 }
+/* ═══════════ 证据缺口：来源未报告统计（全库，不受筛选影响） ═══════════ */
+function renderGaps(){
+  var box=document.getElementById('gapsCard'); if(!box)return;
+  var T=DATA&&DATA.topics||[];
+  if(!T.length){box.innerHTML='';return;}
+  var stat={};
+  function bump(k,miss,total){ (stat[k]=stat[k]||{m:0,t:0}); stat[k].m+=miss; stat[k].t+=total; }
+  var kt={n:0,hr:0,ci:0,nn:0}, tr={n:0,enr:0,ph:0,st:0}, pp={n:0,yr:0}, nw={n:0,pd:0};
+  T.forEach(function(t){
+    (t.key_trials||[]).forEach(function(r){
+      kt.n++;
+      if(r.hr==null)kt.hr++;
+      if(r.ci_low==null||r.ci_high==null)kt.ci++;
+      if(r.n==null)kt.nn++;
+    });
+    (t.trials||[]).forEach(function(x){
+      tr.n++;
+      if(x.enrollment==null)tr.enr++;
+      if(!(x.phase||[]).length)tr.ph++;
+      if(!x.start_date)tr.st++;
+    });
+    (t.papers||[]).forEach(function(x){ pp.n++; if(x.year==null)pp.yr++; });
+    (t.news||[]).forEach(function(x){ nw.n++; if(!x.published_date)nw.pd++; });
+  });
+  var rows=[];
+  if(kt.n) rows.push(['会议关键试验','风险比 HR',kt.hr,kt.n,'会议报道常只给定性结论']);
+  if(kt.n) rows.push(['会议关键试验','95% 置信区间',kt.ci,kt.n,'']);
+  if(kt.n) rows.push(['会议关键试验','样本量 N',kt.nn,kt.n,'']);
+  if(tr.n) rows.push(['临床试验','入组数',tr.enr,tr.n,'注册记录未填写']);
+  if(tr.n) rows.push(['临床试验','分期',tr.ph,tr.n,'含 1/2 期与观察性研究']);
+  if(tr.n) rows.push(['临床试验','开始日期',tr.st,tr.n,'']);
+  if(pp.n) rows.push(['文献','发表年份',pp.yr,pp.n,'PubTator 元数据缺失']);
+  if(nw.n) rows.push(['新闻/会议报道','发布日期',nw.pd,nw.n,'多数聚合源不提供']);
+  rows=rows.filter(function(r){return r[2]>0;});
+  if(!rows.length){ box.innerHTML=''; return; }
+
+  var h='<div class="sec" style="margin:6px 0 14px">'+
+    '<b class="sTitle">🧩 证据缺口 · 来源未报告统计<span class="n">'+rows.length+'</span>'+
+    '<span class="more">全库口径（不受当前筛选影响）· 缺失=来源未报告，不做推测填充</span></b>'+
+    '<div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;margin-top:6px">'+
+    '<thead><tr>'+
+    ['类别','字段','缺失/总数','缺失率','可能原因'].map(function(x){
+      return'<th style="border:1px solid var(--line);padding:5px 8px;font-size:11px;color:var(--sub);text-align:left;white-space:nowrap">'+x+'</th>';}).join('')+
+    '</tr></thead><tbody>';
+  rows.forEach(function(r){
+    var pct=Math.round(r[2]/r[3]*100);
+    var col=pct>=50?'#d9534f':(pct>=20?'#e0a23a':'#4a9d6a');
+    h+='<tr>'+
+      '<td style="border:1px solid var(--line);padding:5px 8px;font-size:12px">'+esc(r[0])+'</td>'+
+      '<td style="border:1px solid var(--line);padding:5px 8px;font-size:12px">'+esc(r[1])+'</td>'+
+      '<td style="border:1px solid var(--line);padding:5px 8px;font-size:12px">'+r[2]+' / '+r[3]+'</td>'+
+      '<td style="border:1px solid var(--line);padding:5px 8px;font-size:12px;white-space:nowrap">'+
+        '<b style="color:'+col+'">'+pct+'%</b>'+
+        '<span style="display:inline-block;width:70px;height:6px;background:#eef2f6;border-radius:3px;margin-left:8px;vertical-align:middle">'+
+        '<span style="display:block;height:6px;width:'+pct+'%;background:'+col+';border-radius:3px"></span></span></td>'+
+      '<td style="border:1px solid var(--line);padding:5px 8px;font-size:11.5px;color:var(--sub)">'+esc(r[4]||'—')+'</td>'+
+      '</tr>';
+  });
+  h+='</tbody></table></div>'+
+    '<div style="font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.7">'+
+    '说明：缺失率高不代表证据质量差，而是<b>可结构化提取的字段少</b>——例如儿童肿瘤会议的报道多以定性表述为主，'+
+    '因此 HR/CI 缺失率偏高。跨研究比较前请回到来源原文核对。</div></div>';
+  box.innerHTML=h;
+}
+
 function renderCharts(){
   var v=view(),trials=[],papers=[],news=[];
   v.forEach(function(x){trials=trials.concat(x.trials);papers=papers.concat(x.papers);news=news.concat(x.news);});

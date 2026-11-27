@@ -620,6 +620,78 @@ def _slide_sources(prs, topics, page, max_rows=26):
     _footer(s, "完整来源索引见互动看板各主题页（可点击跳转原文）。")
 
 
+def _gap_rows(payload):
+    """统计来源未报告字段（全库口径）。"""
+    kt = {"n": 0, "hr": 0, "ci": 0, "n_n": 0}
+    tr = {"n": 0, "enr": 0, "ph": 0, "st": 0}
+    nw = {"n": 0, "pd": 0}
+    for t in (payload.get("topics") or []):
+        for r in (t.get("key_trials") or []):
+            kt["n"] += 1
+            if r.get("hr") is None: kt["hr"] += 1
+            if r.get("ci_low") is None or r.get("ci_high") is None: kt["ci"] += 1
+            if r.get("n") is None: kt["n_n"] += 1
+        for x in (t.get("trials") or []):
+            tr["n"] += 1
+            if x.get("enrollment") is None: tr["enr"] += 1
+            if not (x.get("phase") or []): tr["ph"] += 1
+            if not x.get("start_date"): tr["st"] += 1
+        for x in (t.get("news") or []):
+            nw["n"] += 1
+            if not x.get("published_date"): nw["pd"] += 1
+    rows = []
+    if kt["n"]:
+        rows += [("会议关键试验", "风险比 HR", kt["hr"], kt["n"], "会议报道多为定性"),
+                 ("会议关键试验", "95% 置信区间", kt["ci"], kt["n"], ""),
+                 ("会议关键试验", "样本量 N", kt["n_n"], kt["n"], "")]
+    if tr["n"]:
+        rows += [("临床试验", "入组数", tr["enr"], tr["n"], "注册记录未填写"),
+                 ("临床试验", "分期", tr["ph"], tr["n"], "含早期/观察性"),
+                 ("临床试验", "开始日期", tr["st"], tr["n"], "")]
+    if nw["n"]:
+        rows.append(("新闻/会议报道", "发布日期", nw["pd"], nw["n"], "聚合源多不提供"))
+    return [r for r in rows if r[2] > 0]
+
+
+def _slide_gaps(prs, payload, page):
+    rows = _gap_rows(payload)
+    if not rows:
+        return False
+    s = prs.slides.add_slide(prs.slide_layouts[6])
+    _bg(s, C_NAVY)
+    _header(s, "Evidence gaps", "证据缺口：来源未报告统计", page=page)
+    heads = ["类别", "字段", "缺失/总数", "缺失率", "可能原因"]
+    widths = [Inches(2.1), Inches(2.5), Inches(2.0), Inches(1.6), Inches(4.2)]
+    tbl_h = Inches(0.34) * (len(rows) + 1)
+    shape = s.shapes.add_table(len(rows) + 1, len(heads), MARGIN, Inches(1.66),
+                               sum(widths, Emu(0)), tbl_h)
+    tbl = shape.table
+    for i, w in enumerate(widths):
+        tbl.columns[i].width = w
+    for c, h in enumerate(heads):
+        cell = tbl.cell(0, c); cell.text = ""
+        cell.fill.solid(); cell.fill.fore_color.rgb = RGBColor(0x1B, 0x3A, 0x55)
+        r = cell.text_frame.paragraphs[0].add_run(); r.text = h
+        _font(r, 10, True, C_WHITE)
+    for ri, (cat, fld, miss, tot, why) in enumerate(rows, start=1):
+        pct = round(miss / tot * 100)
+        col = C_RED if pct >= 50 else (C_AMBER if pct >= 20 else C_GREEN)
+        for c, v in enumerate((cat, fld, f"{miss} / {tot}", f"{pct}%", why or "—")):
+            cell = tbl.cell(ri, c); cell.text = ""
+            cell.fill.solid()
+            cell.fill.fore_color.rgb = C_NAVY2 if ri % 2 else RGBColor(0x10, 0x27, 0x3D)
+            cell.margin_left = cell.margin_right = Inches(0.05)
+            cell.vertical_anchor = MSO_ANCHOR.MIDDLE
+            r = cell.text_frame.paragraphs[0].add_run(); r.text = v
+            _font(r, 9.5, c == 3, col if c == 3 else C_WHITE)
+    _text(s, MARGIN, Inches(1.66) + tbl_h + Inches(0.22), CONTENT_W, Inches(1.4),
+          "缺失率高不代表证据质量差，而是可结构化提取的字段少——例如儿童肿瘤会议报道多为定性表述，"
+          "因此 HR/置信区间缺失偏高。跨研究比较前请回到来源原文核对；本页为全库口径，不受筛选影响。",
+          11, False, C_MUTED)
+    _footer(s, ATTRIBUTION)
+    return True
+
+
 def _slide_closing(prs, agg):
     s = prs.slides.add_slide(prs.slide_layouts[6])
     _bg(s, C_NAVY)
@@ -653,6 +725,8 @@ def build_pptx(payload: Dict[str, Any], flt_desc: str = "",
     _slide_overview(prs, payload, agg, page, flt_desc, exclude_conf); page += 1
     _slide_method(prs, payload, agg, page); page += 1
     _slide_charts(prs, agg, page); page += 1
+    if _slide_gaps(prs, payload, page):
+        page += 1
 
     for t in (payload.get("topics") or []):
         t["_payload_stamp"] = payload.get("latest_generated_at") or ""
