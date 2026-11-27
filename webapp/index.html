@@ -97,6 +97,15 @@ main{min-width:0}
 /* Hero 横幅 */
 .hero{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);
   margin-bottom:16px;box-shadow:0 8px 30px rgba(28,39,51,.10)}
+.term{position:relative;border-bottom:1px dotted #7a93ad;cursor:help}
+.term:focus{outline:none;background:rgba(47,134,224,.10);border-radius:3px}
+#termPop{position:fixed;z-index:120;max-width:340px;background:#fff;border:1px solid #d6dee7;
+  border-radius:10px;box-shadow:0 12px 32px rgba(16,30,48,.18);padding:12px 14px;font-size:13px;
+  line-height:1.65;color:#22303d}
+#termPop .tp-h{font-weight:700;font-size:13.5px;margin-bottom:4px;color:#12202e}
+#termPop .tp-c{display:inline-block;font-size:11px;color:#4a7bb0;background:#eaf3fb;
+  border-radius:4px;padding:1px 6px;margin-bottom:6px}
+#termPop .tp-t{color:#3d4d5c}
 .hero img{display:block;width:100%;height:225px;object-fit:cover;object-position:center}
 .hero .hero-ol{position:absolute;inset:0;display:flex;flex-direction:column;
   justify-content:flex-end;padding:18px 24px;
@@ -421,7 +430,7 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40p
       <div class="ad">输入或选择医疗问题，AI 将检索临床试验与文献证据，生成带编号引用的专题板块（可重新生成/删除）</div>
       <div class="qchips" id="qchips"></div>
       <div class="qrow">
-        <input id="qInput" placeholder="输入医疗问题，如：奥希替尼耐药后四代 TKI 有哪些在研试验？">
+        <input id="qInput" placeholder="输入医疗问题，如：儿童 ALL 的 CD19 CAR-T 与双抗如何排序？">
         <button class="btn primary" id="askBtn">生成专题</button>
       </div>
       <div class="ask-note">依据：实时 ClinicalTrials.gov 检索 + 已有文献/新闻证据 · AI 生成内容仅供参考，事实以编号来源为准</div>
@@ -456,6 +465,7 @@ footer{color:var(--faint);font-size:12px;text-align:center;padding:26px 20px 40p
   </div>
 </div>
 
+<script src="/assets/glossary-heme.js"></script>
 <script>
 "use strict";
 /* ═══════════ 全局状态 ═══════════ */
@@ -719,7 +729,7 @@ function view(){
 }
 
 /* ═══════════ 渲染 ═══════════ */
-function renderAll(){renderKpis();renderCharts();renderDrill();renderOverview();renderTopics();renderFoot();refreshCounts();}
+function renderAll(){renderKpis();renderCharts();renderDrill();renderOverview();renderTopics();renderFoot();refreshCounts();;try{window.glossarize&&window.glossarize();}catch(e){}}
 
 /* ═══════════ 总览：AI 跨主题总结 + 筛选命中 ═══════════ */
 function renderOverview(){
@@ -2111,6 +2121,162 @@ document.addEventListener('keydown',function(e){
 });
 
 loadData(false,true);
+</script>
+<script>
+/* 术语悬浮解释（参考 onco.cc 的 glossary hover 设计）：
+   把术语标注为虚线下划线，悬停/聚焦显示一句话人话解释 + 类别。
+   规则：每个术语整页只标第一处；跳过链接/按钮/代码/标题与已处理节点；Esc 关闭。*/
+(function(){
+  var GL = window.HEME_GLOSSARY || {};
+  var KEYS = [];
+  Object.keys(GL).forEach(function(k){
+    var t = GL[k];
+    var aliases = [k].concat(t.aka || []);
+    var maxLen = Math.max.apply(null, aliases.map(function(x){ return x.length; }));
+    KEYS.push({key:k, t:t, aliases:aliases, maxLen:maxLen});
+  });
+  KEYS.sort(function(a,b){ return b.maxLen - a.maxLen; });
+
+  var SKIP = {A:1, BUTTON:1, CODE:1, PRE:1, SCRIPT:1, STYLE:1, NOSCRIPT:1,
+              TEXTAREA:1, H1:1, H2:1, H3:1, OPTION:1};
+  var seen = Object.create(null);
+  var activeAnchor = null;   // 当前浮层锚点（滚动时跟随重排）
+
+  function popFor(info){
+    var pop = document.getElementById('termPop');
+    if(!pop){ pop = document.createElement('div'); pop.id = 'termPop'; document.body.appendChild(pop); }
+    pop.innerHTML = '<div class="tp-h"></div><div class="tp-c"></div><div class="tp-t"></div>';
+    pop.querySelector('.tp-h').textContent = info.name;
+    pop.querySelector('.tp-c').textContent = info.cat;
+    pop.querySelector('.tp-t').textContent = info.tldr;
+    return pop;
+  }
+  function place(el, pop){
+    activeAnchor = el;
+    var r = el.getBoundingClientRect();
+    pop.style.visibility = 'hidden'; pop.style.left = '0px'; pop.style.top = '0px';
+    var w = pop.offsetWidth, h = pop.offsetHeight;
+    var left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+    var top = r.bottom + 8;
+    if(top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+    pop.style.left = left + 'px'; pop.style.top = top + 'px'; pop.style.visibility = 'visible';
+  }
+  function hide(){ var p = document.getElementById('termPop'); if(p) p.style.visibility = 'hidden'; activeAnchor = null; }
+
+  function wrap(node, item){
+    var text = node.nodeValue, lower = text.toLowerCase(), best = null;
+    item.aliases.forEach(function(al){
+      var a = String(al).toLowerCase(); if(!a) return;
+      var idx = 0;
+      while(true){
+        var i = lower.indexOf(a, idx);
+        if(i < 0) break;
+        var before = i === 0 ? '' : lower[i-1];
+        var after = lower[i + a.length] || '';
+        var latin = /^[a-z0-9]/.test(a);
+        var okL = !latin || !/[a-z0-9]/i.test(before);
+        var okR = !latin || !/[a-z0-9]/i.test(after);
+        if(okL && okR && (!best || i < best.i)){ best = {i:i, len:a.length}; }
+        idx = i + 1;
+      }
+    });
+    if(!best) return false;
+    var info = {name: item.t.name || item.key, cat: item.t.cat || '术语', tldr: item.t.tldr || ''};
+    var sp = document.createElement('span');
+    sp.className = 'term'; sp.tabIndex = 0;
+    sp.textContent = text.substr(best.i, best.len);
+    sp.addEventListener('mouseenter', function(){ place(sp, popFor(info)); });
+    sp.addEventListener('mouseleave', hide);
+    sp.addEventListener('focus', function(){ place(sp, popFor(info)); });
+    sp.addEventListener('blur', hide);
+    sp.addEventListener('click', function(e){ e.stopPropagation(); place(sp, popFor(info)); });
+    var rest = node.splitText(best.i);
+    rest.nodeValue = rest.nodeValue.substr(best.len);
+    node.parentNode.insertBefore(sp, rest);
+    return true;
+  }
+
+  function targets(root){
+    if(root) return [root];
+    var nodes = document.querySelectorAll('.synth, .ttl');
+    return nodes.length ? Array.prototype.slice.call(nodes)
+                        : [document.querySelector('main') || document.body];
+  }
+  window.glossarize = function(root){
+    hide();
+    var n = 0;
+    var roots = targets(root);
+    KEYS.forEach(function(item){
+      if(seen[item.key]) return;
+      for(var ri = 0; ri < roots.length; ri++){
+        var r = roots[ri];
+        if(!r) continue;
+      var walker = document.createTreeWalker(r, NodeFilter.SHOW_TEXT, {
+        acceptNode: function(node){
+          var p = node.parentNode;
+          if(!p || SKIP[p.tagName]) return NodeFilter.FILTER_REJECT;
+          if(p.classList && (p.classList.contains('term') || p.id === 'termPop'))
+            return NodeFilter.FILTER_REJECT;
+          if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if(node.nodeValue.length > 400) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+        var node, hit = false;
+        while((node = walker.nextNode())){
+          if(wrap(node, item)){ seen[item.key] = 1; n++; hit = true; break; }
+        }
+        if(hit) break;
+      }
+    });
+    // 调试：?termdemo=1 自动弹出第一个术语的解释，便于检查浮层样式
+    if(/[?&]termdemo=1/.test(location.search)){
+      var first = (roots[0] && roots[0].querySelector('.term')) || document.querySelector('.term');
+      if(first){
+        try{ first.scrollIntoView({block:'center'}); }catch(e){}
+        // 等滚动结束再弹（scroll 监听会隐藏浮层）
+        setTimeout(function(){
+          var label = String(first.textContent || '').toLowerCase();
+          var hit = null;
+          KEYS.forEach(function(item){
+            if(hit) return;
+            if(item.key.toLowerCase() === label) { hit = item; return; }
+            (item.aliases || []).forEach(function(a){
+              if(!hit && String(a).toLowerCase() === label) hit = item;
+            });
+          });
+          if(hit){
+            place(first, popFor({name: hit.t.name || hit.key,
+                                 cat: hit.t.cat || '术语',
+                                 tldr: hit.t.tldr || ''}));
+          }
+        }, 700);
+        // 页面可能仍有异步布局/滚动，再补一次（演示用）
+        setTimeout(function(){
+          var lab = String(first.textContent || '').toLowerCase(); var h2 = null;
+          KEYS.forEach(function(it){ if(h2) return;
+            if(it.key.toLowerCase() === lab){ h2 = it; return; }
+            (it.aliases||[]).forEach(function(a){ if(!h2 && String(a).toLowerCase() === lab) h2 = it; }); });
+          if(h2) place(first, popFor({name: h2.t.name || h2.key, cat: h2.t.cat || '术语', tldr: h2.t.tldr || ''}));
+        }, 2200);
+      }
+    }
+    return n;
+  };
+
+  document.addEventListener('click', function(e){
+    if(!e.target.classList || !e.target.classList.contains('term')) hide();
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hide(); });
+  function follow(){
+    var pop = document.getElementById('termPop');
+    if(!activeAnchor || !pop || pop.style.visibility !== 'visible') return;
+    if(!document.body.contains(activeAnchor)){ hide(); return; }
+    place(activeAnchor, pop);
+  }
+  window.addEventListener('resize', follow);
+  window.addEventListener('scroll', follow, true);
+})();
 </script>
 </body>
 </html>
