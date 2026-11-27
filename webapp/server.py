@@ -1129,6 +1129,50 @@ class Handler(BaseHTTPRequestHandler):
                        json.dumps({"error": str(e)}).encode("utf-8"))
 
 
+def _detect_lan_ip() -> str:
+    """挑一个真实局域网地址（避开 VPN/隧道网段，如 198.18.x 的 utun 接口）。"""
+    import socket as _s
+    cands = []
+    try:
+        tmp = _s.socket(_s.AF_INET, _s.SOCK_DGRAM)
+        tmp.connect(("8.8.8.8", 80))
+        cands.append(tmp.getsockname()[0])
+        tmp.close()
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        for info in _s.getaddrinfo(_s.gethostname(), None, _s.AF_INET):
+            cands.append(info[4][0])
+    except Exception:  # noqa: BLE001
+        pass
+    cands += _ifconfig_ips()
+    for ip in cands:
+        if not ip or ip.startswith("127."):
+            continue
+        if ip.startswith("198.18.") or ip.startswith("169.254."):
+            continue
+        if ip.startswith("192.168.") or ip.startswith("10."):
+            return ip
+        if ip.startswith("172.") and 16 <= int(ip.split(".")[1]) <= 31:
+            return ip
+    return cands[0] if cands else ""
+
+
+def _ifconfig_ips():
+    """从 ifconfig 里读本机 IPv4（macOS/Linux 均可用，失败则返回空）。"""
+    import subprocess
+    try:
+        out = subprocess.run(["ifconfig"], capture_output=True, text=True, timeout=3).stdout
+    except Exception:  # noqa: BLE001
+        return []
+    ips = []
+    for line in out.splitlines():
+        parts = line.strip().split()
+        if len(parts) >= 2 and parts[0] == "inet":
+            ips.append(parts[1])
+    return ips
+
+
 def main():
     ap = argparse.ArgumentParser(description="肺癌诊疗情报 Dashboard Web 服务器")
     ap.add_argument("--port", type=int, default=8899)
@@ -1146,13 +1190,7 @@ def main():
     _title = getattr(config.DASHBOARD, "get", lambda *_: None)("title") or "诊疗情报"
     print(f"[server] {_title} Dashboard → {url}")
     if args.host in ("0.0.0.0", "::"):
-        import socket as _s
-        lan = ""
-        try:
-            _tmp = _s.socket(_s.AF_INET, _s.SOCK_DGRAM)
-            _tmp.connect(("8.8.8.8", 80)); lan = _tmp.getsockname()[0]; _tmp.close()
-        except Exception:  # noqa: BLE001
-            pass
+        lan = _detect_lan_ip()
         if lan:
             print(f"[server] 局域网访问 → http://{lan}:{args.port}（同一 Wi-Fi 下的 iPad/手机可用）")
     print(f"[server] 归档目录: {ARCHIVE_DIR}")
