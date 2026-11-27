@@ -49,8 +49,8 @@ PALETTE = [C_GREEN, C_BLUE, C_AMBER, RGBColor(0x9B, 0x8C, 0xE8),
            RGBColor(0xE5, 0x6A, 0x5E), RGBColor(0x4F, 0xC3, 0xD6)]
 
 ASSETS = pathlib.Path(__file__).resolve().parent / "assets"
-# 现有 4 张机制图为肺癌主题；血液肿瘤版暂不配图（配好新图后按主题 id 映射即可）
-TOPIC_FIG = {}
+TOPIC_FIG = {"ped_all": "FigureHeme1.jpg", "ped_aml": "FigureHeme2.jpg",
+             "lymphoma": "FigureHeme3.jpg", "car_t": "FigureHeme4.jpg"}
 
 FONT_CN = "Arial Unicode MS"   # 实测：中英混排在 LibreOffice/PowerPoint 下不丢字
 FONT_EN = "Arial Unicode MS"
