@@ -1132,6 +1132,8 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     ap = argparse.ArgumentParser(description="肺癌诊疗情报 Dashboard Web 服务器")
     ap.add_argument("--port", type=int, default=8899)
+    ap.add_argument("--host", default="127.0.0.1",
+                    help="绑定地址；127.0.0.1=仅本机，0.0.0.0=允许局域网访问（讲课用 iPad/手机看）")
     ap.add_argument("--no-browser", action="store_true")
     args = ap.parse_args()
 
@@ -1139,9 +1141,20 @@ def main():
         print(f"[error] 缺少 {INDEX_HTML}", file=sys.stderr)
         sys.exit(2)
 
-    srv = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    srv = ThreadingHTTPServer((args.host, args.port), Handler)
     url = f"http://localhost:{args.port}"
-    print(f"[server] 肺癌诊疗情报 Dashboard → {url}")
+    _title = getattr(config.DASHBOARD, "get", lambda *_: None)("title") or "诊疗情报"
+    print(f"[server] {_title} Dashboard → {url}")
+    if args.host in ("0.0.0.0", "::"):
+        import socket as _s
+        lan = ""
+        try:
+            _tmp = _s.socket(_s.AF_INET, _s.SOCK_DGRAM)
+            _tmp.connect(("8.8.8.8", 80)); lan = _tmp.getsockname()[0]; _tmp.close()
+        except Exception:  # noqa: BLE001
+            pass
+        if lan:
+            print(f"[server] 局域网访问 → http://{lan}:{args.port}（同一 Wi-Fi 下的 iPad/手机可用）")
     print(f"[server] 归档目录: {ARCHIVE_DIR}")
     print(f"[server] Ctrl+C 停止")
     if not args.no_browser:
